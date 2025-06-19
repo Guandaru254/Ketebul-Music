@@ -1,4 +1,5 @@
-// app/contact/page.tsx
+'use client'
+
 import "./contact.css";
 
 export default function ContactPage() {
@@ -13,9 +14,9 @@ export default function ContactPage() {
           <p><strong>Address:</strong> Ketebul Music Studios, GoDown Arts Centre, Nairobi, Kenya</p>
 
           <div className="socials">
-            <a href="#" target="_blank">Instagram</a>
-            <a href="#" target="_blank">Facebook</a>
-            <a href="#" target="_blank">YouTube</a>
+            <a href="#" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="#" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a href="#" target="_blank" rel="noopener noreferrer">YouTube</a>
           </div>
         </div>
 
