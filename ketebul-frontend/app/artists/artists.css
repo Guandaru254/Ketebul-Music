@@ -1,54 +1,106 @@
+/* Reset */
+body, h1, h2, p {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Main Page Styles */
 .artists-page {
-  padding: 2rem 1rem;
-  max-width: 1200px;
-  margin: auto;
+  padding: 4rem 2rem;
+  background: #f9f9f9;
+  font-family: 'Inter', sans-serif;
+  color: #1a1a1a;
+}
+
+.page-title {
   text-align: center;
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 3rem;
+  color: #333;
 }
 
-.artists-page h1 {
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
-}
-
+/* Grid */
 .artist-grid {
   display: grid;
-  gap: 2rem;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
 }
 
+/* Card */
 .artist-card {
-  background: #111;
-  color: white;
-  border-radius: 1rem;
-  padding: 1.5rem;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
 }
 
 .artist-card:hover {
-  transform: translateY(-5px);
-  background-color: #222;
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
 }
 
-.image-wrapper {
-  border-radius: 1rem;
-  overflow: hidden;
-  margin-bottom: 1rem;
-}
-
+/* Image */
 .artist-img {
   width: 100%;
   height: auto;
   object-fit: cover;
-  border-radius: 1rem;
+  aspect-ratio: 1 / 1;
+  border-bottom: 1px solid #eee;
 }
 
+/* Name */
 .artist-card h2 {
   font-size: 1.5rem;
-  margin-top: 0.5rem;
+  font-weight: 600;
+  padding: 1rem 1.2rem 0.5rem;
+  color: #111;
 }
 
+/* Bio */
 .artist-card p {
-  color: #ccc;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  padding: 0 1.2rem;
+  color: #555;
+  flex-grow: 1;
+}
+
+/* Read More */
+.read-more {
+  display: inline-block;
+  padding: 0.8rem 1.2rem;
+  font-weight: 500;
+  color: #0055ff;
+  text-decoration: none;
+  margin-top: auto;
+  transition: color 0.3s ease;
+}
+
+.read-more:hover {
+  color: #003acc;
+}
+
+/* Mobile Typography */
+@media (max-width: 600px) {
+  .page-title {
+    font-size: 2.2rem;
+  }
+
+  .artist-card h2 {
+    font-size: 1.3rem;
+  }
+
+  .artist-card p {
+    font-size: 0.9rem;
+  }
 }
