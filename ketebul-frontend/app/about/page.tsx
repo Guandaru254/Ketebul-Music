@@ -11,10 +11,9 @@ export default function AboutPage() {
       {/* Mission Section */}
       <section className="about-section">
         <div className="text-block">
-          <h2>Our Mission</h2>
+          <h2>Our Mission Statement</h2>
           <p>
-            We are committed to documenting, supporting, and promoting East African music through original production, artist development, and cultural programming that spans generations.
-          </p>
+To Identify, preserve, conserve and to promote the diverse music traditions of East Africa          </p>
         </div>
         <div className="image-block">
           <Image
@@ -34,6 +33,9 @@ export default function AboutPage() {
           <h2>Our Story</h2>
           <p>
             Since 2007, Ketebul Music has captured the essence of East Africa’s rich soundscape — from field recordings and archival research to large-scale musical productions that inspire and educate.
+         <br /> <br />
+            Memorable archiving is achieved through intensive academic research reports released along with a market-friendly package from each phase of research. The package comprises of a shorter, but succinct, popular version of the academic report and is contained in an attractively designed booklet. To reinforce it is an audio CD featuring re-releases of previous recordings along with a video documentary carrying intensive interviews, analyses, stage performances and archive footage.
+         
           </p>
         </div>
          <div className="image-block">
@@ -54,6 +56,8 @@ export default function AboutPage() {
           <h2>What We Do</h2>
           <p>
             From state-of-the-art studio production to multimedia archiving and documentary filmmaking, we amplify the voices of East Africa’s past, present, and future.
+          <br /> <br />
+          We specialise in both traditional and contemporary African music, with an emphasis on live recorded instruments as opposed to sequenced sounds. We believe in keeping the music as authentic and organic as possible.
           </p>
         </div>
       </section>
