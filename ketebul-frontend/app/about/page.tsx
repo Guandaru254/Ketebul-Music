@@ -32,8 +32,7 @@ To Identify, preserve, conserve and to promote the diverse music traditions of E
         <div className="text-block">
           <h2>Our Story</h2>
           <p>
-            Since 2007, Ketebul Music has captured the essence of East Africa’s rich soundscape — from field recordings and archival research to large-scale musical productions that inspire and educate.
-         <br /> <br />
+Ketebul Music was established in early 2007 with the ambitious vision to carry out research and promote the diverse fusion of traditional sounds of Kenya and East Africa through the documentation and archiving of the work of musicians who have shaped the various genres of music from the region over the past six decades. In broader terms, intensive research carried out by Ketebul Music involves the musicians themselves, their families, industry players such as producers and promoters, media personalities and the market audience.         <br /> <br />
             Memorable archiving is achieved through intensive academic research reports released along with a market-friendly package from each phase of research. The package comprises of a shorter, but succinct, popular version of the academic report and is contained in an attractively designed booklet. To reinforce it is an audio CD featuring re-releases of previous recordings along with a video documentary carrying intensive interviews, analyses, stage performances and archive footage.
          
           </p>
