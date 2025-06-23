@@ -66,7 +66,8 @@ To Identify, preserve, conserve and to promote the diverse music traditions of E
       <section className="about-section services-section">
         <div className="text-block">
           <h2>Studios & Services</h2>
-          <p><strong>Studio A:</strong> Our flagship room for full band multi-track sessions. Equipped with:</p>
+          Our studios, based at the GoDown Arts Centre, boast two fully equipped analogue and digital studios.
+          <p><strong>Studio A:</strong> This is our main studio which has large sound booth set up to handle live multi track recordings for bands. The control room is equipped with a Mac Pro, running on Logic Pro, Pro Tools, Ableton Live, Reason, Cubase and Nuendo. We are also equipped with rack mounted outboard units including;</p>
           <ul>
             <li>Digi 002, Korg Triton Rack, Yamaha Motif</li>
             <li>TC Electronics Finalizer, Focusrite Preamp</li>
@@ -74,11 +75,10 @@ To Identify, preserve, conserve and to promote the diverse music traditions of E
             <li>Logic Pro, Pro Tools, Ableton, Reason, Cubase, Nuendo</li>
           </ul>
 
-          <p><strong>Studio B:</strong> Ideal for vocals, single-instrument tracking, and project work:</p>
+          <p><strong>Studio B:</strong>This is our project studio, designed to handle vocal recording, guitar and single instrument multi track sessions. Also running on Logic, Cubase and Nuendo, Studio B also has outboard equipment such as,</p>
           <ul>
-            <li>Korg Triton Workstation, Roland Phantom XR</li>
+            <li>Digi 002, Korg Triton Workstation, Roland Phantom XR Sampler</li>
             <li>M-Audio MIDI, Tascam CD & Tape Unit</li>
-            <li>Same full DAW support as Studio A</li>
           </ul>
 
           <p><strong>Audio Services:</strong></p>
@@ -89,7 +89,13 @@ To Identify, preserve, conserve and to promote the diverse music traditions of E
             <li>Studio hire & format conversions (Tape, ADAT, CD, Vinyl)</li>
           </ul>
 
-          <p><strong>Video Services:</strong></p>
+          <h2>Video Production, recording and editing suite</h2>
+          <p>Ketebul Music recently ventured into video production.  We specialize in research based documentaries, on the origins and development or traditional sounds, music, and culture of East Africa.
+             <br /> <br />
+             These documentaries form part of the cultural archives that Ketebul Music is in the process of establishing. Through this audio visual archive, Ketebul Music will process and store material on the origins and development East African music genres.</p>
+          <br />
+          <p>We also offer services for the production of music videos. Our editing suite is equipped with a Mac Pro, running Final Cut Pro and Adobe CS4.</p>
+           <p><strong>Video Services:</strong></p>
           <ul>
             <li>Documentary production & music videos</li>
             <li>Editing suite (Final Cut Pro, Adobe CS)</li>
