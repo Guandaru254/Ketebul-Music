@@ -5,23 +5,24 @@ body, h1, h2, p {
   box-sizing: border-box;
 }
 
-/* Main Page Styles */
+/* Page Container */
 .artists-page {
   padding: 4rem 2rem;
-  background: #f9f9f9;
+  background: #f4f6f9;
   font-family: 'Inter', sans-serif;
   color: #1a1a1a;
 }
 
+/* Title */
 .page-title {
   text-align: center;
   font-size: 3rem;
   font-weight: 700;
   margin-bottom: 3rem;
-  color: #333;
+  color: #222;
 }
 
-/* Grid */
+/* Artist Grid Layout */
 .artist-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -31,22 +32,26 @@ body, h1, h2, p {
   padding: 0 1rem;
 }
 
-/* Card */
+/* Artist Card Styling */
 .artist-card {
-  background: #fff;
+  background: #ffffff;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.06),
+    0 8px 24px rgba(0, 0, 0, 0.12);
   display: flex;
   flex-direction: column;
   height: 100%;
-  position: relative;
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+  will-change: transform;
 }
 
 .artist-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow:
+    0 6px 10px rgba(0, 0, 0, 0.08),
+    0 20px 36px rgba(0, 0, 0, 0.18);
 }
 
 /* Image */
@@ -58,7 +63,7 @@ body, h1, h2, p {
   border-bottom: 1px solid #eee;
 }
 
-/* Name */
+/* Artist Name */
 .artist-card h2 {
   font-size: 1.5rem;
   font-weight: 600;
@@ -73,16 +78,18 @@ body, h1, h2, p {
   padding: 0 1.2rem;
   color: #555;
   flex-grow: 1;
+  margin-bottom: 1rem;
 }
 
-/* Read More */
+/* Read More Button */
 .read-more {
   display: inline-block;
   padding: 0.8rem 1.2rem;
   font-weight: 500;
   color: #0055ff;
   text-decoration: none;
-  margin-top: auto;
+  margin-left: 1.2rem;
+  margin-bottom: 1.2rem;
   transition: color 0.3s ease;
 }
 
@@ -90,10 +97,14 @@ body, h1, h2, p {
   color: #003acc;
 }
 
-/* Mobile Typography */
-@media (max-width: 600px) {
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .artists-page {
+    padding: 3rem 1.5rem;
+  }
+
   .page-title {
-    font-size: 2.2rem;
+    font-size: 2.4rem;
   }
 
   .artist-card h2 {
@@ -102,5 +113,19 @@ body, h1, h2, p {
 
   .artist-card p {
     font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: 2rem;
+  }
+
+  .artist-grid {
+    gap: 2rem;
+  }
+
+  .read-more {
+    padding: 0.7rem 1rem;
   }
 }

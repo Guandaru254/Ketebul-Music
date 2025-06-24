@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { motion, Variants } from 'framer-motion';
 import './artists.css';
 
 const artists = [
@@ -49,13 +50,38 @@ const artists = [
   },
 ];
 
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0 },
+};
+
 export default function ArtistsPage() {
   return (
     <main className="artists-page">
-      <h1 className="page-title">Our Artists</h1>
+      <motion.h1
+        className="page-title"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+      >
+        Our Artists
+      </motion.h1>
+
       <div className="artist-grid">
         {artists.map((artist, index) => (
-          <div className="artist-card" key={index}>
+          <motion.div
+            key={index}
+            className="artist-card"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={cardVariants}
+            transition={{
+              delay: index * 0.2,
+              duration: 0.8,
+              ease: 'easeOut',
+            }}
+          >
             <Image
               src={artist.image}
               alt={artist.name}
@@ -68,7 +94,7 @@ export default function ArtistsPage() {
             <Link href={`/artists/${artist.slug}`} className="read-more">
               Read more →
             </Link>
-          </div>
+          </motion.div>
         ))}
       </div>
     </main>
