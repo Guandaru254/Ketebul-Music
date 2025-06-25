@@ -47,7 +47,7 @@ const partners = [
     img: '/partner2.png'
   },
   {
-    href: 'http://https://afkenya.org',
+    href: 'https://afkenya.org',
     alt: 'French Embassy Kenya',
     img: '/partner3.png'
   }
