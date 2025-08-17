@@ -2,101 +2,177 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion, Variants } from 'framer-motion';
-import './artists.css';
+import { motion, Variants, Transition } from 'framer-motion';
+import { useState } from 'react'; // Needed for image loading state
 
+// Define your artists data
 const artists = [
+  {
+    name: 'Winyo',
+    image: '/artists/winyo.jpg',
+    bio: 'Born Shiphton Onyango, Winyo adopted his artistic name ‘Winyo’, which is a Luo word (a tribe from the Lake Victoria region), meaning ‘My Own’. His music has evolved through a journey of experience from gospel to afro-fusion to his current style,...',
+    slug: 'winyo',
+  },
+  {
+    name: 'Ogoya Nengo',
+    image: '/artists/ogoya.jpg',
+    bio: 'Ogoya Nengo was born Anastasia Oluoch in the late 1930s at Magoya, near the shores of Lake Victoria. She is a renowned Dodo singer, carrying on a powerful tradition of music and storytelling that has captivated audiences globally...',
+    slug: 'ogoya-nengo',
+  },
+  {
+    name: 'Makadem',
+    image: '/artists/makadem.jpg',
+    bio: 'Makadem, also known as the Ohanglaman, is a talented musician and vibrant performing artiste from Kenya. His music blends traditional Luo rhythms with contemporary sounds, creating a unique and energetic style...',
+    slug: 'makadem',
+  },
   {
     name: 'Bado',
     image: '/artists/bado.jpg',
-    bio: 'Hailing from the coastal town of Watamu in Malindi, Bado was born Mohamed Said Ngana. Although he started singing publicly...',
+    bio: 'Hailing from the coastal town of Watamu in Malindi, Bado was born Mohamed Said Ngana. Although he started singing publicly in 2005, he has been composing music since childhood. His music is deeply rooted in coastal traditions...',
     slug: 'bado',
   },
   {
     name: 'Ontiri Bikundo',
     image: '/artists/ontiri.jpg',
-    bio: 'Ontiri Bikundo was born in 1976 in Nyaribari Chache constituency of Kisii District. His parents passed away before he was...',
+    bio: 'Ontiri Bikundo was born in 1976 in Nyaribari Chache constituency of Kisii District. His parents passed away before he was old enough to know them, and he was raised by his grandmother. His music reflects his life\'s journey and the rich Kisii culture...',
     slug: 'ontiri-bikundo',
   },
   {
     name: 'Olith Ratego',
     image: '/artists/olith.jpg',
-    bio: 'Olith Ratego was born Musa Odhiambo Omondi, in Asere Ugenya, Siaya District. The middle child in a family of three,...',
+    bio: 'Olith Ratego was born Musa Odhiambo Omondi, in Asere Ugenya, Siaya District. The middle child in a family of three, he started playing the nyatiti (a traditional Luo lyre) at a young age. His music is a modern interpretation of ancient sounds...',
     slug: 'olith-ratego',
-  },
-  {
-    name: 'Ogoya Nengo',
-    image: '/artists/ogoya.jpg',
-    bio: 'Ogoya Nengo was born Anastasia Oluoch in the late 1930s at Magoya, near the shores of Lake Victoria...',
-    slug: 'ogoya-nengo',
   },
   {
     name: 'Gargar',
     image: '/artists/gargar.jpg',
-    bio: 'Gargar is a group of Kenyan women of Somali origin from Garissa, North Eastern Kenya...',
+    bio: 'Gargar is a group of Kenyan women of Somali origin from Garissa, North Eastern Kenya. Their music is a vibrant celebration of Somali culture, blending traditional harmonies with contemporary African rhythms and powerful vocals...',
     slug: 'gargar',
-  },
-  {
-    name: 'Winyo',
-    image: '/artists/winyo.jpg',
-    bio: 'Born Shiphton Onyango, Winyo adopted his artistic name ‘Winyo’, which is a Luo word (a tribe from the Lake Victoria region)...',
-    slug: 'winyo',
-  },
-  {
-    name: 'Makadem',
-    image: '/artists/makadem.jpg',
-    bio: 'Makadem, also known as the Ohanglaman, is a talented musician and vibrant performing artiste from Kenya...',
-    slug: 'makadem',
   },
 ];
 
 const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0 },
+  hidden: { opacity: 0, y: 50, scale: 0.98 },
+  visible: (i: number) => ({ // Staggered entry
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      type: "spring",
+      stiffness: 60,   // Further reduced stiffness for even slower, more gentle spring
+      damping: 22,     // Increased damping to prevent overshooting and make it smoother
+      delay: i * 0.3,  // Increased stagger delay for a very pronounced "one by one" flow
+      duration: 1.5,   // Increased overall duration for a noticeably slower animation
+    } as Transition,
+  }),
+};
+
+const hoverVariants: Variants = {
+  lift: {
+    y: -8,
+    scale: 1.03,
+    boxShadow: "0 10px 20px rgba(0,0,0,0.4), 0 0 0 3px rgba(253, 224, 71, 0.6)",
+    transition: {
+      type: "spring",
+      stiffness: 300,
+      damping: 18
+    } as Transition,
+  }
 };
 
 export default function ArtistsPage() {
   return (
-    <main className="artists-page">
+    // Main container for the artists page, ensuring global dark theme and using josefin-sans
+    <main className="min-h-screen bg-gray-950 text-gray-100 py-16 px-4 sm:px-6 lg:px-8 font-josefin-sans"> {/* Changed font-inter to font-josefin-sans */}
+      {/* Removed: The motion.h1 element for the main title */}
+      {/*
       <motion.h1
-        className="page-title"
-        initial={{ opacity: 0, y: -20 }}
+        className="text-center text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-16 font-josefin-sans text-yellow-300 drop-shadow-md"
+        initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: 'easeOut' }}
       >
-        Our Artists
+        Meet Our Incredible Artists
       </motion.h1>
+      */}
 
-      <div className="artist-grid">
+      {/* Artist Grid Layout */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-7xl mx-auto">
         {artists.map((artist, index) => (
           <motion.div
             key={index}
-            className="artist-card"
+            // Apply the gradient background to the card - matching header and team page
+            className={`
+              bg-gradient-to-r from-gray-900 to-black rounded-2xl overflow-hidden shadow-2xl flex flex-col cursor-pointer
+              transform transition-all duration-300 ease-in-out border-2 border-transparent relative group
+            `}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
+            whileHover="lift"
+            viewport={{ once: false, amount: 0.15 }} // Adjusted amount for better trigger
             variants={cardVariants}
-            transition={{
-              delay: index * 0.2,
-              duration: 0.8,
-              ease: 'easeOut',
-            }}
+            custom={index} // Pass index for staggered delay
           >
-            <Image
-              src={artist.image}
-              alt={artist.name}
-              width={400}
-              height={400}
-              className="artist-img"
-            />
-            <h2>{artist.name}</h2>
-            <p>{artist.bio.slice(0, 120)}...</p>
-            <Link href={`/artists/${artist.slug}`} className="read-more">
-              Read more →
-            </Link>
+            {/* Image Container with Skeleton Loader and Overlay */}
+            <div className="relative w-full h-64 overflow-hidden flex-shrink-0"> {/* Consistent height for images */}
+              <ImageLoader src={artist.image} alt={artist.name} />
+              {/* Gradient overlay to blend image into card background */}
+              <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-gray-900 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </div>
+
+            {/* Content Area: Adjusted alignment and added min-height for consistent bio start */}
+            <div className="p-6 flex flex-col flex-grow items-start"> {/* Changed items-center to items-start */}
+              <div className="flex flex-col min-h-[4rem] justify-start w-full"> {/* Added min-height for consistent description start */}
+                <h2 className="text-3xl font-bold mb-3 font-josefin-sans text-white text-left leading-snug"> {/* Changed text-yellow-300 to text-white, text-center to text-left */}
+                  {artist.name}
+                </h2>
+              </div>
+              <p className="text-gray-300 text-base leading-relaxed flex-grow line-clamp-4 text-left"> {/* Increased line-clamp for more bio, text-center to text-left */}
+                {artist.bio}
+              </p>
+              <Link href={`/artists/${artist.slug}`} className="mt-6 inline-flex items-center text-yellow-400 hover:text-yellow-200 font-semibold transition-colors duration-200 group-hover:translate-x-1"> {/* Link in yellow-400, hover yellow-200 */}
+                Explore Profile
+                <svg className="ml-2 w-5 h-5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                </svg>
+              </Link>
+            </div>
           </motion.div>
         ))}
       </div>
     </main>
+  );
+}
+
+// Separate component for Image with Skeleton Loader
+function ImageLoader({ src, alt }: { src: string; alt: string }) {
+  const [loading, setLoading] = useState(true);
+
+  return (
+    <div className="relative w-full h-full">
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+        className={`
+          object-cover object-center rounded-t-2xl // Rounded top corners for image
+          transition-opacity duration-500 ease-in-out
+          ${loading ? 'opacity-0' : 'opacity-100'} // Hide image until loaded
+        `}
+        onLoad={() => setLoading(false)}
+        onError={(e) => {
+          setLoading(false); // Hide skeleton even on error
+          e.currentTarget.onerror = null; // Prevent infinite loop
+          e.currentTarget.src = "/placeholder.png"; // Fallback image
+        }}
+        priority={false} // Only critical images on homepage need priority
+      />
+      {loading && (
+        <div className="absolute inset-0 bg-gray-700 animate-pulse rounded-t-2xl flex items-center justify-center">
+          <span className="text-gray-400 text-sm">Loading Image...</span>
+        </div>
+      )}
+    </div>
   );
 }
