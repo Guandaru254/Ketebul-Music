@@ -43,6 +43,12 @@ const projects = [
     image: "/projects/garissa.jpg",
     description: "A powerful album by the all-female group Gargar, celebrating Somali culture and identity.",
   },
+  {
+    title: "Singing Wells", // Added Singing Wells project
+    slug: "singing-wells",
+    image: "/projects/wells.png", // Make sure this image exists in public/projects/
+    description: "An initiative to document, preserve, and promote traditional music from East Africa, focusing on cultural heritage.",
+  },
 ];
 
 // Framer Motion variants for card entry animation
@@ -80,17 +86,8 @@ export default function ProjectsPage() {
   return (
     // Main container for the projects page
     <main className="min-h-screen bg-gray-950 text-gray-100 py-16 px-4 sm:px-6 lg:px-8 font-inter">
-      {/* Removed: The motion.h1 element for the main title */}
-      {/*
-      <motion.h1
-        className="text-center text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-16 font-josefin-sans text-yellow-300 drop-shadow-md"
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
-      >
-        Our Creative Projects
-      </motion.h1>
-      */}
+      {/* Tailwind CSS CDN for Canvas preview - typically in _app.js or _document.js for Next.js */}
+      <script src="https://cdn.tailwindcss.com"></script>
 
       {/* Project Grid Layout */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
@@ -114,7 +111,7 @@ export default function ProjectsPage() {
 
             {/* Content Area */}
             <div className="p-6 flex flex-col flex-grow">
-              <h2 className="text-2xl font-semibold mb-3 font-josefin-sans text-white leading-snug"> {/* Changed text-yellow-300 to text-white */}
+              <h2 className="text-2xl font-semibold mb-3 font-josefin-sans text-white leading-snug">
                 {project.title}
               </h2>
               <p className="text-gray-300 text-base leading-relaxed flex-grow line-clamp-4">
@@ -138,6 +135,10 @@ export default function ProjectsPage() {
 function ImageLoader({ src, alt }: { src: string; alt: string }) {
   const [loading, setLoading] = useState(true);
 
+  // Fallback placeholder image in case the original is not found (404)
+  // Text color is now a golden shade for consistency
+  const fallbackSrc = 'https://placehold.co/600x400/374151/DAA520?text=Image+Missing';
+
   return (
     <div className="relative w-full h-full">
       <Image
@@ -154,7 +155,8 @@ function ImageLoader({ src, alt }: { src: string; alt: string }) {
         onError={(e) => {
           setLoading(false); // Hide skeleton even on error
           e.currentTarget.onerror = null; // Prevent infinite loop
-          e.currentTarget.src = "/placeholder.png"; // Fallback image
+          e.currentTarget.src = fallbackSrc; // Fallback image
+          console.error(`Failed to load image: ${src}. Displaying fallback.`);
         }}
         priority={false} // Only critical images on homepage need priority
       />
