@@ -282,10 +282,10 @@ export default function HomePage() {
         >
           <h2 className="text-3xl sm:text-4xl font-bold mb-4 font-josefin-sans text-white">About Us</h2>
           <p className="text-gray-300 leading-relaxed mb-4">
-            Ketebul Music is a not-for-profit organization dedicated to recording, preserving, and promoting the diverse musical traditions of East Africa.
-          </p>
+Ketebul Music is a not-for-profit non-governmental organization based at the GoDown Arts Centre in Nairobi, Kenya.
+          <br></br>
           <p className="text-gray-300 leading-relaxed mb-6">
-            Through storytelling, collaboration, and mentorship, we celebrate cultural heritage while empowering new voices in the music industry.
+The word "Ketebul" means "drum sticks"; it is derived from the Luo language of Western Kenya. This name was a natural choice for an organization that has a vision of an African society that celebrates its cultural identity and also recognizes the special role that artistes play every day in people’s lives.          </p>
           </p>
           <Link href="/about"
             className={`bg-${PRIMARY_YELLOW} hover:bg-${HOVER_YELLOW} text-gray-900 font-bold py-3.5 px-9 rounded-full transition-colors duration-300 shadow-xl text-lg transform hover:scale-105 self-start`}
