@@ -5,6 +5,10 @@ import { motion, Variants, Transition } from 'framer-motion';
 import { useState } from 'react'; // Needed for ImageLoader's useState
 import { Facebook, Instagram, Linkedin } from 'lucide-react'; // Importing standard Lucide icons
 
+// --- Global Theme & Color Constants (Copied from homepage for consistency) ---
+const PRIMARY_YELLOW = 'yellow-500'; // Tailwind CSS class for #F59E0B
+const HOVER_YELLOW = 'yellow-600'; // Tailwind CSS class for a slightly darker yellow on hover
+
 const teamMembers = [
   {
     name: 'Tabu Osusa',
@@ -234,7 +238,8 @@ const hoverVariants: Variants = {
   lift: {
     y: -10, // Lift slightly higher
     scale: 1.03, // Enlarge slightly, but still noticeable
-    boxShadow: "0 12px 25px rgba(0,0,0,0.4), 0 0 0 4px rgba(253, 224, 71, 0.6)", // Stronger shadow and a clear golden glow
+    // Consistent shadow color with PRIMARY_YELLOW (Tailwind yellow-500 is rgb(245, 158, 11))
+    boxShadow: `0 12px 25px rgba(0,0,0,0.4), 0 0 0 4px rgba(245, 158, 11, 0.6)`, 
     transition: {
       type: "spring",
       stiffness: 350, // Immediate hover response
@@ -248,24 +253,13 @@ export default function TeamPage() {
     // Main container for the team page, ensuring global dark theme and padding for fixed header
     <main className="min-h-screen bg-gray-950 text-gray-100 py-16 px-4 sm:px-6 lg:px-8 font-inter">
       {/* Removed: The motion.h1 element for the main title */}
-      {/*
-      <motion.h1
-        className="text-center text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-16 font-josefin-sans text-yellow-300 drop-shadow-md"
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
-      >
-        Meet Our Incredible Team
-      </motion.h1>
-      */}
-
-      {/* Team Grid Layout */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-7xl mx-auto">
+      {/* Team Grid Layout: Changed xl:grid-cols-4 to lg:grid-cols-3 for 3 columns on larger screens */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
         {teamMembers.map((member, index) => (
           <motion.article
             key={index}
             // Apply the gradient background to the card - matching header
-            className="bg-gradient-to-r from-gray-900 to-black rounded-2xl overflow-hidden shadow-2xl flex flex-col p-6 cursor-pointer border-2 border-transparent relative group"
+            className="bg-gradient-to-r from-gray-900 to-black rounded-2xl overflow-hidden shadow-2xl flex flex-col p-8 cursor-pointer border-2 border-transparent relative group" // Increased padding from p-6 to p-8
             initial="hidden"
             whileInView="visible"
             whileHover="lift"
@@ -274,7 +268,7 @@ export default function TeamPage() {
             custom={index} // Pass index for staggered delay
           >
             {/* Image Container: Removed grayscale filter */}
-            <div className="relative w-full h-64 rounded-xl overflow-hidden flex-shrink-0 mb-6 shadow-lg">
+            <div className="relative w-full h-72 rounded-xl overflow-hidden flex-shrink-0 mb-6 shadow-lg"> {/* Increased height from h-64 to h-72 */}
               <ImageLoader src={member.photo} alt={`Photo of ${member.name}`} />
             </div>
 
@@ -284,7 +278,7 @@ export default function TeamPage() {
                 <h2 className="text-2xl font-bold mb-1 font-josefin-sans text-white text-left">
                   {member.name}
                 </h2>
-                <p className="text-lg font-medium text-yellow-300 text-left">
+                <p className={`text-lg font-medium text-${PRIMARY_YELLOW} text-left`}> {/* Updated yellow color */}
                   {member.role}
                 </p>
               </div>
@@ -297,23 +291,23 @@ export default function TeamPage() {
             <div className="flex justify-start w-full space-x-4 mt-2 px-2 text-gray-400">
               {member.social?.instagram && (
                 <a href={member.social.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                  <Instagram size={24} className="hover:text-yellow-300 transition-colors" />
+                  <Instagram size={24} className={`hover:text-${HOVER_YELLOW} transition-colors`} /> {/* Updated yellow color */}
                 </a>
               )}
               {member.social?.facebook && (
                 <a href={member.social.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-                  <Facebook size={24} className="hover:text-yellow-300 transition-colors" />
+                  <Facebook size={24} className={`hover:text-${HOVER_YELLOW} transition-colors`} /> {/* Updated yellow color */}
                 </a>
               )}
               {member.social?.linkedin && (
                 <a href={member.social.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                  <Linkedin size={24} className="hover:text-yellow-300 transition-colors" />
+                  <Linkedin size={24} className={`hover:text-${HOVER_YELLOW} transition-colors`} /> {/* Updated yellow color */}
                 </a>
               )}
               {member.social?.whatsapp && (
                 <a href={member.social.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
                   {/* Inline SVG for WhatsApp icon */}
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="hover:text-yellow-300 transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className={`hover:text-${HOVER_YELLOW} transition-colors`}> {/* Updated yellow color */}
                     <path d="M12.04 2C7.03 2 3 6.03 3 11.04c0 1.63.43 3.18 1.18 4.54L3.11 21.09l4.73-1.24c1.29.7 2.76 1.08 4.2 1.08 5.01 0 9.04-4.03 9.04-9.04S17.05 2 12.04 2zm3.62 14.15c-.1.25-.6.5-.83.56-.23.07-.5.06-.75-.02-.3-.1-.97-.3-1.66-.7-1.3-.8-2.16-2.12-2.43-2.58-.27-.47-.03-.7.19-.92.21-.2.48-.47.66-.67.19-.21.25-.47.16-.67-.1-.2-.61-1.46-.84-2.02-.23-.55-.47-.47-.65-.48-.19-.01-.4-.01-.61-.01-.22 0-.58.07-.88.42-.3.35-1.15 1.13-1.15 2.74 0 1.61 1.18 3.16 1.34 3.38.16.22 2.3 3.52 5.6 4.79 3.3 1.27 3.3 1.08 3.9 1.02.6-.06 1.8-.74 2.04-1.46.24-.72.24-1.34.17-1.46-.07-.12-.23-.19-.48-.31z"/>
                   </svg>
                 </a>
@@ -327,29 +321,70 @@ export default function TeamPage() {
 }
 
 // Separate component for Image with Skeleton Loader
-function ImageLoader({ src, alt }: { src: string; alt: string }) {
+interface ImageLoaderProps {
+  src: string;
+  alt: string;
+  width?: number; // Keep these for flexibility, although fill is used here
+  height?: number; // Keep these for flexibility, although fill is used here
+  className?: string;
+}
+
+function ImageLoader({ src, alt, width, height, className }: ImageLoaderProps) {
   const [loading, setLoading] = useState(true);
+
+  // Fallback placeholder image for when an image fails to load.
+  const fallbackSrc = "https://placehold.co/200x200/525252/b3b3b3?text=Image+Missing"; 
+
+  // Conditionally render the Image component to correctly handle 'fill' vs 'width/height'
+  // This resolves the TypeScript error by ensuring mutual exclusivity at the type level.
+  const imageElement = width && height ? (
+    <Image
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw" // Optimised sizes for team photos
+      className={`
+        object-cover object-center rounded-xl // Ensure rounded corners on the image itself
+        transition-opacity duration-500 ease-in-out
+        ${loading ? 'opacity-0' : 'opacity-100'} // Hide image until loaded
+        ${className || ''}
+      `}
+      onLoad={() => setLoading(false)}
+      onError={(e) => {
+        setLoading(false); // Hide skeleton even on error
+        e.currentTarget.onerror = null; // Prevent infinite loop
+        e.currentTarget.src = fallbackSrc; // Fallback image
+        console.error(`Failed to load image: ${src}. Displaying fallback.`); // Log the specific error
+      }}
+      priority={false}
+    />
+  ) : (
+    <Image
+      src={src}
+      alt={alt}
+      fill // Use fill when width/height are not explicitly provided
+      sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw" // Optimised sizes for team photos
+      className={`
+        object-cover object-center rounded-xl // Ensure rounded corners on the image itself
+        transition-opacity duration-500 ease-in-out
+        ${loading ? 'opacity-0' : 'opacity-100'} // Hide image until loaded
+        ${className || ''}
+      `}
+      onLoad={() => setLoading(false)}
+      onError={(e) => {
+        setLoading(false);
+        e.currentTarget.onerror = null;
+        e.currentTarget.src = fallbackSrc;
+        console.error(`Failed to load image: ${src}. Displaying fallback.`);
+      }}
+      priority={false}
+    />
+  );
 
   return (
     <div className="relative w-full h-full">
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw" // Optimised sizes for team photos
-        className={`
-          object-cover object-center rounded-xl // Ensure rounded corners on the image itself
-          transition-opacity duration-500 ease-in-out
-          ${loading ? 'opacity-0' : 'opacity-100'} // Hide image until loaded
-        `}
-        onLoad={() => setLoading(false)}
-        onError={(e) => {
-          setLoading(false); // Hide skeleton even on error
-          e.currentTarget.onerror = null; // Prevent infinite loop
-          e.currentTarget.src = "/placeholder.png"; // Fallback image
-        }}
-        priority={false} // Team photos might not be LCP, can be lazy loaded
-      />
+      {imageElement}
       {loading && (
         <div className="absolute inset-0 bg-gray-700 animate-pulse rounded-xl flex items-center justify-center">
           <span className="text-gray-400 text-sm">Loading...</span>
