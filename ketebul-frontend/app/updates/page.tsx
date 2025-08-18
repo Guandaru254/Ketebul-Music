@@ -1,99 +1,83 @@
-// app/updates/page.tsx
+// app/updates/page.tsx (Server Component)
+// This file can now be much simpler as the interactivity moves to the client.
+import Image from 'next/image'; // Make sure to import Image
+import React from 'react'; // Import React for JSX
 
-import Image from 'next/image';
-
-// Define the structure for an Update item
-interface Update {
-  date: string;
-  monthYear: string;
-  title: string;
-  content: string;
-  imageUrl?: string; // Optional image URL
-  imageAlt?: string; // Optional image alt text
-}
-
-// Hardcoded data for the updates page
-// This will ensure content displays reliably for your presentation
-const updates: Update[] = [
-  {
-    date: '08',
-    monthYear: 'AUG\n2025',
-    title: 'Book Launch - ANYANGO NYAR SIAYA (Nyatiti Queen)',
-    content: `This September Anyango Nyar Siaya from Japan returns to Kenya to launch her book 'ANYANGO NYAR SIAYA (Nyatiti Queen)' and perform in Nairobi and Kisumu.
-
-Wednesday, 17 Sept - Book launch at Alliance Française Nairobi
-Thursday, 18 Sept - Gojo Cafe (backed by Makadem)
-Saturday, 20 Sept - Dunga Hill Camp, Kisumu (backed by Sangau Soul)
-
-The book will be available from Nuria Bookstore and Ketebul Music. All shows are free. Come and experience the nyatiti with the first woman from outside the Luo community to play it professionally.`,
-    imageUrl: '/anyango-nyar-siaya.jpg', // Using a specific name for clarity
-    imageAlt: 'Anyango Nyar Siaya (Nyatiti Queen) book launch'
-  },
-  {
-    date: '23',
-    monthYear: 'SEP\n2020',
-    title: 'Shades of Benga Online - Episode 2: The Congo Connection & Nairobi Social Halls',
-    content: `We're back again this Wednesday 23 September @ 8:00PM EAT (+3GMT) with #shadesofbenga online episode 2! We travel back in time and see how a couple of Congolese guitarists influenced Kenyan popular music in the 1960s. Join us on our YouTube channel KETEBULMUSIC and Facebook page: ketebulmusic to watch this episode. CLICK HERE to schedule and to view the episode!`,
-    imageUrl: '/shades-of-benga.jpg', // Using a specific name for clarity
-    imageAlt: 'Shades of Benga Online Episode 2'
-  },
-  // Add more updates here if needed
-];
-
-// Main Updates Page component
 export default function UpdatesPage() {
   return (
-    <div className="min-h-screen bg-gray-100 p-4 sm:p-8 font-sans">
-      <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-xl p-6 sm:p-8">
-        {/* News Header */}
-        <div className="relative bg-red-600 text-white text-center py-4 rounded-t-lg mb-8 shadow-md">
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">News</h1>
-          <div className="absolute inset-x-0 bottom-0 h-1 bg-red-700"></div> {/* Bottom border effect */}
+    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-50 font-inter">
+      <script src="https://cdn.tailwindcss.com"></script>
+      <div className="w-full max-w-4xl bg-white p-8 rounded-lg shadow-xl">
+        <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">Latest Updates</h1>
+        
+        {/* Update Item 1: Anyango Nyar Siaya */}
+        <div className="flex flex-col md:flex-row items-center bg-blue-50 border-l-4 border-blue-500 rounded-lg p-6 mb-8 shadow-md">
+          <div className="md:w-1/3 flex-shrink-0 mb-4 md:mb-0 md:mr-6">
+            <Image
+              src="/anyango-nyar-siaya.jpg"
+              alt="Anyango Nyar Siaya"
+              width={300} // Specify width
+              height={300} // Specify height
+              layout="responsive" // Make image responsive
+              className="rounded-lg object-cover shadow-lg"
+              // Corrected onError handler with type casting
+              onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                const target = e.target as HTMLImageElement;
+                target.src = 'https://placehold.co/300x300/e0e0e0/ffffff?text=Image+Error';
+              }}
+            />
+          </div>
+          <div className="md:w-2/3">
+            <h2 className="text-2xl font-semibold text-blue-800 mb-2">Anyango Nyar Siaya Concert</h2>
+            <p className="text-gray-700 leading-relaxed">
+              We are thrilled to announce the upcoming concert featuring the legendary Anyango Nyar Siaya!
+              Known for her enchanting voice and captivating performances, Anyango brings the rich musical traditions
+              of Siaya to life. Join us for an unforgettable evening of soulful melodies and vibrant rhythms.
+            </p>
+            <p className="text-sm text-gray-500 mt-2">Date: October 26, 2024 | Venue: National Theatre, Nairobi</p>
+            <button
+              className="mt-4 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300 ease-in-out"
+              onClick={() => alert("Details for Anyango Nyar Siaya concert are coming soon!")} // Example of client-side interaction
+            >
+              Get Tickets
+            </button>
+          </div>
         </div>
 
-        {/* Updates Grid */}
-        <div className="space-y-10">
-          {updates.map((update, index) => (
-            <div
-              key={index}
-              className="flex flex-col sm:flex-row bg-gray-50 border border-gray-200 rounded-xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-lg"
+        {/* Update Item 2: Shades of Benga Album Release */}
+        <div className="flex flex-col md:flex-row items-center bg-green-50 border-l-4 border-green-500 rounded-lg p-6 shadow-md">
+          <div className="md:w-1/3 flex-shrink-0 mb-4 md:mb-0 md:mr-6">
+            <Image
+              src="/shades-of-benga.jpg"
+              alt="Shades of Benga Album"
+              width={300} // Specify width
+              height={300} // Specify height
+              layout="responsive" // Make image responsive
+              className="rounded-lg object-cover shadow-lg"
+              // Corrected onError handler with type casting
+              onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                const target = e.target as HTMLImageElement;
+                target.src = 'https://placehold.co/300x300/e0e0e0/ffffff?text=Image+Error';
+              }}
+            />
+          </div>
+          <div className="md:w-2/3">
+            <h2 className="text-2xl font-semibold text-green-800 mb-2">New Album Release: Shades of Benga</h2>
+            <p className="text-gray-700 leading-relaxed">
+              Ketebul Music is proud to present "Shades of Benga," a groundbreaking album that explores
+              the diverse facets of Benga music. Featuring collaborations with both veteran artists and
+              rising stars, this album is a tribute to the timeless genre that defines Kenyan sound.
+            </p>
+            <p className="text-sm text-gray-500 mt-2">Release Date: September 15, 2024 | Available on: All major streaming platforms</p>
+            <button
+              className="mt-4 px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition duration-300 ease-in-out"
+              onClick={() => alert("Pre-order for 'Shades of Benga' is now open!")} // Example of client-side interaction
             >
-              {/* Date Section */}
-              <div className="flex-shrink-0 w-full sm:w-36 bg-red-500 text-white flex flex-col items-center justify-center p-4 text-center">
-                <span className="text-5xl font-extrabold leading-none">{update.date}</span>
-                <span className="text-lg font-semibold whitespace-pre-line">{update.monthYear}</span>
-              </div>
-
-              {/* Content Section */}
-              <div className="flex-grow p-6 flex flex-col justify-between">
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-800 mb-3">{update.title}</h2>
-                  <p className="text-gray-700 leading-relaxed whitespace-pre-line">{update.content}</p>
-                </div>
-                {update.imageUrl && (
-                  <div className="mt-6 w-full sm:w-64 h-auto self-center sm:self-end rounded-lg overflow-hidden shadow-md">
-                    <Image
-                      src={update.imageUrl}
-                      alt={update.imageAlt || 'Update image'}
-                      width={600} // Adjust width as needed for better quality in a hardcoded scenario
-                      height={400} // Adjust height as needed
-                      layout="responsive" // Make image responsive
-                      objectFit="cover"
-                      className="rounded-lg"
-                      onError={(e) => {
-                        console.error("Error loading image:", e.currentTarget.src);
-                        // Optional: Replace with a generic fallback image if original fails
-                        e.currentTarget.src = 'https://placehold.co/600x400/CCCCCC/000000?text=Image+Missing';
-                      }}
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
+              Pre-order Now
+            </button>
+          </div>
         </div>
       </div>
     </div>
   );
 }
-
