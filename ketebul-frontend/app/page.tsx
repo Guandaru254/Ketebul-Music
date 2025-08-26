@@ -20,8 +20,8 @@ const phrases = [
 // Data for Hero section's dynamic backgrounds
 const backgrounds = [
   '/back.jpg',
-  '/back2.jpg', // Updated background image
-  '/studio.jpg'
+  '/assets/images/back2.jpg',
+  '/assets/images/studio.jpg',
 ];
 
 // Helper component for letter-by-letter animation with keyword highlighting
