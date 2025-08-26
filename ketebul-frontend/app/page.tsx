@@ -20,7 +20,7 @@ const phrases = [
 // Data for Hero section's dynamic backgrounds
 const backgrounds = [
   '/back.jpg',
-  '/back2.jpg',
+  '/back2.jpg', // Updated background image
   '/studio.jpg'
 ];
 
