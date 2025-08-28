@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react'; // Import React and useState
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, Variants, Transition } from 'framer-motion';
@@ -10,28 +10,28 @@ const GOLDEN_YELLOW = '#FFD700'; // Pure Golden Yellow (Gold)
 const PRIMARY_YELLOW_TAILWIND = 'yellow-500'; // Tailwind CSS class for #F59E0B
 const HOVER_YELLOW_TAILWIND = 'yellow-600'; // Tailwind CSS class for a slightly darker yellow on hover
 
-// --- Project Data with Categories ---
+// --- Project Data with Updated Categories ---
 const projects = [
   {
     title: "SAUTI: Gifted Different Unsilenced",
     slug: "sauti",
     image: "/projects/sauti.png",
     description: "A multimedia project featuring a documentary and music compilation exploring musicians with unique abilities.",
-    category: "Documentary",
+    category: "Documentaries", // Changed from "Documentary"
   },
   {
     title: "Shades of Benga",
     slug: "shades-of-benga",
     image: "/projects/benga.jpg",
     description: "A comprehensive book and research project tracing the roots of Kenya’s popular music from 1946 to 2016.",
-    category: "Research",
+    category: "Books & Research", // Changed from "Research"
   },
   {
     title: "Uromo by Sali Oyugi",
     slug: "uromo",
     image: "/projects/uromo.jpg",
     description: "A soulful music project blending African traditions and contemporary songwriting.",
-    category: "Music Production",
+    category: "Music Projects", // Changed from "Music Production"
   },
   {
     title: "Weapon of Mass Reconciliation",
@@ -45,26 +45,28 @@ const projects = [
     slug: "ohanglaman",
     image: "/projects/ohanglaman.jpg",
     description: "Makadem's debut album mixing Ohangla sounds with modern Afro-fusion.",
-    category: "Music Production",
+    category: "Music Projects", // Changed from "Music Production"
   },
   {
     title: "Garissa Express by Gargar",
     slug: "garissa-express",
     image: "/projects/garissa.jpg",
     description: "A powerful album by the all-female group Gargar, celebrating Somali culture and identity.",
-    category: "Music Production",
+    category: "Music Projects", // Changed from "Music Production"
   },
   {
     title: "Singing Wells",
     slug: "singing-wells",
     image: "/projects/wells.png",
     description: "An initiative to document, preserve, and promote traditional music from East Africa, focusing on cultural heritage.",
-    category: "Documentation",
+    category: "Documentaries", // Changed from "Documentation" to align with "Documentaries"
   },
 ];
 
 // Define all unique categories for filtering
-const allCategories = ["All", ...Array.from(new Set(projects.map(p => p.category)))];
+// Manually defining to ensure order and consistency for the new categories
+const allCategories = ["All", "Documentaries", "Books & Research", "Music Projects", "Social Impact"];
+
 
 // Framer Motion variants for card entry animation
 const cardVariants: Variants = {
