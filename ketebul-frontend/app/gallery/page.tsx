@@ -33,7 +33,7 @@ const images = [
   { src: '/gallery/38.JPG' },
   { src: '/gallery/39.JPG' },
   { src: '/gallery/40.JPG' },
-  { src: '/gallery/41.JPG' },
+  { src: '/gallery/41.jpg' },
   { src: '/gallery/42.JPG' },
   { src: '/gallery/43.JPG' },
   { src: '/gallery/44.JPG' },
@@ -41,9 +41,9 @@ const images = [
   { src: '/gallery/46.JPG' },
   { src: '/gallery/47.JPG' },
   { src: '/gallery/48.JPG' },
-  { src: '/gallery/49.JPG' },
-  { src: '/gallery/50.JPG' },
-  { src: '/gallery/51.JPG' },
+  { src: '/gallery/49.jpg' },
+  { src: '/gallery/50.jpg' },
+  { src: '/gallery/51.jpg' },
   { src: '/gallery/52.JPG' },
   { src: '/gallery/53.JPG' },
   { src: '/gallery/54.JPG' },
@@ -52,8 +52,8 @@ const images = [
   { src: '/gallery/57.JPG' },
   { src: '/gallery/58.JPG' },
   { src: '/gallery/59.JPG' },
-  { src: '/gallery/60.JPG' },
-  { src: '/gallery/61.JPG' },
+  { src: '/gallery/60.jpg' },
+  { src: '/gallery/61.jpg' },
 ];
 
 export default function GalleryPage() {
