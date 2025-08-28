@@ -217,7 +217,7 @@ export default function AboutPage() {
             transition={{ duration: 0.8, delay: 0.4 }}
           >
             <div className="relative w-full h-80 rounded-xl overflow-hidden shadow-2xl">
-              <ImageLoader src="/3.jpeg" alt="Ketebul Music Introduction" />
+              <ImageLoader src="/55.JPG" alt="Ketebul Music Introduction" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
             </div>
           </motion.div>
@@ -381,7 +381,7 @@ export default function AboutPage() {
             transition={{ duration: 0.8, delay: 0.4 }}
           >
             <div className="relative w-full h-80 rounded-xl overflow-hidden shadow-2xl">
-              <ImageLoader src="/studio.jpg" alt="Ketebul Music Video Production" />
+              <ImageLoader src="/46.JPG" alt="Ketebul Music Video Production" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
             </div>
           </motion.div>

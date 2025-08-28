@@ -14,14 +14,14 @@ const HOVER_YELLOW = 'yellow-600'; // Tailwind CSS class for a slightly darker y
 const phrases = [
   { text: 'Celebrating East African Sound', keywords: ['East', 'African'] },
   { text: 'Preserving Musical Heritage', keywords: ['Musical', 'Heritage'] },
-  { text: 'Empowering New Voices', keywords: ['New'] }
+  { text: 'Empowering New Voices', keywords: ['New', 'Voices'] }
 ];
 
 // Data for Hero section's dynamic backgrounds
 const backgrounds = [
   '/back.jpg',
-  '/assets/images/back2.jpg',
-  '/assets/images/studio.jpg',
+  '/gallery/57.JPG',
+  '/gallery/50.jpg',
 ];
 
 // Helper component for letter-by-letter animation with keyword highlighting
@@ -62,7 +62,7 @@ const AnimatedPhrase: React.FC<AnimatedPhraseProps> = ({ text, keywords }) => {
 
   return (
     <motion.h1
-      className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white mb-8 leading-tight font-josefin-sans drop-shadow-lg"
+      className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white mb-6 leading-tight font-josefin-sans drop-shadow-lg"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -136,16 +136,19 @@ const partners = [
     href: 'https://abubillamusic.com',
     alt: 'Abubila Music',
     img: '/partner1.png',
+    name: 'Abubila Music', // Added name for caption
   },
   {
     href: 'https://www.fordfoundation.org/regions/eastern-africa',
     alt: 'Ford Foundation Eastern Africa',
     img: '/partner2.png',
+    name: 'Ford Foundation', // Added name for caption
   },
   {
     href: 'https://afkenya.org',
     alt: 'French Embassy Kenya',
     img: '/partner3.png',
+    name: 'French Embassy Kenya', // Added name for caption
   },
 ];
 
@@ -216,7 +219,7 @@ export default function HomePage() {
         <AnimatePresence mode="wait">
           <motion.div
             key={heroPhraseIndex} // Key changes to re-mount and animate both background and title
-            className="absolute inset-0 z-0 bg-cover bg-center"
+            className="absolute inset-0 z-0 bg-cover bg-[center_top_30%]" // Background image position for visual balance
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -224,7 +227,7 @@ export default function HomePage() {
             style={{ backgroundImage: `url(${backgrounds[heroPhraseIndex]})` }}
           >
             {/* Dark overlay for text readability, inside the animating background div */}
-            <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center p-4">
+            <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center p-4 pb-10">
               {/* Animated Title Phrase using the new AnimatedPhrase component */}
               <AnimatedPhrase
                 text={phrases[heroPhraseIndex].text}
@@ -282,10 +285,9 @@ export default function HomePage() {
         >
           <h2 className="text-3xl sm:text-4xl font-bold mb-4 font-josefin-sans text-white">About Us</h2>
           <p className="text-gray-300 leading-relaxed mb-4">
-Ketebul Music is a not-for-profit non-governmental organization based at the GoDown Arts Centre in Nairobi, Kenya.
-          <br></br>
-          <p className="text-gray-300 leading-relaxed mb-6">
-The word "Ketebul" means "drum sticks"; it is derived from the Luo language of Western Kenya. This name was a natural choice for an organization that has a vision of an African society that celebrates its cultural identity and also recognizes the special role that artistes play every day in people’s lives.          </p>
+            Ketebul Music is a not-for-profit non-governmental organization based at the GoDown Arts Centre in Nairobi, Kenya.
+            <br />
+            The word "Ketebul" means "drum sticks"; it is derived from the Luo language of Western Kenya. This name was a natural choice for an organization that has a vision of an African society that celebrates its cultural identity and also recognizes the special role that artistes play every day in people’s lives.          
           </p>
           <Link href="/about"
             className={`bg-${PRIMARY_YELLOW} hover:bg-${HOVER_YELLOW} text-gray-900 font-bold py-3.5 px-9 rounded-full transition-colors duration-300 shadow-xl text-lg transform hover:scale-105 self-start`}
@@ -296,21 +298,21 @@ The word "Ketebul" means "drum sticks"; it is derived from the Luo language of W
       </motion.section>
 
       {/* FEATURED ARTISTS SECTION */}
-      <section className="container mx-auto px-4 py-20"> {/* Increased vertical padding */}
+      <section className="container mx-auto px-4 py-20">
         <motion.h2
           className="text-3xl sm:text-4xl font-bold mb-12 text-center font-josefin-sans text-white"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: false, amount: 0.3 }}
-          variants={sectionVariants} // Using shared section variants
+          variants={sectionVariants}
         >
           Featured Artists
         </motion.h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"> {/* Adjusted for 3 cards comfortably */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {featuredArtists.map((artist, index) => (
             <motion.div
               key={index}
-              className="bg-gray-800 rounded-xl overflow-hidden shadow-xl flex flex-col h-full cursor-pointer border-2 border-transparent p-8" // Added p-8 for larger cards
+              className="bg-gray-800 rounded-xl overflow-hidden shadow-xl flex flex-col h-full cursor-pointer border-2 border-transparent p-8"
               initial="hidden"
               whileInView="visible"
               whileHover="lift"
@@ -318,8 +320,7 @@ The word "Ketebul" means "drum sticks"; it is derived from the Luo language of W
               variants={cardVariants}
               custom={index}
             >
-              <div className="relative w-full h-72 overflow-hidden flex-shrink-0 mb-4"> {/* Increased height from h-64 to h-72 */}
-                {/* REMOVED 'fill' PROP HERE: ImageLoader component handles it internally */}
+              <div className="relative w-full h-72 overflow-hidden flex-shrink-0 mb-4">
                 <ImageLoader src={artist.image} alt={artist.name} />
                 <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-gray-900 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
@@ -376,9 +377,7 @@ The word "Ketebul" means "drum sticks"; it is derived from the Luo language of W
               variants={cardVariants}
               custom={index}
             >
-              {/* Increased height for project images */}
               <div className="relative w-full h-80 sm:h-96 overflow-hidden flex-shrink-0">
-                {/* REMOVED 'fill' PROP HERE */}
                 <ImageLoader src={project.img} alt={project.title} />
                 <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-gray-900 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
@@ -423,17 +422,19 @@ The word "Ketebul" means "drum sticks"; it is derived from the Luo language of W
               initial="hidden"
               whileInView="visible"
               viewport={{ once: false, amount: 0.2 }}
-              variants={cardVariants} // Re-using card variants for entrance animation
+              variants={cardVariants}
               custom={i}
             >
               <Link href={partner.href} target="_blank" rel="noopener noreferrer" className="block w-48 h-48 md:w-56 md:h-56 relative">
-                {/* REMOVED 'fill' PROP HERE */}
                 <ImageLoader
                   src={partner.img}
                   alt={partner.alt}
                   className="object-contain"
                 />
               </Link>
+              <p className="text-white text-center text-sm mt-2 font-semibold font-inter">
+                {partner.name}
+              </p>
             </motion.div>
           ))}
         </div>
@@ -467,7 +468,6 @@ The word "Ketebul" means "drum sticks"; it is derived from the Luo language of W
 }
 
 // Separate component for Image with Skeleton Loader
-// Ensure this component is accessible in the same file or imported correctly if in a separate file.
 interface ImageLoaderProps {
   src: string;
   alt: string;
@@ -478,12 +478,8 @@ interface ImageLoaderProps {
 
 function ImageLoader({ src, alt, width, height, className }: ImageLoaderProps) {
   const [loading, setLoading] = useState(true);
-
-  // Fallback placeholder image for when an image fails to load.
   const fallbackSrc = "https://placehold.co/200x200/525252/b3b3b3?text=Image+Missing";
 
-  // Conditionally render the Image component to correctly handle 'fill' vs 'width/height'
-  // This ensures that either 'fill' is true OR 'width' and 'height' are provided, resolving the TypeScript error.
   const imageElement = width && height ? (
     <Image
       src={src}
@@ -499,9 +495,9 @@ function ImageLoader({ src, alt, width, height, className }: ImageLoaderProps) {
       onLoad={() => setLoading(false)}
       onError={(e) => {
         setLoading(false);
-        e.currentTarget.onerror = null; // Prevents infinite loop if fallback image also fails
-        e.currentTarget.src = fallbackSrc; // Set fallback image
-        console.error(`Failed to load image: ${src}. Displaying fallback.`); // Log the specific error
+        e.currentTarget.onerror = null;
+        e.currentTarget.src = fallbackSrc;
+        console.error(`Failed to load image: ${src}. Displaying fallback.`);
       }}
       priority={false}
     />
@@ -509,7 +505,7 @@ function ImageLoader({ src, alt, width, height, className }: ImageLoaderProps) {
     <Image
       src={src}
       alt={alt}
-      fill // Use fill when width/height are not explicitly provided
+      fill
       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
       className={`
         object-contain ${className || ''}
