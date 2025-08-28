@@ -347,7 +347,7 @@ export default function AboutPage() {
             transition={{ duration: 0.8, delay: 0.4 }}
           >
             <div className="relative w-full h-80 rounded-xl overflow-hidden shadow-2xl">
-              <ImageLoader src="/studio2.jpg" alt="Ketebul Music Studio Interior" />
+              <ImageLoader src="/back2.jpg" alt="Ketebul Music Studio Interior" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
             </div>
           </motion.div>
