@@ -1,14 +1,90 @@
 'use client';
 
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence, Variants, Transition } from 'framer-motion';
-import { useState, useEffect } from 'react';
 
 // --- Global Theme & Color Constants ---
-// Define a consistent yellow color for the entire project
+const GOLDEN_YELLOW = '#FFD700'; // Pure Golden Yellow (Gold) - used for direct color application
 const PRIMARY_YELLOW = 'yellow-500'; // Tailwind CSS class for #F59E0B
 const HOVER_YELLOW = 'yellow-600'; // Tailwind CSS class for a slightly darker yellow on hover
+
+// ImageLoader component for handling image loading states and fallbacks
+interface ImageLoaderProps {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  className?: string;
+  objectFit?: 'cover' | 'contain'; // Added objectFit prop
+}
+
+function ImageLoader({ src, alt, width, height, className, objectFit = 'cover' }: ImageLoaderProps) {
+  const [loading, setLoading] = useState(true);
+  const [imageSrc, setImageSrc] = useState(src); // State to manage image source, especially for fallback
+
+  const fallbackSrc = 'https://placehold.co/600x400/374151/DAA520?text=Image+Missing';
+
+  useEffect(() => {
+    setImageSrc(src); // Update imageSrc when prop changes
+    setLoading(true); // Reset loading state
+  }, [src]);
+
+  const handleError = () => {
+    setLoading(false);
+    setImageSrc(fallbackSrc);
+    console.error(`Failed to load image: ${src}. Displaying fallback.`);
+  };
+
+  const handleLoad = () => {
+    setLoading(false);
+  };
+
+  const effectiveClassName = `
+    ${objectFit === 'cover' ? 'object-cover' : 'object-contain'} object-center
+    ${className || ''}
+    transition-opacity duration-500 ease-in-out
+    ${loading ? 'opacity-0' : 'opacity-100'}
+  `;
+
+  const imageElement = width && height ? (
+    <Image
+      src={imageSrc}
+      alt={alt}
+      width={width}
+      height={height}
+      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+      className={effectiveClassName}
+      onLoad={handleLoad}
+      onError={handleError}
+      priority={false}
+    />
+  ) : (
+    <Image
+      src={imageSrc}
+      alt={alt}
+      fill
+      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+      className={effectiveClassName}
+      onLoad={handleLoad}
+      onError={handleError}
+      priority={false}
+    />
+  );
+
+  return (
+    <div className="relative w-full h-full">
+      {imageElement}
+      {loading && (
+        <div className="absolute inset-0 bg-gray-700 animate-pulse rounded-t-xl flex items-center justify-center"> {/* Adjusted rounded-t-xl */}
+          <span className="text-gray-400 text-sm">Loading Image...</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 
 // Data for Hero section's dynamic text
 const phrases = [
@@ -199,8 +275,8 @@ export default function HomePage() {
     lift: {
       y: -10, // Lifts a bit more
       scale: 1.04, // Enlarges slightly more
-      // Consistent shadow color with PRIMARY_YELLOW (Tailwind yellow-500 is rgb(245, 158, 11))
-      boxShadow: `0 12px 25px rgba(0,0,0,0.4), 0 0 0 4px rgba(245, 158, 11, 0.6)`,
+      // Consistent shadow color with GOLDEN_YELLOW
+      boxShadow: `0 12px 25px rgba(0,0,0,0.4), 0 0 0 4px ${GOLDEN_YELLOW}`,
       transition: {
         type: "spring",
         stiffness: 350, // More responsive hover
@@ -213,7 +289,7 @@ export default function HomePage() {
     // Main container for the Home page, inheriting global dark background and light text
     <main className="min-h-screen bg-gray-950 text-gray-100 font-inter">
       {/* HERO SECTION - Dynamic Backgrounds and Phrases (Full Screen Desktop) */}
-      {/* h-screen ensures it takes full viewport height on all devices. For mobile, it will scroll. */}
+      {/* h-screen ensures it takes full viewport height on all devices on desktop. For mobile, it will scroll. */}
       <section className="relative h-screen flex items-center justify-center text-center overflow-hidden">
         {/* Animated Background Images and Phrase - Wrapped in a single AnimatePresence for sync */}
         <AnimatePresence mode="wait">
@@ -264,7 +340,7 @@ export default function HomePage() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: false, amount: 0.4 }}
           transition={{ duration: 1, ease: 'easeOut' }}
-          className="relative w-full h-80 rounded-lg overflow-hidden shadow-2xl"
+          className="relative w-full h-80 rounded-xl overflow-hidden shadow-2xl"
         >
           <Image
             src="/tabu-osusa.jpg"
@@ -312,7 +388,7 @@ export default function HomePage() {
           {featuredArtists.map((artist, index) => (
             <motion.div
               key={index}
-              className="bg-gray-800 rounded-xl overflow-hidden shadow-xl flex flex-col h-full cursor-pointer border-2 border-transparent p-8"
+              className="bg-gradient-to-r from-gray-900 to-black rounded-2xl overflow-hidden shadow-2xl flex flex-col h-full cursor-pointer group border-2 border-transparent hover:border-yellow-500 transition-all duration-300 ease-in-out p-8"
               initial="hidden"
               whileInView="visible"
               whileHover="lift"
@@ -320,11 +396,11 @@ export default function HomePage() {
               variants={cardVariants}
               custom={index}
             >
-              <div className="relative w-full h-72 overflow-hidden flex-shrink-0 mb-4">
-                <ImageLoader src={artist.image} alt={artist.name} />
-                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-gray-900 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="relative w-full h-72 overflow-hidden flex-shrink-0 mb-4 rounded-xl"> {/* Added rounded-xl here */}
+                <ImageLoader src={artist.image} alt={artist.name} objectFit="cover" />
+                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-gray-900 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300 rounded-b-xl"></div>
               </div>
-              <div className="p-6 flex flex-col flex-grow">
+              <div className="p-6 flex flex-col flex-grow items-start"> {/* Adjusted for p-6 */}
                 <h2 className="text-3xl font-bold mb-3 font-josefin-sans text-white leading-snug">
                   {artist.name}
                 </h2>
@@ -369,7 +445,7 @@ export default function HomePage() {
           {featuredProjects.map((project, index) => (
             <motion.div
               key={index}
-              className="bg-gray-800 rounded-xl overflow-hidden shadow-xl flex flex-col h-full cursor-pointer border-2 border-transparent"
+              className="bg-gradient-to-r from-gray-900 to-black rounded-2xl overflow-hidden shadow-2xl flex flex-col h-full cursor-pointer group border-2 border-transparent hover:border-yellow-500 transition-all duration-300 ease-in-out p-8"
               initial="hidden"
               whileInView="visible"
               whileHover="lift"
@@ -377,11 +453,11 @@ export default function HomePage() {
               variants={cardVariants}
               custom={index}
             >
-              <div className="relative w-full h-80 sm:h-96 overflow-hidden flex-shrink-0">
-                <ImageLoader src={project.img} alt={project.title} />
-                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-gray-900 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="relative w-full h-80 sm:h-96 overflow-hidden flex-shrink-0 rounded-xl"> {/* Added rounded-xl here */}
+                <ImageLoader src={project.img} alt={project.title} objectFit="cover" />
+                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-gray-900 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300 rounded-b-xl"></div>
               </div>
-              <div className="p-6 flex flex-col flex-grow">
+              <div className="p-6 flex flex-col flex-grow items-start"> {/* Adjusted for p-6 */}
                 <h3 className="text-xl font-semibold mb-2 font-josefin-sans text-white">{project.title}</h3>
                 <Link href={`/projects/${project.slug}`} className={`mt-4 inline-flex items-center text-${PRIMARY_YELLOW} hover:text-${HOVER_YELLOW}`}>
                   View Project →
@@ -418,21 +494,21 @@ export default function HomePage() {
           {partners.map((partner, i) => (
             <motion.div
               key={i}
-              className="flex flex-col items-center p-4 bg-gray-800 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+              className="flex flex-col items-center p-8 bg-gradient-to-r from-gray-900 to-black rounded-2xl shadow-2xl group border-2 border-transparent hover:border-yellow-500 transition-all duration-300 transform hover:scale-105"
               initial="hidden"
               whileInView="visible"
               viewport={{ once: false, amount: 0.2 }}
               variants={cardVariants}
               custom={i}
             >
-              <Link href={partner.href} target="_blank" rel="noopener noreferrer" className="block w-48 h-48 md:w-56 md:h-56 relative">
+              <Link href={partner.href} target="_blank" rel="noopener noreferrer" className="block w-48 h-48 md:w-56 md:h-56 relative p-4 rounded-xl"> {/* Added rounded-xl here */}
                 <ImageLoader
                   src={partner.img}
                   alt={partner.alt}
-                  className="object-contain"
+                  objectFit="contain" // Explicitly use contain for logos
                 />
               </Link>
-              <p className="text-white text-center text-sm mt-2 font-semibold font-inter">
+              <p className="text-white text-center text-lg mt-2 font-semibold font-inter">
                 {partner.name}
               </p>
             </motion.div>
@@ -464,73 +540,5 @@ export default function HomePage() {
         </motion.div>
       </section>
     </main>
-  );
-}
-
-// Separate component for Image with Skeleton Loader
-interface ImageLoaderProps {
-  src: string;
-  alt: string;
-  width?: number;
-  height?: number;
-  className?: string;
-}
-
-function ImageLoader({ src, alt, width, height, className }: ImageLoaderProps) {
-  const [loading, setLoading] = useState(true);
-  const fallbackSrc = "https://placehold.co/200x200/525252/b3b3b3?text=Image+Missing";
-
-  const imageElement = width && height ? (
-    <Image
-      src={src}
-      alt={alt}
-      width={width}
-      height={height}
-      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
-      className={`
-        object-contain ${className || ''}
-        transition-opacity duration-500 ease-in-out
-        ${loading ? 'opacity-0' : 'opacity-100'}
-      `}
-      onLoad={() => setLoading(false)}
-      onError={(e) => {
-        setLoading(false);
-        e.currentTarget.onerror = null;
-        e.currentTarget.src = fallbackSrc;
-        console.error(`Failed to load image: ${src}. Displaying fallback.`);
-      }}
-      priority={false}
-    />
-  ) : (
-    <Image
-      src={src}
-      alt={alt}
-      fill
-      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
-      className={`
-        object-contain ${className || ''}
-        transition-opacity duration-500 ease-in-out
-        ${loading ? 'opacity-0' : 'opacity-100'}
-      `}
-      onLoad={() => setLoading(false)}
-      onError={(e) => {
-        setLoading(false);
-        e.currentTarget.onerror = null;
-        e.currentTarget.src = fallbackSrc;
-        console.error(`Failed to load image: ${src}. Displaying fallback.`);
-      }}
-      priority={false}
-    />
-  );
-
-  return (
-    <div className="relative w-full h-full flex items-center justify-center">
-      {imageElement}
-      {loading && (
-        <div className="absolute inset-0 bg-gray-700 animate-pulse rounded-md flex items-center justify-center">
-          <span className="text-gray-400 text-sm">Loading Image...</span>
-        </div>
-      )}
-    </div>
   );
 }

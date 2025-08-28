@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { motion, Variants, Transition } from 'framer-motion';
-import { useState } from 'react'; // Needed for ImageLoader's useState
+import { useState, useEffect } from 'react'; // Added useEffect for ImageLoader's new logic
 import Link from 'next/link'; // Added for project links
 
 // --- Global Theme & Color Constants ---
@@ -57,56 +57,59 @@ interface ImageLoaderProps {
   width?: number;
   height?: number;
   className?: string;
+  objectFit?: 'cover' | 'contain'; // Added objectFit prop
 }
 
-function ImageLoader({ src, alt, width, height, className }: ImageLoaderProps) {
+function ImageLoader({ src, alt, width, height, className, objectFit = 'cover' }: ImageLoaderProps) {
   const [loading, setLoading] = useState(true);
+  const [imageSrc, setImageSrc] = useState(src); // State to manage image source, especially for fallback
 
-  // Fallback placeholder image for when an image fails to load.
   const fallbackSrc = "https://placehold.co/200x200/525252/b3b3b3?text=Image+Missing";
+
+  useEffect(() => {
+    setImageSrc(src); // Update imageSrc when prop changes
+    setLoading(true); // Reset loading state
+  }, [src]);
+
+  const handleError = () => {
+    setLoading(false);
+    setImageSrc(fallbackSrc);
+    console.error(`Failed to load image: ${src}. Displaying fallback.`);
+  };
+
+  const handleLoad = () => {
+    setLoading(false);
+  };
+
+  const effectiveClassName = `
+    ${objectFit === 'cover' ? 'object-cover' : 'object-contain'} object-center
+    ${className || ''}
+    transition-opacity duration-500 ease-in-out
+    ${loading ? 'opacity-0' : 'opacity-100'}
+  `;
 
   // Conditionally render the Image component to correctly handle 'fill' vs 'width/height'
   const imageElement = width && height ? (
     <Image
-      src={src}
+      src={imageSrc}
       alt={alt}
       width={width}
       height={height}
       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-      className={`
-        object-cover object-center rounded-xl
-        transition-opacity duration-500 ease-in-out
-        ${loading ? 'opacity-0' : 'opacity-100'}
-        ${className || ''}
-      `}
-      onLoad={() => setLoading(false)}
-      onError={(e) => {
-        setLoading(false);
-        e.currentTarget.onerror = null;
-        e.currentTarget.src = fallbackSrc;
-        console.error(`Failed to load image: ${src}. Displaying fallback.`);
-      }}
+      className={effectiveClassName}
+      onLoad={handleLoad}
+      onError={handleError}
       priority={false}
     />
   ) : (
     <Image
-      src={src}
+      src={imageSrc}
       alt={alt}
       fill
       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-      className={`
-        object-cover object-center rounded-xl
-        transition-opacity duration-500 ease-in-out
-        ${loading ? 'opacity-0' : 'opacity-100'}
-        ${className || ''}
-      `}
-      onLoad={() => setLoading(false)}
-      onError={(e) => {
-        setLoading(false);
-        e.currentTarget.onerror = null;
-        e.currentTarget.src = fallbackSrc;
-        console.error(`Failed to load image: ${src}. Displaying fallback.`);
-      }}
+      className={effectiveClassName}
+      onLoad={handleLoad}
+      onError={handleError}
       priority={false}
     />
   );
@@ -217,7 +220,8 @@ export default function AboutPage() {
             transition={{ duration: 0.8, delay: 0.4 }}
           >
             <div className="relative w-full h-80 rounded-xl overflow-hidden shadow-2xl">
-              <ImageLoader src="/55.JPG" alt="Ketebul Music Introduction" />
+              {/* Changed objectFit to "contain" for this specific image */}
+              <ImageLoader src="/55.JPG" alt="Ketebul Music Introduction" objectFit="contain" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
             </div>
           </motion.div>
@@ -405,7 +409,7 @@ export default function AboutPage() {
               variants={cardVariants}
               custom={index}
             >
-              <div className="relative w-full h-96 flex-shrink-0 overflow-hidden"> {/* Increased height significantly here */}
+              <div className="relative w-full h-96 flex-shrink-0 overflow-hidden rounded-xl">
                 <ImageLoader src={project.image} alt={project.title} />
                 <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-gray-900 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
