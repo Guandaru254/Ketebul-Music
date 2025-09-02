@@ -46,6 +46,31 @@ const teamMembers = [
       whatsapp: 'https://wa.me/254712345678',
     },
   },
+  
+  {
+    name: 'Nick Abonyo',
+    role: 'Label Manager',
+    photo: '/team/nick.jpg',
+    bio: 'Nick oversees artist relations and project coordination with a tech-savvy approach to music management.',
+    social: {
+      instagram: 'https://www.instagram.com/nickabonyo',
+      facebook: 'https://www.facebook.com/nickabonyo',
+      linkedin: 'https://www.linkedin.com/in/nickabonyo',
+      whatsapp: 'https://wa.me/254712345678',
+    },
+  },
+  {
+    name: 'Patrick "Sapat" Ondiek',
+    role: 'Projects Manager',
+    photo: '/team/patrick.jpg',
+    bio: 'Patrick is a videographer passionate about visual storytelling and documentary production, bringing our projects to life.',
+    social: {
+      instagram: 'https://www.instagram.com/patrickondiek',
+      facebook: 'https://www.facebook.com/patrickondiek',
+      linkedin: 'https://www.linkedin.com/in/patrickondiek',
+      whatsapp: 'https://wa.me/254712345678',
+    },
+  },
   {
     name: 'Bill Odidi',
     role: 'Board Member & Editor',
@@ -163,30 +188,6 @@ const teamMembers = [
       instagram: 'https://www.instagram.com/tobiasodhiambo',
       facebook: 'https://www.facebook.com/tobiasodhiambo',
       linkedin: 'https://www.linkedin.com/in/tobiasodhiambo',
-      whatsapp: 'https://wa.me/254712345678',
-    },
-  },
-  {
-    name: 'Nick Abonyo',
-    role: 'Label Manager',
-    photo: '/team/nick.jpg',
-    bio: 'Nick oversees artist relations and project coordination with a tech-savvy approach to music management.',
-    social: {
-      instagram: 'https://www.instagram.com/nickabonyo',
-      facebook: 'https://www.facebook.com/nickabonyo',
-      linkedin: 'https://www.linkedin.com/in/nickabonyo',
-      whatsapp: 'https://wa.me/254712345678',
-    },
-  },
-  {
-    name: 'Patrick "Sapat" Ondiek',
-    role: 'Projects Manager',
-    photo: '/team/patrick.jpg',
-    bio: 'Patrick is a videographer passionate about visual storytelling and documentary production, bringing our projects to life.',
-    social: {
-      instagram: 'https://www.instagram.com/patrickondiek',
-      facebook: 'https://www.facebook.com/patrickondiek',
-      linkedin: 'https://www.linkedin.com/in/patrickondiek',
       whatsapp: 'https://wa.me/254712345678',
     },
   },

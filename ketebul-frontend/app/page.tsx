@@ -1,8 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
 import { motion, AnimatePresence, Variants, Transition } from 'framer-motion';
 
 // --- Global Theme & Color Constants ---
@@ -48,28 +46,24 @@ function ImageLoader({ src, alt, width, height, className, objectFit = 'cover' }
     ${loading ? 'opacity-0' : 'opacity-100'}
   `;
 
+  // Use a standard <img> tag for compatibility
   const imageElement = width && height ? (
-    <Image
+    <img
       src={imageSrc}
       alt={alt}
       width={width}
       height={height}
-      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
       className={effectiveClassName}
       onLoad={handleLoad}
       onError={handleError}
-      priority={false}
     />
   ) : (
-    <Image
+    <img
       src={imageSrc}
       alt={alt}
-      fill
-      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-      className={effectiveClassName}
+      className={`${effectiveClassName} w-full h-full`}
       onLoad={handleLoad}
       onError={handleError}
-      priority={false}
     />
   );
 
@@ -222,9 +216,9 @@ const partners = [
   },
   {
     href: 'https://afkenya.org',
-    alt: 'French Embassy Kenya',
-    img: '/partner3.png',
-    name: 'French Embassy Kenya', // Added name for caption
+    alt: 'Alliancw Francaise de Nairobi',
+    img: '/partner3.jpg',
+    name: 'Alliancw Francaise de Nairobi', // Added name for caption
   },
 ];
 
@@ -315,12 +309,12 @@ export default function HomePage() {
                 exit={{ opacity: 0, scale: 0.8 }} // Exits by shrinking
                 transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }} // Delayed after title
               >
-                <Link
+                <a
                   href="/about"
                   className={`inline-block bg-${PRIMARY_YELLOW} hover:bg-${HOVER_YELLOW} text-gray-900 font-bold py-3.5 px-9 rounded-full transition-all duration-300 shadow-xl text-lg transform hover:scale-105`}
                 >
                   Learn More
-                </Link>
+                </a>
               </motion.div>
             </div>
           </motion.div>
@@ -342,13 +336,11 @@ export default function HomePage() {
           transition={{ duration: 1, ease: 'easeOut' }}
           className="relative w-full h-80 rounded-xl overflow-hidden shadow-2xl"
         >
-          <Image
+          {/* Use a standard <img> tag */}
+          <img
             src="/tabu-osusa.jpg"
             alt="About Ketebul"
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 500px"
-            className="object-cover object-center"
-            priority
+            className="w-full h-full object-cover object-center"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
         </motion.div>
@@ -365,11 +357,11 @@ export default function HomePage() {
             <br />
             The word "Ketebul" means "drum sticks"; it is derived from the Luo language of Western Kenya. This name was a natural choice for an organization that has a vision of an African society that celebrates its cultural identity and also recognizes the special role that artistes play every day in people’s lives.          
           </p>
-          <Link href="/about"
+          <a href="/about"
             className={`bg-${PRIMARY_YELLOW} hover:bg-${HOVER_YELLOW} text-gray-900 font-bold py-3.5 px-9 rounded-full transition-colors duration-300 shadow-xl text-lg transform hover:scale-105 self-start`}
           >
             Learn more about us →
-          </Link>
+          </a>
         </motion.div>
       </motion.section>
 
@@ -407,12 +399,12 @@ export default function HomePage() {
                 <p className="text-gray-300 text-base leading-relaxed flex-grow line-clamp-4">
                   {artist.bio}
                 </p>
-                <Link href={`/artists/${artist.slug}`} className={`mt-6 inline-flex items-center text-${PRIMARY_YELLOW} hover:text-${HOVER_YELLOW} font-semibold transition-colors duration-200 group-hover:translate-x-1`}>
+                <a href={`/artists/${artist.slug}`} className={`mt-6 inline-flex items-center text-${PRIMARY_YELLOW} hover:text-${HOVER_YELLOW} font-semibold transition-colors duration-200 group-hover:translate-x-1`}>
                   Explore Profile
                   <svg className="ml-2 w-5 h-5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                   </svg>
-                </Link>
+                </a>
               </div>
             </motion.div>
           ))}
@@ -424,9 +416,9 @@ export default function HomePage() {
           viewport={{ once: false, amount: 0.3 }}
           variants={sectionVariants}
         >
-          <Link href="/artists" className={`bg-${PRIMARY_YELLOW} hover:bg-${HOVER_YELLOW} text-gray-900 font-bold py-3.5 px-9 rounded-full transition-colors duration-300 shadow-lg text-lg transform hover:scale-105`}>
+          <a href="/artists" className={`bg-${PRIMARY_YELLOW} hover:bg-${HOVER_YELLOW} text-gray-900 font-bold py-3.5 px-9 rounded-full transition-colors duration-300 shadow-lg text-lg transform hover:scale-105`}>
             See All Artists →
-          </Link>
+          </a>
         </motion.div>
       </section>
 
@@ -459,9 +451,9 @@ export default function HomePage() {
               </div>
               <div className="p-6 flex flex-col flex-grow items-start"> {/* Adjusted for p-6 */}
                 <h3 className="text-xl font-semibold mb-2 font-josefin-sans text-white">{project.title}</h3>
-                <Link href={`/projects/${project.slug}`} className={`mt-4 inline-flex items-center text-${PRIMARY_YELLOW} hover:text-${HOVER_YELLOW}`}>
+                <a href={`/projects/${project.slug}`} className={`mt-4 inline-flex items-center text-${PRIMARY_YELLOW} hover:text-${HOVER_YELLOW}`}>
                   View Project →
-                </Link>
+                </a>
               </div>
             </motion.div>
           ))}
@@ -473,9 +465,9 @@ export default function HomePage() {
           viewport={{ once: false, amount: 0.3 }}
           variants={sectionVariants}
         >
-          <Link href="/projects" className={`bg-${PRIMARY_YELLOW} hover:bg-${HOVER_YELLOW} text-gray-900 font-bold py-3.5 px-9 rounded-full transition-colors duration-300 shadow-lg text-lg transform hover:scale-105`}>
+          <a href="/projects" className={`bg-${PRIMARY_YELLOW} hover:bg-${HOVER_YELLOW} text-gray-900 font-bold py-3.5 px-9 rounded-full transition-colors duration-300 shadow-lg text-lg transform hover:scale-105`}>
             See All Projects →
-          </Link>
+          </a>
         </motion.div>
       </section>
 
@@ -501,13 +493,13 @@ export default function HomePage() {
               variants={cardVariants}
               custom={i}
             >
-              <Link href={partner.href} target="_blank" rel="noopener noreferrer" className="block w-48 h-48 md:w-56 md:h-56 relative p-4 rounded-xl"> {/* Added rounded-xl here */}
+              <a href={partner.href} target="_blank" rel="noopener noreferrer" className="block w-48 h-48 md:w-56 md:h-56 relative p-4 rounded-xl"> {/* Added rounded-xl here */}
                 <ImageLoader
                   src={partner.img}
                   alt={partner.alt}
                   objectFit="contain" // Explicitly use contain for logos
                 />
-              </Link>
+              </a>
               <p className="text-white text-center text-lg mt-2 font-semibold font-inter">
                 {partner.name}
               </p>
@@ -531,12 +523,12 @@ export default function HomePage() {
           <p className="text-lg text-gray-800 max-w-2xl mx-auto mb-10">
             Support our mission to preserve and promote East African music. Your contribution helps us empower artists and enrich cultural heritage.
           </p>
-          <Link
+          <a
             href="/contact"
             className={`bg-gray-900 hover:bg-gray-800 text-${PRIMARY_YELLOW} font-bold py-3.5 px-9 rounded-full transition-colors duration-300 shadow-lg text-lg transform hover:scale-105`}
           >
             Get Involved
-          </Link>
+          </a>
         </motion.div>
       </section>
     </main>
