@@ -373,9 +373,6 @@ export default function AboutPage() {
             <p className="text-gray-300 leading-relaxed mb-4 text-left">
               These documentaries form an integral part of the cultural archives that Ketebul Music meticulously maintains. Through this audiovisual repository, we process and store invaluable material on the evolution of East African music genres.
             </p>
-            <p className="text-gray-300 leading-relaxed text-left">
-              Beyond documentaries, we offer comprehensive services for the production of high-quality music videos. Our expert editing team is equipped with a Mac M1 running Final Cut Pro and Adobe Premiere 2021, ensuring professional and polished visual content.
-            </p>
           </motion.div>
           <motion.div
             className="md:order-1"
