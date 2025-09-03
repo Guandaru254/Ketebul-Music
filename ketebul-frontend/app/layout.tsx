@@ -1,10 +1,11 @@
 import './globals.css';
 import type { Metadata, Viewport } from 'next';
 import { Inter, Josefin_Sans } from 'next/font/google';
-import Layout from '../components/Layout'; // Import your custom Layout component
-import { Suspense } from 'react'; // Import Suspense for robust hydration
-import { Analytics } from '@vercel/analytics/react'; // Vercel Analytics
-import { SpeedInsights } from '@vercel/speed-insights/next'; // Vercel Speed Insights
+import Layout from '../components/Layout';
+import { Suspense } from 'react';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
+import TransitionProvider from '../components/TransitionProvider';
 
 // Define metadata for SEO (best practice in App Router)
 export const metadata: Metadata = {
@@ -65,7 +66,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${inter.variable} ${josefinSans.variable} font-inter`}>
         {/* Wrap Layout component in Suspense for robust client-side rendering/hydration */}
         <Suspense>
-          <Layout>{children}</Layout>
+          <Layout>
+            <TransitionProvider>{children}</TransitionProvider>
+          </Layout>
         </Suspense>
         {/* Vercel Analytics and Speed Insights components are added here to ensure they are present on every page */}
         <Analytics />
