@@ -3,6 +3,8 @@ import type { Metadata, Viewport } from 'next';
 import { Inter, Josefin_Sans } from 'next/font/google';
 import Layout from '../components/Layout'; // Import your custom Layout component
 import { Suspense } from 'react'; // Import Suspense for robust hydration
+import { Analytics } from '@vercel/analytics/react'; // Vercel Analytics
+import { SpeedInsights } from '@vercel/speed-insights/next'; // Vercel Speed Insights
 
 // Define metadata for SEO (best practice in App Router)
 export const metadata: Metadata = {
@@ -65,6 +67,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Suspense>
           <Layout>{children}</Layout>
         </Suspense>
+        {/* Vercel Analytics and Speed Insights components are added here to ensure they are present on every page */}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
