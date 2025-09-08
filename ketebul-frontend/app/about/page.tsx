@@ -334,7 +334,7 @@ export default function AboutPage() {
             className="flex flex-col items-start"
           >
             <p className="text-gray-300 leading-relaxed mb-4 text-left">
-              Located in Tena Estate, Ketebul Music is proud to host two fully equipped analogue and digital studios. These facilities are designed to cater to a wide range of audio production needs, from intricate traditional recordings to modern, high-fidelity sound engineering.
+              Located in Tena Estate, Eastlands Nairobi, Ketebul Music is proud to host two fully equipped analogue and digital studios. These facilities are designed to cater to a wide range of audio production needs, from intricate traditional recordings to modern, high-fidelity sound engineering.
             </p>
             <p className="text-gray-300 leading-relaxed text-left">
               Our studios provide a creative and professional environment where artists can bring their musical visions to life, ensuring exceptional sound quality and a seamless recording experience.

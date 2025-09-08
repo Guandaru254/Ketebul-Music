@@ -22,6 +22,7 @@ function ImageLoader({ src, alt, width, height, className, objectFit = 'cover' }
   const [loading, setLoading] = useState(true);
   const [imageSrc, setImageSrc] = useState(src); // State to manage image source, especially for fallback
 
+  // Fallback image source, providing clear feedback if the primary image fails
   const fallbackSrc = 'https://placehold.co/600x400/374151/DAA520?text=Image+Missing';
 
   useEffect(() => {
@@ -71,7 +72,7 @@ function ImageLoader({ src, alt, width, height, className, objectFit = 'cover' }
     <div className="relative w-full h-full">
       {imageElement}
       {loading && (
-        <div className="absolute inset-0 bg-gray-700 animate-pulse rounded-t-xl flex items-center justify-center"> {/* Adjusted rounded-t-xl */}
+        <div className="absolute inset-0 bg-gray-700 animate-pulse rounded-xl flex items-center justify-center">
           <span className="text-gray-400 text-sm">Loading Image...</span>
         </div>
       )}
@@ -80,18 +81,29 @@ function ImageLoader({ src, alt, width, height, className, objectFit = 'cover' }
 }
 
 
-// Data for Hero section's dynamic text
-const phrases = [
-  { text: 'Celebrating East African Sound', keywords: ['East', 'African'] },
-  { text: 'Preserving Musical Heritage', keywords: ['Musical', 'Heritage'] },
-  { text: 'Empowering New Voices', keywords: ['New', 'Voices'] }
-];
-
-// Data for Hero section's dynamic backgrounds
-const backgrounds = [
-  '/back.jpg',
-  '/gallery/57.JPG',
-  '/gallery/50.jpg',
+// Refactored data for Hero section's dynamic text and backgrounds
+const heroContent = [
+  { 
+    text: 'Celebrating East African Sound', 
+    keywords: ['East', 'African'], 
+    img: '/benga.jpg', 
+    position: 'bg-left',
+    mobilePosition: 'left 25%' // Anchored to the left to show 'Shades of Benga'
+  },
+  { 
+    text: 'Preserving Musical Heritage', 
+    keywords: ['Musical', 'Heritage'], 
+    img: '/sauti.png', 
+    position: 'bg-center', // This image is well-suited for a center position on all screens
+    mobilePosition: 'center' // Explicitly center-center for clarity
+  },
+  { 
+    text: 'Empowering New Voices', 
+    keywords: ['New', 'Voices'], 
+    img: '/wells.png', 
+    position: 'bg-bottom',
+    mobilePosition: '50% 100%' // Anchored to the bottom to show 'Singing Wells'
+  }
 ];
 
 // Helper component for letter-by-letter animation with keyword highlighting
@@ -111,7 +123,7 @@ const AnimatedPhrase: React.FC<AnimatedPhraseProps> = ({ text, keywords }) => {
       opacity: 1,
       transition: {
         staggerChildren: 0.08, // Time delay between each word's animation start
-        delayChildren: 0.5,    // Initial delay before the first word animates
+        delayChildren: 0.5,    // Initial delay before the first word animates
       },
     },
   };
@@ -124,7 +136,7 @@ const AnimatedPhrase: React.FC<AnimatedPhraseProps> = ({ text, keywords }) => {
       y: 0, // Animate to original position
       transition: {
         type: "spring", // Spring animation for a natural feel
-        damping: 12,    // Controls oscillation
+        damping: 12,    // Controls oscillation
         stiffness: 100, // Controls the spring's stiffness
       },
     },
@@ -158,49 +170,36 @@ const AnimatedPhrase: React.FC<AnimatedPhraseProps> = ({ text, keywords }) => {
   );
 };
 
-
-// Sample data for featured artists (UPDATED based on screenshot request)
-const featuredArtists = [
-  {
-    name: 'Bado',
-    image: '/artists/bado.jpg',
-    bio: 'Hailing from the coastal town of Watamu in Malindi, Bado was born Mohamed Said Ngana. Although he started singing publicly in 2005, he has been composing music since childhood. His music is deeply rooted in coastal traditions...',
-    slug: 'bado',
-  },
-  {
-    name: 'Ontiri Bikundo',
-    image: '/artists/ontiri.jpg',
-    bio: 'Ontiri Bikundo was born in 1976 in Nyaribari Chache constituency of Kisii District. His parents passed away before he was old enough to know them, and he was raised by his grandmother. His music reflects his life\'s journey and the rich Kisii culture...',
-    slug: 'ontiri-bikundo',
-  },
-  {
-    name: 'Olith Ratego',
-    image: '/artists/olith.jpg',
-    bio: 'Olith Ratego was born Musa Odhiambo Omondi, in Asere Ugenya, Siaya District. The middle child in a family of three, he started playing the nyatiti (a traditional Luo lyre) at a young age. His music is a modern interpretation of ancient sounds...',
-    slug: 'olith-ratego',
-  },
-];
-
-// Sample data for featured projects
-const featuredProjects = [
+// Refactored data for featured projects with a 'type' property
+const allProjects = [
   {
     slug: 'sauti',
     title: 'SAUTI: Gifted Different Unsilenced',
-    img: '/projects/sauti.png'
+    img: '/projects/sauti.png',
+    type: 'Documentary',
   },
   {
     slug: 'shades-of-benga',
     title: 'Shades of Benga',
-    img: '/projects/benga.jpg'
+    img: '/projects/benga.jpg',
+    type: 'Documentary',
   },
   {
     slug: 'reconciliation',
     title: 'Weapon of Mass Reconciliation',
-    img: '/projects/reconciliation.jpg'
-  }
+    img: '/projects/reconciliation.jpg',
+    type: 'Other Project',
+  },
 ];
 
-// Sample data for partners
+// Sort projects based on the specified order: Documentaries, then Other Projects
+const sortedProjects = [...allProjects].sort((a, b) => {
+  const order = ['Documentary', 'Other Project'];
+  return order.indexOf(a.type) - order.indexOf(b.type);
+});
+
+
+// Sample data for partners (using provided image paths as placeholders)
 const partners = [
   {
     href: 'https://abubillamusic.com',
@@ -216,20 +215,20 @@ const partners = [
   },
   {
     href: 'https://afkenya.org',
-    alt: 'Alliancw Francaise de Nairobi',
+    alt: 'Alliance Francaise de Nairobi',
     img: '/partner3.jpg',
-    name: 'Alliancw Francaise de Nairobi', // Added name for caption
+    name: 'Alliance Francaise de Nairobi', // Added name for caption
   },
 ];
 
 
 export default function HomePage() {
-  const [heroPhraseIndex, setHeroPhraseIndex] = useState(0);
+  const [heroIndex, setHeroIndex] = useState(0);
 
   // Effect for cycling hero phrases and backgrounds
   useEffect(() => {
     const interval = setInterval(() => {
-      setHeroPhraseIndex((prev) => (prev + 1) % phrases.length);
+      setHeroIndex((prev) => (prev + 1) % heroContent.length);
     }, 6000); // Change every 6 seconds
     return () => clearInterval(interval);
   }, []);
@@ -257,9 +256,9 @@ export default function HomePage() {
       transition: {
         type: "spring",
         stiffness: 150, // A bit more firm
-        damping: 12,    // Less damping for a subtle bounce
-        delay: i * 0.1,  // Quicker stagger for a flowing entrance
-        duration: 0.8,   // Overall duration for visible state
+        damping: 12,    // Less damping for a subtle bounce
+        delay: i * 0.1,  // Quicker stagger for a flowing entrance
+        duration: 0.8,  // Overall duration for visible state
       } as Transition,
     }),
   };
@@ -279,6 +278,8 @@ export default function HomePage() {
     }
   };
 
+  const currentContent = heroContent[heroIndex];
+
   return (
     // Main container for the Home page, inheriting global dark background and light text
     <main className="min-h-screen bg-gray-950 text-gray-100 font-inter">
@@ -288,21 +289,72 @@ export default function HomePage() {
         {/* Animated Background Images and Phrase - Wrapped in a single AnimatePresence for sync */}
         <AnimatePresence mode="wait">
           <motion.div
-            key={heroPhraseIndex} // Key changes to re-mount and animate both background and title
-            className="absolute inset-0 z-0 bg-cover bg-[center_top_30%]" // Background image position for visual balance
+            key={heroIndex} // Key changes to re-mount and animate both background and title
+            className="absolute inset-0 z-0" // Removed fixed bg position, outer container handles opacity
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1.2, ease: 'easeInOut' }} // Longer and smoother fade
-            style={{ backgroundImage: `url(${backgrounds[heroPhraseIndex]})` }}
           >
+            {/* Inner motion.div for the zoom animation */}
+            <motion.div
+              className={`absolute inset-0 bg-cover`}
+              initial={{ scale: 1 }}
+              animate={{ scale: 1.05 }}
+              transition={{ duration: 6, ease: 'easeInOut' }} // Match the interval duration
+              style={{
+                backgroundImage: `url(${currentContent.img})`,
+                // Conditionally apply the more specific mobile position
+                backgroundPosition: currentContent.mobilePosition
+              }}
+            >
+            </motion.div>
+            
             {/* Dark overlay for text readability, inside the animating background div */}
             <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center p-4 pb-10">
               {/* Animated Title Phrase using the new AnimatedPhrase component */}
-              <AnimatedPhrase
-                text={phrases[heroPhraseIndex].text}
-                keywords={phrases[heroPhraseIndex].keywords} // Pass keywords from the phrases data
-              />
+              <motion.h1
+                className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white mb-6 leading-tight font-josefin-sans drop-shadow-lg"
+                variants={{
+                  hidden: { opacity: 0 },
+                  visible: {
+                    opacity: 1,
+                    transition: {
+                      staggerChildren: 0.08,
+                      delayChildren: 0.5,
+                    },
+                  },
+                }}
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+              >
+                {currentContent.text.split(' ').map((word, wordIndex) => (
+                  <span key={wordIndex} className="inline-block">
+                    {word.split('').map((char, charIndex) => (
+                      <motion.span
+                        key={charIndex}
+                        variants={{
+                          hidden: { opacity: 0, y: 20 },
+                          visible: {
+                            opacity: 1,
+                            y: 0,
+                            transition: {
+                              type: "spring",
+                              damping: 12,
+                              stiffness: 100,
+                            },
+                          },
+                        }}
+                        className={`inline-block ${currentContent.keywords.includes(word) ? `text-${PRIMARY_YELLOW}` : 'text-white'}`}
+                      >
+                        {char}
+                      </motion.span>
+                    ))}
+                    {wordIndex < currentContent.text.split(' ').length - 1 && '\u00A0'}
+                  </span>
+                ))}
+              </motion.h1>
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -323,104 +375,53 @@ export default function HomePage() {
 
       {/* ABOUT PREVIEW SECTION */}
       <motion.section
-        className="container mx-auto px-4 py-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center" // Increased vertical padding
+        className="container mx-auto px-4 py-20"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.4 }} // Changed to once:false for re-triggering
-        variants={sectionVariants} // Using shared section variants
+        viewport={{ once: false, amount: 0.4 }}
+        variants={sectionVariants}
       >
-        <motion.div // Added motion to image container for slide-in
-          initial={{ opacity: 0, x: -80 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: false, amount: 0.4 }}
-          transition={{ duration: 1, ease: 'easeOut' }}
-          className="relative w-full h-80 rounded-xl overflow-hidden shadow-2xl"
-        >
-          {/* Use a standard <img> tag */}
-          <img
-            src="/tabu-osusa.jpg"
-            alt="About Ketebul"
-            className="w-full h-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-        </motion.div>
-        <motion.div // Added motion to text content for slide-in
-          initial={{ opacity: 0, x: 80 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: false, amount: 0.4 }}
-          transition={{ duration: 1, ease: 'easeOut', delay: 0.2 }}
-          className="flex flex-col"
-        >
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4 font-josefin-sans text-white">About Us</h2>
-          <p className="text-gray-300 leading-relaxed mb-4">
-            Ketebul Music is a not-for-profit non-governmental organization based at the GoDown Arts Centre in Nairobi, Kenya.
-            <br />
-            The word "Ketebul" means "drum sticks"; it is derived from the Luo language of Western Kenya. This name was a natural choice for an organization that has a vision of an African society that celebrates its cultural identity and also recognizes the special role that artistes play every day in people’s lives.          
-          </p>
-          <a href="/about"
-            className={`bg-${PRIMARY_YELLOW} hover:bg-${HOVER_YELLOW} text-gray-900 font-bold py-3.5 px-9 rounded-full transition-colors duration-300 shadow-xl text-lg transform hover:scale-105 self-start`}
+        <div className="grid grid-cols-1 md:grid-cols-2 md:gap-12 md:items-start">
+          {/* Image Column */}
+          <motion.div
+            initial={{ opacity: 0, x: -80 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: false, amount: 0.4 }}
+            transition={{ duration: 1, ease: 'easeOut' }}
+            className="relative w-full h-80 rounded-xl overflow-hidden shadow-2xl"
           >
-            Learn more about us →
-          </a>
-        </motion.div>
-      </motion.section>
+            <ImageLoader src="/gallery/3.jpeg" alt="About Ketebul" objectFit="cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+          </motion.div>
 
-      {/* FEATURED ARTISTS SECTION */}
-      <section className="container mx-auto px-4 py-20">
-        <motion.h2
-          className="text-3xl sm:text-4xl font-bold mb-12 text-center font-josefin-sans text-white"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: false, amount: 0.3 }}
-          variants={sectionVariants}
-        >
-          Featured Artists
-        </motion.h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featuredArtists.map((artist, index) => (
-            <motion.div
-              key={index}
-              className="bg-gradient-to-r from-gray-900 to-black rounded-2xl overflow-hidden shadow-2xl flex flex-col h-full cursor-pointer group border-2 border-transparent hover:border-yellow-500 transition-all duration-300 ease-in-out p-8"
-              initial="hidden"
-              whileInView="visible"
-              whileHover="lift"
-              viewport={{ once: false, amount: 0.2 }}
-              variants={cardVariants}
-              custom={index}
+          {/* Text Content Column */}
+          <motion.div
+            initial={{ opacity: 0, x: 80 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: false, amount: 0.4 }}
+            transition={{ duration: 1, ease: 'easeOut', delay: 0.2 }}
+            className="flex flex-col space-y-4 md:pt-0 pt-8"
+          >
+            {/* Title above the paragraph */}
+            <h2
+              className="text-3xl sm:text-4xl font-bold font-josefin-sans text-white text-left"
             >
-              <div className="relative w-full h-72 overflow-hidden flex-shrink-0 mb-4 rounded-xl"> {/* Added rounded-xl here */}
-                <ImageLoader src={artist.image} alt={artist.name} objectFit="cover" />
-                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-gray-900 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300 rounded-b-xl"></div>
-              </div>
-              <div className="p-6 flex flex-col flex-grow items-start"> {/* Adjusted for p-6 */}
-                <h2 className="text-3xl font-bold mb-3 font-josefin-sans text-white leading-snug">
-                  {artist.name}
-                </h2>
-                <p className="text-gray-300 text-base leading-relaxed flex-grow line-clamp-4">
-                  {artist.bio}
-                </p>
-                <a href={`/artists/${artist.slug}`} className={`mt-6 inline-flex items-center text-${PRIMARY_YELLOW} hover:text-${HOVER_YELLOW} font-semibold transition-colors duration-200 group-hover:translate-x-1`}>
-                  Explore Profile
-                  <svg className="ml-2 w-5 h-5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                  </svg>
-                </a>
-              </div>
-            </motion.div>
-          ))}
+              About Us
+            </h2>
+            <p className="text-gray-300 leading-relaxed mb-4">
+              Ketebul Music is a not-for-profit non-governmental organization based at the GoDown Arts Centre in Nairobi, Kenya.
+              <br />
+              <br />
+              The word "Ketebul" means "drum sticks"; it is derived from the Luo language of Western Kenya. This name was a natural choice for an organization that has a vision of an African society that celebrates its cultural identity and also recognizes the special role that artistes play every day in people’s lives.          
+            </p>
+            <a href="/about"
+              className={`bg-${PRIMARY_YELLOW} hover:bg-${HOVER_YELLOW} text-gray-900 font-bold py-3.5 px-9 rounded-full transition-colors duration-300 shadow-xl text-lg transform hover:scale-105 self-start`}
+            >
+              Learn more about us →
+            </a>
+          </motion.div>
         </div>
-        <motion.div
-          className="text-center mt-16"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: false, amount: 0.3 }}
-          variants={sectionVariants}
-        >
-          <a href="/artists" className={`bg-${PRIMARY_YELLOW} hover:bg-${HOVER_YELLOW} text-gray-900 font-bold py-3.5 px-9 rounded-full transition-colors duration-300 shadow-lg text-lg transform hover:scale-105`}>
-            See All Artists →
-          </a>
-        </motion.div>
-      </section>
+      </motion.section>
 
       {/* FEATURED PROJECTS SECTION */}
       <section className="container mx-auto px-4 py-20">
@@ -434,7 +435,7 @@ export default function HomePage() {
           Featured Projects
         </motion.h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featuredProjects.map((project, index) => (
+          {sortedProjects.map((project, index) => (
             <motion.div
               key={index}
               className="bg-gradient-to-r from-gray-900 to-black rounded-2xl overflow-hidden shadow-2xl flex flex-col h-full cursor-pointer group border-2 border-transparent hover:border-yellow-500 transition-all duration-300 ease-in-out p-8"

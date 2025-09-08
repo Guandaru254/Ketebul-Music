@@ -13,7 +13,7 @@ const teamMembers = [
   {
     name: 'Tabu Osusa',
     role: 'Founder & Executive Director',
-    photo: '/tabu-osusa.jpg',
+    photo: '/team/tabu.jpg',
     bio: 'Tabu is an iconic figure in the East African music industry and founding Executive Director of Ketebul Music. His vision guides our mission.',
     social: {
       instagram: 'https://www.instagram.com/tabuosusa',
