@@ -120,18 +120,6 @@ const teamMembers = [
     },
   },
   {
-    name: 'Anditi Tigo',
-    role: 'Executive Assistant',
-    photo: '/team/anditi.jpg',
-    bio: 'Anditi is a strategist and singer-songwriter focused on African culture and inclusive cultural development, providing vital support.',
-    social: {
-      instagram: 'https://www.instagram.com/andititigo',
-      facebook: 'https://www.facebook.com/andititigo',
-      linkedin: 'https://www.linkedin.com/in/andititigo',
-      whatsapp: 'https://wa.me/254712345678',
-    },
-  },
-  {
     name: 'Rachel Olwanda',
     role: 'Monitoring & Evaluation Expert',
     photo: '/team/rachel.jpeg',
