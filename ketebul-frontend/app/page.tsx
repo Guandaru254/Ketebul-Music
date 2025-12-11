@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence, Variants, Transition } from 'framer-motion';
 
 // --- Global Theme & Color Constants ---
@@ -15,19 +16,27 @@ interface ImageLoaderProps {
   width?: number;
   height?: number;
   className?: string;
-  objectFit?: 'cover' | 'contain'; // Added objectFit prop
+  objectFit?: 'cover' | 'contain';
 }
 
-function ImageLoader({ src, alt, width, height, className, objectFit = 'cover' }: ImageLoaderProps) {
+function ImageLoader({
+  src,
+  alt,
+  width,
+  height,
+  className,
+  objectFit = 'cover',
+}: ImageLoaderProps) {
   const [loading, setLoading] = useState(true);
-  const [imageSrc, setImageSrc] = useState(src); // State to manage image source, especially for fallback
+  const [imageSrc, setImageSrc] = useState(src);
 
   // Fallback image source, providing clear feedback if the primary image fails
-  const fallbackSrc = 'https://placehold.co/600x400/374151/DAA520?text=Image+Missing';
+  const fallbackSrc =
+    'https://placehold.co/600x400/374151/DAA520?text=Image+Missing';
 
   useEffect(() => {
-    setImageSrc(src); // Update imageSrc when prop changes
-    setLoading(true); // Reset loading state
+    setImageSrc(src);
+    setLoading(true);
   }, [src]);
 
   const handleError = () => {
@@ -44,29 +53,34 @@ function ImageLoader({ src, alt, width, height, className, objectFit = 'cover' }
     ${objectFit === 'cover' ? 'object-cover' : 'object-contain'} object-center
     ${className || ''}
     transition-opacity duration-500 ease-in-out
-    ${loading ? 'opacity-0' : 'opacity-100'}
+    ${loading ? 'opacity-80' : 'opacity-100'}
   `;
 
-  // Use a standard <img> tag for compatibility
-  const imageElement = width && height ? (
-    <img
-      src={imageSrc}
-      alt={alt}
-      width={width}
-      height={height}
-      className={effectiveClassName}
-      onLoad={handleLoad}
-      onError={handleError}
-    />
-  ) : (
-    <img
-      src={imageSrc}
-      alt={alt}
-      className={`${effectiveClassName} w-full h-full`}
-      onLoad={handleLoad}
-      onError={handleError}
-    />
-  );
+  const imageElement =
+    width && height ? (
+      <Image
+        src={imageSrc}
+        alt={alt}
+        width={width}
+        height={height}
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+        className={effectiveClassName}
+        onLoad={handleLoad}
+        onError={handleError}
+        priority={false}
+      />
+    ) : (
+      <Image
+        src={imageSrc}
+        alt={alt}
+        fill
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+        className={effectiveClassName}
+        onLoad={handleLoad}
+        onError={handleError}
+        priority={false}
+      />
+    );
 
   return (
     <div className="relative w-full h-full">
@@ -80,30 +94,29 @@ function ImageLoader({ src, alt, width, height, className, objectFit = 'cover' }
   );
 }
 
-
 // Refactored data for Hero section's dynamic text and backgrounds
 const heroContent = [
-  { 
-    text: 'Celebrating East African Sound', 
-    keywords: ['East', 'African'], 
-    img: '/benga.jpg', 
+  {
+    text: 'Celebrating East African Sound',
+    keywords: ['East', 'African'],
+    img: '/benga.jpg',
     position: 'bg-left',
-    mobilePosition: 'left 25%' // Anchored to the left to show 'Shades of Benga'
+    mobilePosition: 'left 25%', // left for “Shades of Benga”
   },
-  { 
-    text: 'Preserving Musical Heritage', 
-    keywords: ['Musical', 'Heritage'], 
-    img: '/sauti.png', 
-    position: 'bg-center', // This image is well-suited for a center position on all screens
-    mobilePosition: 'center' // Explicitly center-center for clarity
+  {
+    text: 'Preserving Musical Heritage',
+    keywords: ['Musical', 'Heritage'],
+    img: '/sauti.png',
+    position: 'bg-center',
+    mobilePosition: 'center',
   },
-  { 
-    text: 'Empowering New Voices', 
-    keywords: ['New', 'Voices'], 
-    img: '/wells.png', 
+  {
+    text: 'Empowering New Voices',
+    keywords: ['New', 'Voices'],
+    img: '/wells.png',
     position: 'bg-bottom',
-    mobilePosition: '50% 100%' // Anchored to the bottom to show 'Singing Wells'
-  }
+    mobilePosition: '50% 100%', // bottom for “Singing Wells”
+  },
 ];
 
 // Helper component for letter-by-letter animation with keyword highlighting
@@ -113,31 +126,28 @@ interface AnimatedPhraseProps {
 }
 
 const AnimatedPhrase: React.FC<AnimatedPhraseProps> = ({ text, keywords }) => {
-  // Split the text into words to apply individual word animations and styling
   const words = text.split(' ');
 
-  // Variants for the entire phrase container, orchestrating the entrance of words
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.08, // Time delay between each word's animation start
-        delayChildren: 0.5,    // Initial delay before the first word animates
+        staggerChildren: 0.08,
+        delayChildren: 0.5,
       },
     },
   };
 
-  // Variants for individual letters within a word, creating the typing effect
   const letterVariants: Variants = {
-    hidden: { opacity: 0, y: 20 }, // Start hidden, slightly below
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
-      y: 0, // Animate to original position
+      y: 0,
       transition: {
-        type: "spring", // Spring animation for a natural feel
-        damping: 12,    // Controls oscillation
-        stiffness: 100, // Controls the spring's stiffness
+        type: 'spring',
+        damping: 12,
+        stiffness: 100,
       },
     },
   };
@@ -148,7 +158,7 @@ const AnimatedPhrase: React.FC<AnimatedPhraseProps> = ({ text, keywords }) => {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      exit="hidden" // Ensures it fades out smoothly when the parent AnimatePresence triggers
+      exit="hidden"
     >
       {words.map((word, wordIndex) => (
         <span key={wordIndex} className="inline-block">
@@ -156,13 +166,13 @@ const AnimatedPhrase: React.FC<AnimatedPhraseProps> = ({ text, keywords }) => {
             <motion.span
               key={charIndex}
               variants={letterVariants}
-              // Apply consistent golden yellow to specified keywords, otherwise white
-              className={`inline-block ${keywords.includes(word) ? `text-${PRIMARY_YELLOW}` : 'text-white'}`}
+              className={`inline-block ${
+                keywords.includes(word) ? `text-${PRIMARY_YELLOW}` : 'text-white'
+              }`}
             >
               {char}
             </motion.span>
           ))}
-          {/* Add a non-breaking space after each word, except the last one */}
           {wordIndex < words.length - 1 && '\u00A0'}
         </span>
       ))}
@@ -170,7 +180,7 @@ const AnimatedPhrase: React.FC<AnimatedPhraseProps> = ({ text, keywords }) => {
   );
 };
 
-// Refactored data for featured projects with a 'type' property
+// Refactored data for featured projects
 const allProjects = [
   {
     slug: 'sauti',
@@ -192,35 +202,32 @@ const allProjects = [
   },
 ];
 
-// Sort projects based on the specified order: Documentaries, then Other Projects
 const sortedProjects = [...allProjects].sort((a, b) => {
   const order = ['Documentary', 'Other Project'];
   return order.indexOf(a.type) - order.indexOf(b.type);
 });
 
-
-// Sample data for partners (using provided image paths as placeholders)
+// Sample data for partners
 const partners = [
   {
     href: 'https://abubillamusic.com',
     alt: 'Abubila Music',
     img: '/partner1.png',
-    name: 'Abubila Music', // Added name for caption
+    name: 'Abubila Music',
   },
   {
     href: 'https://www.fordfoundation.org/regions/eastern-africa',
     alt: 'Ford Foundation Eastern Africa',
     img: '/partner2.png',
-    name: 'Ford Foundation', // Added name for caption
+    name: 'Ford Foundation',
   },
   {
     href: 'https://afkenya.org',
     alt: 'Alliance Francaise de Nairobi',
     img: '/partner3.jpg',
-    name: 'Alliance Francaise de Nairobi', // Added name for caption
+    name: 'Alliance Francaise de Nairobi',
   },
 ];
-
 
 export default function HomePage() {
   const [heroIndex, setHeroIndex] = useState(0);
@@ -228,138 +235,89 @@ export default function HomePage() {
   // Effect for cycling hero phrases and backgrounds
   useEffect(() => {
     const interval = setInterval(() => {
-      setHeroIndex((prev) => (prev + 1) % heroContent.length);
-    }, 6000); // Change every 6 seconds
+      setHeroIndex(prev => (prev + 1) % heroContent.length);
+    }, 6000);
     return () => clearInterval(interval);
   }, []);
 
-  // Framer Motion variants for general section entry animation
   const sectionVariants: Variants = {
-    hidden: { opacity: 0, y: 50 }, // Start slightly further down
+    hidden: { opacity: 0, y: 50 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 1, // Smoother duration
-        ease: 'easeOut'
-      }
+        duration: 1,
+        ease: 'easeOut',
+      },
     },
   };
 
-  // Framer Motion variants for card entry animation
   const cardVariants: Variants = {
-    hidden: { opacity: 0, y: 40, scale: 0.95 }, // Start slightly further down, slightly smaller
-    visible: (i: number) => ({ // Use custom prop for staggered delay
+    hidden: { opacity: 0, y: 40, scale: 0.95 },
+    visible: (i: number) => ({
       opacity: 1,
       y: 0,
       scale: 1,
       transition: {
-        type: "spring",
-        stiffness: 150, // A bit more firm
-        damping: 12,    // Less damping for a subtle bounce
-        delay: i * 0.1,  // Quicker stagger for a flowing entrance
-        duration: 0.8,  // Overall duration for visible state
+        type: 'spring',
+        stiffness: 150,
+        damping: 12,
+        delay: i * 0.1,
+        duration: 0.8,
       } as Transition,
     }),
   };
 
-  // Framer Motion variants for card hover animation
   const hoverVariants: Variants = {
     lift: {
-      y: -10, // Lifts a bit more
-      scale: 1.04, // Enlarges slightly more
-      // Consistent shadow color with GOLDEN_YELLOW
+      y: -10,
+      scale: 1.04,
       boxShadow: `0 12px 25px rgba(0,0,0,0.4), 0 0 0 4px ${GOLDEN_YELLOW}`,
       transition: {
-        type: "spring",
-        stiffness: 350, // More responsive hover
-        damping: 25
+        type: 'spring',
+        stiffness: 350,
+        damping: 25,
       } as Transition,
-    }
+    },
   };
 
   const currentContent = heroContent[heroIndex];
 
   return (
-    // Main container for the Home page, inheriting global dark background and light text
     <main className="min-h-screen bg-gray-950 text-gray-100 font-inter">
-      {/* HERO SECTION - Dynamic Backgrounds and Phrases (Full Screen Desktop) */}
-      {/* h-screen ensures it takes full viewport height on all devices on desktop. For mobile, it will scroll. */}
+      {/* HERO SECTION */}
       <section className="relative h-screen flex items-center justify-center text-center overflow-hidden">
-        {/* Animated Background Images and Phrase - Wrapped in a single AnimatePresence for sync */}
         <AnimatePresence mode="wait">
           <motion.div
-            key={heroIndex} // Key changes to re-mount and animate both background and title
-            className="absolute inset-0 z-0" // Removed fixed bg position, outer container handles opacity
+            key={heroIndex}
+            className="absolute inset-0 z-0"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1.2, ease: 'easeInOut' }} // Longer and smoother fade
+            transition={{ duration: 1.2, ease: 'easeInOut' }}
           >
-            {/* Inner motion.div for the zoom animation */}
             <motion.div
-              className={`absolute inset-0 bg-cover`}
+              className="absolute inset-0 bg-cover"
               initial={{ scale: 1 }}
               animate={{ scale: 1.05 }}
-              transition={{ duration: 6, ease: 'easeInOut' }} // Match the interval duration
+              transition={{ duration: 6, ease: 'easeInOut' }}
               style={{
                 backgroundImage: `url(${currentContent.img})`,
-                // Conditionally apply the more specific mobile position
-                backgroundPosition: currentContent.mobilePosition
+                backgroundPosition: currentContent.mobilePosition,
+                backgroundSize: 'cover',
               }}
-            >
-            </motion.div>
-            
-            {/* Dark overlay for text readability, inside the animating background div */}
+            />
             <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center p-4 pb-10">
-              {/* Animated Title Phrase using the new AnimatedPhrase component */}
-              <motion.h1
-                className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white mb-6 leading-tight font-josefin-sans drop-shadow-lg"
-                variants={{
-                  hidden: { opacity: 0 },
-                  visible: {
-                    opacity: 1,
-                    transition: {
-                      staggerChildren: 0.08,
-                      delayChildren: 0.5,
-                    },
-                  },
-                }}
-                initial="hidden"
-                animate="visible"
-                exit="hidden"
-              >
-                {currentContent.text.split(' ').map((word, wordIndex) => (
-                  <span key={wordIndex} className="inline-block">
-                    {word.split('').map((char, charIndex) => (
-                      <motion.span
-                        key={charIndex}
-                        variants={{
-                          hidden: { opacity: 0, y: 20 },
-                          visible: {
-                            opacity: 1,
-                            y: 0,
-                            transition: {
-                              type: "spring",
-                              damping: 12,
-                              stiffness: 100,
-                            },
-                          },
-                        }}
-                        className={`inline-block ${currentContent.keywords.includes(word) ? `text-${PRIMARY_YELLOW}` : 'text-white'}`}
-                      >
-                        {char}
-                      </motion.span>
-                    ))}
-                    {wordIndex < currentContent.text.split(' ').length - 1 && '\u00A0'}
-                  </span>
-                ))}
-              </motion.h1>
+              {/* You can switch to AnimatedPhrase if you prefer that implementation */}
+              <AnimatedPhrase
+                text={currentContent.text}
+                keywords={currentContent.keywords}
+              />
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }} // Exits by shrinking
-                transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }} // Delayed after title
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }}
               >
                 <a
                   href="/about"
@@ -382,7 +340,6 @@ export default function HomePage() {
         variants={sectionVariants}
       >
         <div className="grid grid-cols-1 md:grid-cols-2 md:gap-12 md:items-start">
-          {/* Image Column */}
           <motion.div
             initial={{ opacity: 0, x: -80 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -390,11 +347,14 @@ export default function HomePage() {
             transition={{ duration: 1, ease: 'easeOut' }}
             className="relative w-full h-80 rounded-xl overflow-hidden shadow-2xl"
           >
-            <ImageLoader src="/gallery/3.jpeg" alt="About Ketebul" objectFit="cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+            <ImageLoader
+              src="/gallery/3.jpeg"
+              alt="About Ketebul"
+              objectFit="cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
           </motion.div>
 
-          {/* Text Content Column */}
           <motion.div
             initial={{ opacity: 0, x: 80 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -402,19 +362,22 @@ export default function HomePage() {
             transition={{ duration: 1, ease: 'easeOut', delay: 0.2 }}
             className="flex flex-col space-y-4 md:pt-0 pt-8"
           >
-            {/* Title above the paragraph */}
-            <h2
-              className="text-3xl sm:text-4xl font-bold font-josefin-sans text-white text-left"
-            >
+            <h2 className="text-3xl sm:text-4xl font-bold font-josefin-sans text-white text-left">
               About Us
             </h2>
             <p className="text-gray-300 leading-relaxed mb-4">
-              Ketebul Music is a not-for-profit non-governmental organization based at the GoDown Arts Centre in Nairobi, Kenya.
+              Ketebul Music is a not-for-profit non-governmental organization
+              based at the GoDown Arts Centre in Nairobi, Kenya.
               <br />
               <br />
-              The word "Ketebul" means "drum sticks"; it is derived from the Luo language of Western Kenya. This name was a natural choice for an organization that has a vision of an African society that celebrates its cultural identity and also recognizes the special role that artistes play every day in people’s lives.          
+              The word &quot;Ketebul&quot; means &quot;drum sticks&quot;; it is
+              derived from the Luo language of Western Kenya. This name was a
+              natural choice for an organization that has a vision of an African
+              society that celebrates its cultural identity and also recognizes
+              the special role that artistes play every day in people’s lives.
             </p>
-            <a href="/about"
+            <a
+              href="/about"
               className={`bg-${PRIMARY_YELLOW} hover:bg-${HOVER_YELLOW} text-gray-900 font-bold py-3.5 px-9 rounded-full transition-colors duration-300 shadow-xl text-lg transform hover:scale-105 self-start`}
             >
               Learn more about us →
@@ -446,13 +409,22 @@ export default function HomePage() {
               variants={cardVariants}
               custom={index}
             >
-              <div className="relative w-full h-80 sm:h-96 overflow-hidden flex-shrink-0 rounded-xl"> {/* Added rounded-xl here */}
-                <ImageLoader src={project.img} alt={project.title} objectFit="cover" />
-                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-gray-900 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300 rounded-b-xl"></div>
+              <div className="relative w-full h-80 sm:h-96 overflow-hidden flex-shrink-0 rounded-xl">
+                <ImageLoader
+                  src={project.img}
+                  alt={project.title}
+                  objectFit="cover"
+                />
+                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-gray-900 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300 rounded-b-xl" />
               </div>
-              <div className="p-6 flex flex-col flex-grow items-start"> {/* Adjusted for p-6 */}
-                <h3 className="text-xl font-semibold mb-2 font-josefin-sans text-white">{project.title}</h3>
-                <a href={`/projects/${project.slug}`} className={`mt-4 inline-flex items-center text-${PRIMARY_YELLOW} hover:text-${HOVER_YELLOW}`}>
+              <div className="p-6 flex flex-col flex-grow items-start">
+                <h3 className="text-xl font-semibold mb-2 font-josefin-sans text-white">
+                  {project.title}
+                </h3>
+                <a
+                  href={`/projects/${project.slug}`}
+                  className={`mt-4 inline-flex items-center text-${PRIMARY_YELLOW} hover:text-${HOVER_YELLOW}`}
+                >
                   View Project →
                 </a>
               </div>
@@ -466,13 +438,16 @@ export default function HomePage() {
           viewport={{ once: false, amount: 0.3 }}
           variants={sectionVariants}
         >
-          <a href="/projects" className={`bg-${PRIMARY_YELLOW} hover:bg-${HOVER_YELLOW} text-gray-900 font-bold py-3.5 px-9 rounded-full transition-colors duration-300 shadow-lg text-lg transform hover:scale-105`}>
+          <a
+            href="/projects"
+            className={`bg-${PRIMARY_YELLOW} hover:bg-${HOVER_YELLOW} text-gray-900 font-bold py-3.5 px-9 rounded-full transition-colors duration-300 shadow-lg text-lg transform hover:scale-105`}
+          >
             See All Projects →
           </a>
         </motion.div>
       </section>
 
-      {/* PARTNERS SECTION - Static Display */}
+      {/* PARTNERS SECTION */}
       <section className="container mx-auto px-4 py-20 overflow-hidden">
         <motion.h2
           className="text-3xl sm:text-4xl font-bold mb-12 text-center font-josefin-sans text-white"
@@ -494,11 +469,16 @@ export default function HomePage() {
               variants={cardVariants}
               custom={i}
             >
-              <a href={partner.href} target="_blank" rel="noopener noreferrer" className="block w-48 h-48 md:w-56 md:h-56 relative p-4 rounded-xl"> {/* Added rounded-xl here */}
+              <a
+                href={partner.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-48 h-48 md:w-56 md:h-56 relative p-4 rounded-xl"
+              >
                 <ImageLoader
                   src={partner.img}
                   alt={partner.alt}
-                  objectFit="contain" // Explicitly use contain for logos
+                  objectFit="contain"
                 />
               </a>
               <p className="text-white text-center text-lg mt-2 font-semibold font-inter">
@@ -522,7 +502,8 @@ export default function HomePage() {
             Join Our Journey
           </h2>
           <p className="text-lg text-gray-800 max-w-2xl mx-auto mb-10">
-            Support our mission to preserve and promote East African music. Your contribution helps us empower artists and enrich cultural heritage.
+            Support our mission to preserve and promote East African music. Your
+            contribution helps us empower artists and enrich cultural heritage.
           </p>
           <a
             href="/contact"
