@@ -53,6 +53,12 @@ const artists = [
     bio: 'Gargar is a group of Kenyan women of Somali origin from Garissa, North Eastern Kenya. Their music is a vibrant celebration of Somali culture, blending traditional harmonies with contemporary African rhythms and powerful vocals...',
     slug: 'gargar',
   },
+  {
+    name: 'Anyango Nyar Siaya',
+    image: '/artists/nyar.jpg',
+    bio: 'She was born in Tokyo. Captivated by African music, she traveled alone to a remote village in Kenya for training, and became the worlds first female performer of the traditional string instrument, the nyatiti, which was traditionally reserved only for a select few men in the region. In 2009, Anyango was named one among100 Most Respected People in Japan by Newsweek magazine. In 2010, she performed at the FUJI ROCK FESTIVAL and was selected as the Best Act in the World Music category. In 2022, she released her ninth album, AOKO. Currently, she performs not only across Japan but also at music festivals in Kenya, France, Germany, and the United States. As a Japanese-Kenyan Cultural Ambassador, she conducts lectures and performances at over 100 schools, including elementary, junior high, and high schools, as well as universities throughout Japan.',
+    slug: 'gargar',
+  },
 ];
 
 const cardVariants: Variants = {
