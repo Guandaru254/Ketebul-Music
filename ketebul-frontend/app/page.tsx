@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence, Variants, Transition } from 'framer-motion';
+import type { MotionStyle } from 'framer-motion';
 
 // --- Global Theme & Color Constants ---
 const GOLDEN_YELLOW = '#FFD700'; // Pure Golden Yellow (Gold) - used for direct color application
@@ -281,6 +282,12 @@ export default function HomePage() {
     },
   };
 
+  // combine entry + hover variants so whileHover="lift" works
+  const combinedCardVariants: Variants = {
+    ...cardVariants,
+    ...hoverVariants,
+  };
+
   const currentContent = heroContent[heroIndex];
 
   return (
@@ -301,14 +308,15 @@ export default function HomePage() {
               initial={{ scale: 1 }}
               animate={{ scale: 1.05 }}
               transition={{ duration: 6, ease: 'easeInOut' }}
-              style={{
-                backgroundImage: `url(${currentContent.img})`,
-                backgroundPosition: currentContent.mobilePosition,
-                backgroundSize: 'cover',
-              }}
+              style={
+                {
+                  backgroundImage: `url(${currentContent.img})`,
+                  backgroundPosition: currentContent.mobilePosition,
+                  backgroundSize: 'cover',
+                } as MotionStyle
+              }
             />
             <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center p-4 pb-10">
-              {/* You can switch to AnimatedPhrase if you prefer that implementation */}
               <AnimatedPhrase
                 text={currentContent.text}
                 keywords={currentContent.keywords}
@@ -406,7 +414,7 @@ export default function HomePage() {
               whileInView="visible"
               whileHover="lift"
               viewport={{ once: false, amount: 0.2 }}
-              variants={cardVariants}
+              variants={combinedCardVariants}
               custom={index}
             >
               <div className="relative w-full h-80 sm:h-96 overflow-hidden flex-shrink-0 rounded-xl">
@@ -466,7 +474,7 @@ export default function HomePage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: false, amount: 0.2 }}
-              variants={cardVariants}
+              variants={combinedCardVariants}
               custom={i}
             >
               <a
