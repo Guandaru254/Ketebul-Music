@@ -3,218 +3,187 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, Variants, Transition } from 'framer-motion';
-import { useState } from 'react'; // Needed for image loading state
+import { useState } from 'react';
 
-// --- Global Theme & Color Constants (Copied from homepage for consistency) ---
-const PRIMARY_YELLOW = 'yellow-500'; // Tailwind CSS class for #F59E0B
-const HOVER_YELLOW = 'yellow-600'; // Tailwind CSS class for a slightly darker yellow on hover
+// ------------------------------------------------------------
+// GLOBAL CONSTANTS
+// ------------------------------------------------------------
+const PRIMARY_YELLOW = 'text-yellow-500';
+const PRIMARY_YELLOW_HOVER = 'hover:text-yellow-600';
 
-// Define your artists data
+// ------------------------------------------------------------
+// ARTISTS DATA (CLEANED + FIXED SLUGS)
+// ------------------------------------------------------------
 const artists = [
   {
     name: 'Winyo',
     image: '/artists/winyo.jpg',
-    bio: 'Born Shiphton Onyango, Winyo adopted his artistic name ‘Winyo’, which is a Luo word (a tribe from the Lake Victoria region), meaning ‘My Own’. His music has evolved through a journey of experience from gospel to afro-fusion to his current style,...',
+    bio: 'Born Shiphton Onyango, Winyo adopted his artistic name...',
     slug: 'winyo',
   },
   {
     name: 'Ogoya Nengo',
     image: '/artists/ogoya.jpg',
-    bio: 'Ogoya Nengo was born Anastasia Oluoch in the late 1930s at Magoya, near the shores of Lake Victoria. She is a renowned Dodo singer, carrying on a powerful tradition of music and storytelling that has captivated audiences globally...',
+    bio: 'Ogoya Nengo was born Anastasia Oluoch...',
     slug: 'ogoya-nengo',
   },
   {
     name: 'Makadem',
     image: '/artists/makadem.jpg',
-    bio: 'Makadem, also known as the Ohanglaman, is a talented musician and vibrant performing artiste from Kenya. His music blends traditional Luo rhythms with contemporary sounds, creating a unique and energetic style...',
+    bio: 'Makadem, also known as the Ohanglaman...',
     slug: 'makadem',
   },
   {
     name: 'Bado',
     image: '/artists/bado.jpg',
-    bio: 'Hailing from the coastal town of Watamu in Malindi, Bado was born Mohamed Said Ngana. Although he started singing publicly in 2005, he has been composing music since childhood. His music is deeply rooted in coastal traditions...',
+    bio: 'Born Mohamed Said Ngana, Bado is from coastal Kenya...',
     slug: 'bado',
   },
   {
     name: 'Ontiri Bikundo',
     image: '/artists/ontiri.jpg',
-    bio: 'Ontiri Bikundo was born in 1976 in Nyaribari Chache constituency of Kisii District. His parents passed away before he was old enough to know them, and he was raised by his grandmother. His music reflects his life\'s journey and the rich Kisii culture...',
+    bio: 'Ontiri Bikundo was born in Kisii...',
     slug: 'ontiri-bikundo',
   },
   {
     name: 'Olith Ratego',
     image: '/artists/olith.jpg',
-    bio: 'Olith Ratego was born Musa Odhiambo Omondi, in Asere Ugenya, Siaya District. The middle child in a family of three, he started playing the nyatiti (a traditional Luo lyre) at a young age. His music is a modern interpretation of ancient sounds...',
+    bio: 'Olith Ratego (Musa Odhiambo Omondi)...',
     slug: 'olith-ratego',
   },
   {
     name: 'Gargar',
     image: '/artists/gargar.jpg',
-    bio: 'Gargar is a group of Kenyan women of Somali origin from Garissa, North Eastern Kenya. Their music is a vibrant celebration of Somali culture, blending traditional harmonies with contemporary African rhythms and powerful vocals...',
+    bio: 'Gargar is a group of Kenyan women from Garissa...',
     slug: 'gargar',
   },
   {
     name: 'Anyango Nyar Siaya',
     image: '/artists/nyar.jpg',
-    bio: 'She was born in Tokyo. Captivated by African music, she traveled alone to a remote village in Kenya for training, and became the worlds first female performer of the traditional string instrument, the nyatiti, which was traditionally reserved only for a select few men in the region. In 2009, Anyango was named one among100 Most Respected People in Japan by Newsweek magazine. In 2010, she performed at the FUJI ROCK FESTIVAL and was selected as the Best Act in the World Music category. In 2022, she released her ninth album, AOKO. Currently, she performs not only across Japan but also at music festivals in Kenya, France, Germany, and the United States. As a Japanese-Kenyan Cultural Ambassador, she conducts lectures and performances at over 100 schools, including elementary, junior high, and high schools, as well as universities throughout Japan.',
-    slug: 'gargar',
-  },
+    bio: 'Anyango is the world’s first female Nyatiti player...',
+    slug: 'anyango-nyar-siaya',
+  }
 ];
 
+// ------------------------------------------------------------
+// ANIMATION VARIANTS (IMPROVED + CLEAN)
+// ------------------------------------------------------------
 const cardVariants: Variants = {
   hidden: { opacity: 0, y: 50, scale: 0.98 },
-  visible: (i: number) => ({ // Staggered entry
+  visible: (i: number) => ({
     opacity: 1,
     y: 0,
     scale: 1,
     transition: {
-      type: "spring",
-      stiffness: 100,   // Reverted to 100 for consistency with team page
-      damping: 12,     // Reverted to 12 for consistency with team page
-      delay: i * 0.1,  // Reverted to 0.1 for consistency with team page (faster stagger)
-      duration: 0.8,   // Reverted to 0.8 for consistency with team page
+      type: 'spring',
+      stiffness: 120,
+      damping: 15,
+      delay: i * 0.08,
+      duration: 0.6
     } as Transition,
   }),
 };
 
 const hoverVariants: Variants = {
   lift: {
-    y: -8,
+    y: -6,
     scale: 1.03,
-    // Consistent shadow color with PRIMARY_YELLOW (Tailwind yellow-500 is rgb(245, 158, 11))
-    boxShadow: `0 10px 20px rgba(0,0,0,0.4), 0 0 0 3px rgba(245, 158, 11, 0.6)`, 
+    boxShadow: `0 10px 20px rgba(0, 0, 0, 0.35), 0 0 0 2px rgba(245, 158, 11, 0.5)`,
     transition: {
-      type: "spring",
-      stiffness: 350, // Reverted to 350 for consistency
-      damping: 25 // Reverted to 25 for consistency
+      type: 'spring',
+      stiffness: 300,
+      damping: 22,
     } as Transition,
-  }
+  },
 };
 
+// ------------------------------------------------------------
+// MAIN ARTISTS PAGE
+// ------------------------------------------------------------
 export default function ArtistsPage() {
   return (
-    // Main container for the artists page, ensuring global dark theme and using inter font for consistency
-    <main className="min-h-screen bg-gray-950 text-gray-100 py-16 px-4 sm:px-6 lg:px-8 font-inter"> {/* Changed font-josefin-sans to font-inter for consistency */}
+    <main className="min-h-screen bg-gray-950 text-gray-100 py-16 px-4 sm:px-6 lg:px-8 font-inter">
+      
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
 
-      {/* Artist Grid Layout: Changed xl:grid-cols-4 to lg:grid-cols-3 for 3 columns on larger screens */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
         {artists.map((artist, index) => (
           <motion.div
-            key={index}
-            // Apply the gradient background to the card - matching header and team page
-            className={`
-              bg-gradient-to-r from-gray-900 to-black rounded-2xl overflow-hidden shadow-2xl flex flex-col cursor-pointer
-              transform transition-all duration-300 ease-in-out border-2 border-transparent relative group p-8
-            `} /* Increased padding from p-6 to p-8 */
+            key={artist.slug}
+            className="bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden shadow-2xl border border-gray-800 hover:border-yellow-500 transition-all p-6 flex flex-col group"
+            variants={cardVariants}
             initial="hidden"
             whileInView="visible"
             whileHover="lift"
-            viewport={{ once: false, amount: 0.15 }} // Adjusted amount for better trigger
-            variants={cardVariants}
-            custom={index} // Pass index for staggered delay
+            viewport={{ once: true, amount: 0.2 }}
+            custom={index}
           >
-            {/* Image Container with Skeleton Loader and Overlay */}
-            <div className="relative w-full h-72 overflow-hidden flex-shrink-0"> {/* Consistent height for images h-72 */}
+
+            {/* IMAGE */}
+            <div className="relative w-full h-72 overflow-hidden rounded-xl">
               <ImageLoader src={artist.image} alt={artist.name} />
-              {/* Gradient overlay to blend image into card background */}
-              <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-gray-900 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
             </div>
 
-            {/* Content Area: Adjusted alignment and added min-height for consistent bio start */}
-            <div className="p-6 flex flex-col flex-grow items-start">
-              <div className="flex flex-col min-h-[4rem] justify-start w-full"> {/* Added min-height for consistent description start */}
-                <h2 className="text-3xl font-bold mb-3 font-josefin-sans text-white text-left leading-snug">
-                  {artist.name}
-                </h2>
-              </div>
-              <p className="text-gray-300 text-base leading-relaxed flex-grow line-clamp-4 text-left">
+            {/* TEXT CONTENT */}
+            <div className="mt-6 flex flex-col flex-grow">
+              <h2 className="text-2xl font-bold font-josefin-sans text-white mb-2">
+                {artist.name}
+              </h2>
+
+              <p className="text-gray-300 text-sm leading-relaxed line-clamp-4 flex-grow">
                 {artist.bio}
               </p>
+
+              {/* EXPLORE LINK */}
               <Link
                 href={`/artists/${artist.slug}`}
-                className={`mt-6 inline-flex items-center text-${PRIMARY_YELLOW} hover:text-${HOVER_YELLOW} font-semibold transition-colors duration-200 group-hover:translate-x-1`}
+                className={`${PRIMARY_YELLOW} ${PRIMARY_YELLOW_HOVER} mt-5 inline-flex items-center font-semibold`}
               >
                 Explore Profile
-                <svg className="ml-2 w-5 h-5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Link>
             </div>
+
           </motion.div>
         ))}
+
       </div>
     </main>
   );
 }
 
-// Separate component for Image with Skeleton Loader
+// ------------------------------------------------------------
+// IMAGE LOADER (IMPROVED)
+// ------------------------------------------------------------
 interface ImageLoaderProps {
   src: string;
   alt: string;
-  width?: number;
-  height?: number;
-  className?: string;
 }
 
-function ImageLoader({ src, alt, width, height, className }: ImageLoaderProps) {
+function ImageLoader({ src, alt }: ImageLoaderProps) {
   const [loading, setLoading] = useState(true);
-
-  // Fallback placeholder image for when an image fails to load.
-  const fallbackSrc = "https://placehold.co/200x200/525252/b3b3b3?text=Image+Missing"; 
-
-  // Conditionally render the Image component to correctly handle 'fill' vs 'width/height'
-  // This resolves the TypeScript error by ensuring mutual exclusivity at the type level.
-  const imageElement = width && height ? (
-    <Image
-      src={src}
-      alt={alt}
-      width={width}
-      height={height}
-      sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw" // Optimised sizes for artists photos
-      className={`
-        object-cover object-center rounded-t-2xl // Rounded top corners for image
-        transition-opacity duration-500 ease-in-out
-        ${loading ? 'opacity-0' : 'opacity-100'} // Hide image until loaded
-        ${className || ''}
-      `}
-      onLoad={() => setLoading(false)}
-      onError={(e) => {
-        setLoading(false); // Hide skeleton even on error
-        e.currentTarget.onerror = null; // Prevent infinite loop
-        e.currentTarget.src = fallbackSrc; // Fallback image
-        console.error(`Failed to load image: ${src}. Displaying fallback.`); // Log the specific error
-      }}
-      priority={false}
-    />
-  ) : (
-    <Image
-      src={src}
-      alt={alt}
-      fill // Use fill when width/height are not explicitly provided
-      sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw" // Optimised sizes for artists photos
-      className={`
-        object-cover object-center rounded-t-2xl // Rounded top corners for image
-        transition-opacity duration-500 ease-in-out
-        ${loading ? 'opacity-0' : 'opacity-100'} // Hide image until loaded
-        ${className || ''}
-      `}
-      onLoad={() => setLoading(false)}
-      onError={(e) => {
-        setLoading(false);
-        e.currentTarget.onerror = null;
-        e.currentTarget.src = fallbackSrc;
-        console.error(`Failed to load image: ${src}. Displaying fallback.`);
-      }}
-      priority={false}
-    />
-  );
+  const fallback = "https://placehold.co/400x400/1f1f1f/999?text=No+Image";
 
   return (
     <div className="relative w-full h-full">
-      {imageElement}
+      
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes="(max-width: 768px) 100vw, 33vw"
+        className={`object-cover rounded-xl transition-opacity duration-500 ${loading ? 'opacity-0' : 'opacity-100'}`}
+        onLoad={() => setLoading(false)}
+        onError={(e) => {
+          e.currentTarget.src = fallback;
+          console.error(`Failed to load: ${src}`);
+        }}
+      />
+
       {loading && (
-        <div className="absolute inset-0 bg-gray-700 animate-pulse rounded-t-2xl flex items-center justify-center">
-          <span className="text-gray-400 text-sm">Loading Image...</span>
+        <div className="absolute inset-0 bg-gray-800 animate-pulse rounded-xl flex items-center justify-center">
+          <span className="text-gray-500 text-sm">Loading...</span>
         </div>
       )}
     </div>
