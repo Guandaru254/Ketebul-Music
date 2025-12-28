@@ -170,7 +170,7 @@ const teamMembers = [
   {
     name: 'Tobias "Shunkyz" Odhiambo',
     role: 'Audio Engineer',
-    photo: '/team/moise.jpg',
+    photo: '/team/tobias.jpg',
     bio: 'Shunkyz is a skilled audio engineer specializing in African genres, mixing, and mastering, perfecting our sound.',
     social: {
       instagram: 'https://www.instagram.com/tobiasodhiambo',
@@ -182,7 +182,7 @@ const teamMembers = [
     {
     name: 'Moise Bonyambala',
     role: 'Sound Engineer',
-    photo: '/team/tobias.jpg',
+    photo: '/team/moise.jpg',
     bio: 'Moïse Bonyambala is a jazz pianist, sound engineer, and music teacher dedicated to using art to support peace, unity, and reconciliation in post-conflict regions. Through music, he brings communities together, fosters mutual understanding, and promotes African cultural expression.',
     social: {
       instagram: 'https://www.instagram.com/tobiasodhiambo',
