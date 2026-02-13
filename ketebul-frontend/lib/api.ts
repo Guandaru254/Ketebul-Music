@@ -1,19 +1,39 @@
-const API_BASE_URL = 'http://127.0.0.1:8000/api';
+import { createClient } from 'next-sanity'
+import imageUrlBuilder from '@sanity/image-url'
+// This path jump (../sanity/) is critical because your env.ts is inside the sanity folder
+import { apiVersion, dataset, projectId } from '../sanity/env' 
+
+export const client = createClient({
+  projectId,
+  dataset,
+  apiVersion,
+  useCdn: false, // Ensures you see your changes immediately after hitting 'Publish'
+})
+
+// Helper for images - fixes the 'urlFor' export error in your updates page
+const builder = imageUrlBuilder(client)
+export function urlFor(source: any) {
+  return builder.image(source)
+}
+
+/** * SHIFTED LOGIC: 
+ * We are replacing the manual 'fetch' and 'API_BASE_URL' with Sanity GROQ queries. 
+ * This is why the code looks shorter—Sanity handles the 'res.ok' and '.json()' internally.
+ */
 
 export async function fetchArtists() {
-  const res = await fetch(`${API_BASE_URL}/artists/`);
-  if (!res.ok) throw new Error('Failed to fetch artists');
-  return res.json();
+  return await client.fetch(`*[_type == "artist"] | order(name asc)`)
 }
 
 export async function fetchBooks() {
-  const res = await fetch(`${API_BASE_URL}/books/`);
-  if (!res.ok) throw new Error('Failed to fetch books');
-  return res.json();
+  return await client.fetch(`*[_type == "book"] | order(releaseDate desc)`)
 }
 
 export async function fetchPosts() {
-  const res = await fetch(`${API_BASE_URL}/posts/`);
-  if (!res.ok) throw new Error('Failed to fetch posts');
-  return res.json();
+  return await client.fetch(`*[_type == "post"] | order(_createdAt desc)`)
+}
+
+// Added this so your Updates page can pull from the CMS
+export async function fetchUpdates() {
+  return await client.fetch(`*[_type == "update"] | order(date desc)`)
 }
