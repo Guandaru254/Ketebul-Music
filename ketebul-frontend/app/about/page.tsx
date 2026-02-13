@@ -2,22 +2,12 @@
 
 import Image from 'next/image';
 import { motion, Variants, Transition } from 'framer-motion';
-import { useState, useEffect } from 'react'; // Added useEffect for ImageLoader's new logic
-import Link from 'next/link'; // Added for project links
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 // --- Global Theme & Color Constants ---
-const PRIMARY_YELLOW = 'yellow-500'; // Tailwind CSS class for #F59E0B
-const HOVER_YELLOW = 'yellow-600'; // Tailwind CSS class for a slightly darker yellow on hover
-
-// Framer Motion variants for general section entry animation
-const sectionVariants: Variants = {
-  hidden: { opacity: 0, y: 50 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.8, ease: 'easeOut' }
-  },
-};
+const PRIMARY_YELLOW = 'yellow-500';
+const HOVER_YELLOW = 'yellow-600';
 
 // Framer Motion variants for card entry animation
 const cardVariants: Variants = {
@@ -34,10 +24,6 @@ const cardVariants: Variants = {
       duration: 0.8,
     } as Transition,
   }),
-};
-
-// Framer Motion variants for card hover animation
-const hoverVariants: Variants = {
   lift: {
     y: -10,
     scale: 1.04,
@@ -50,31 +36,30 @@ const hoverVariants: Variants = {
   }
 };
 
-// --- ImageLoader Component (Re-included for self-contained file and clarity) ---
+// --- ImageLoader Component ---
 interface ImageLoaderProps {
   src: string;
   alt: string;
   width?: number;
   height?: number;
   className?: string;
-  objectFit?: 'cover' | 'contain'; // Added objectFit prop
+  objectFit?: 'cover' | 'contain';
 }
 
 function ImageLoader({ src, alt, width, height, className, objectFit = 'cover' }: ImageLoaderProps) {
   const [loading, setLoading] = useState(true);
-  const [imageSrc, setImageSrc] = useState(src); // State to manage image source, especially for fallback
+  const [imageSrc, setImageSrc] = useState(src);
 
   const fallbackSrc = "https://placehold.co/200x200/525252/b3b3b3?text=Image+Missing";
 
   useEffect(() => {
-    setImageSrc(src); // Update imageSrc when prop changes
-    setLoading(true); // Reset loading state
+    setImageSrc(src);
+    setLoading(true);
   }, [src]);
 
   const handleError = () => {
     setLoading(false);
     setImageSrc(fallbackSrc);
-    console.error(`Failed to load image: ${src}. Displaying fallback.`);
   };
 
   const handleLoad = () => {
@@ -88,7 +73,6 @@ function ImageLoader({ src, alt, width, height, className, objectFit = 'cover' }
     ${loading ? 'opacity-0' : 'opacity-100'}
   `;
 
-  // Conditionally render the Image component to correctly handle 'fill' vs 'width/height'
   const imageElement = width && height ? (
     <Image
       src={imageSrc}
@@ -127,7 +111,6 @@ function ImageLoader({ src, alt, width, height, className, objectFit = 'cover' }
 }
 
 // --- Data for About Page Sections ---
-
 const missionsAndValues = [
   {
     title: "Identify",
@@ -189,10 +172,8 @@ const featuredCollaborations = [
   },
 ];
 
-
 export default function AboutPage() {
   return (
-    // Main container for the About page, using the consistent gradient background
     <main className="min-h-screen bg-gradient-to-r from-gray-900 to-black text-gray-100 py-16 px-4 sm:px-6 lg:px-8 font-inter">
 
       {/* Introduction Section */}
@@ -210,7 +191,7 @@ export default function AboutPage() {
               Ketebul Music is a not-for-profit non-governmental organization based at the GoDown Arts Centre in Nairobi, Kenya.
             </p>
             <p className="text-gray-300 leading-relaxed text-left">
-              The word "Ketebul" means "drum sticks"; it is derived from the Luo language of Western Kenya. This name was a natural choice for an organization that has a vision of an African society that celebrates its cultural identity and also recognizes the special role that artistes play every day in people’s lives.
+              The word &quot;Ketebul&quot; means &quot;drum sticks&quot;; it is derived from the Luo language of Western Kenya. This name was a natural choice for an organization that has a vision of an African society that celebrates its cultural identity and also recognizes the special role that artistes play every day in people&apos;s lives.
             </p>
           </motion.div>
           <motion.div
@@ -220,7 +201,6 @@ export default function AboutPage() {
             transition={{ duration: 0.8, delay: 0.4 }}
           >
             <div className="relative w-full h-80 rounded-xl overflow-hidden shadow-2xl">
-              {/* Changed objectFit to "contain" for this specific image */}
               <ImageLoader src="/55.JPG" alt="Ketebul Music Introduction" objectFit="contain" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
             </div>
@@ -228,7 +208,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Our Story Section (formerly History) */}
+      {/* Our Story Section */}
       <section className="max-w-7xl mx-auto mb-16 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <motion.div
@@ -389,7 +369,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Projects by Ketebul Music Section (formerly Featured Collaborations) */}
+      {/* Projects Section */}
       <section className="max-w-7xl mx-auto mb-16 py-8">
         <h2 className="text-center text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-12 font-josefin-sans text-white drop-shadow-md">
           Projects by Ketebul Music
