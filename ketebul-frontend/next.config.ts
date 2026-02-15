@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // 1. Force bypass for both TS and Linting to ensure the build finishes
+  // 1. Force bypass for both TS and Linting to bypass local errors
   typescript: {
     ignoreBuildErrors: true, 
   },
@@ -9,8 +9,10 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   
+  // 2. Moved from experimental to top-level to fix the build warning
+  serverExternalPackages: ['@sanity/client', 'next-sanity'],
+
   images: {
-    // 2. Strict pattern for Sanity prevents "hostname not configured" errors
     remotePatterns: [
       {
         protocol: 'https',
@@ -25,14 +27,10 @@ const nextConfig: NextConfig = {
     ],
   },
 
-  // 3. Optimization settings to speed up the 2-minute build time
   experimental: {
     optimizePackageImports: ['framer-motion', 'lucide-react', 'sanity'],
-    // Helps with Sanity's heavy build footprint
-    serverComponentsExternalPackages: ['@sanity/client', 'next-sanity'],
   },
 
-  // Ensures your styles and assets are handled correctly in the new version
   reactStrictMode: true,
 };
 
