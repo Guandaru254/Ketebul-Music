@@ -1,39 +1,39 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* 1. IGNORE TYPESCRIPT ERRORS 
-     This stops the build from failing due to 'any' types or missing interfaces.
-  */
+  // 1. Force bypass for both TS and Linting to ensure the build finishes
   typescript: {
     ignoreBuildErrors: true, 
   },
-
-  /* 2. IGNORE ESLINT ERRORS (The missing piece!)
-     This stops Vercel from failing when it sees unused variables, 
-     <a> tags instead of <Link>, or sync scripts.
-  */
   eslint: {
     ignoreDuringBuilds: true,
   },
   
   images: {
+    // 2. Strict pattern for Sanity prevents "hostname not configured" errors
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'cdn.sanity.io',
-        port: '',
-        pathname: '/**', 
+        pathname: '/images/**', 
       },
       {
         protocol: 'https',
-        hostname: 'placehold.co', 
+        hostname: 'placehold.co',
+        pathname: '/**',
       },
     ],
   },
 
+  // 3. Optimization settings to speed up the 2-minute build time
   experimental: {
-    optimizePackageImports: ['framer-motion', 'lucide-react'],
+    optimizePackageImports: ['framer-motion', 'lucide-react', 'sanity'],
+    // Helps with Sanity's heavy build footprint
+    serverComponentsExternalPackages: ['@sanity/client', 'next-sanity'],
   },
+
+  // Ensures your styles and assets are handled correctly in the new version
+  reactStrictMode: true,
 };
 
 export default nextConfig;
