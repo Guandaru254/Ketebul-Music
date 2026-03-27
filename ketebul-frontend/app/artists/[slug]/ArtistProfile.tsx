@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 
@@ -13,48 +14,48 @@ export default function ArtistProfile({ artist }: { artist: any }) {
 
         {/* IMAGE */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="relative w-full h-[450px] rounded-xl overflow-hidden shadow-2xl"
+          initial={{ opacity: 0, x: -40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
+          className="relative w-full h-[500px] rounded-2xl overflow-hidden shadow-2xl border border-gray-800"
         >
           <Image
             src={artist.image}
             alt={artist.name}
             fill
-            className={`object-cover transition-opacity duration-500 ${
-              loading ? 'opacity-0' : 'opacity-100'
-            }`}
+            priority
+            className={`object-cover transition-opacity duration-500 ${loading ? 'opacity-0' : 'opacity-100'}`}
             onLoad={() => setLoading(false)}
           />
-
           {loading && (
-            <div className="absolute inset-0 bg-gray-800 animate-pulse flex items-center justify-center">
-              <p className="text-gray-400">Loading Image...</p>
+            <div className="absolute inset-0 bg-gray-800 animate-pulse rounded-2xl flex items-center justify-center">
+              <p className="text-gray-500 text-sm">Loading image...</p>
             </div>
           )}
         </motion.div>
 
         {/* TEXT */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.2 }}
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
         >
-          <h1 className="text-4xl md:text-5xl font-bold font-josefin-sans mb-6 text-white">
+          <h1 className="text-5xl font-bold font-josefin-sans mb-6 text-white">
             {artist.name}
           </h1>
 
-          <p className="text-gray-300 leading-relaxed text-lg whitespace-pre-line">
-            {artist.bio}
-          </p>
+          <div className="bg-gray-900/40 p-8 rounded-2xl border border-gray-800">
+            <p className="text-gray-300 leading-relaxed text-lg whitespace-pre-line">
+              {artist.bio}
+            </p>
+          </div>
 
-          <a
+          <Link
             href="/artists"
-            className="inline-block mt-10 bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-3 px-8 rounded-full transition shadow-xl"
+            className="inline-block mt-10 bg-yellow-500 hover:bg-yellow-600 text-gray-950 font-bold py-4 px-10 rounded-full transition-all hover:scale-105 active:scale-95 shadow-xl"
           >
-            Back to Artists
-          </a>
+            ← Back to Artists
+          </Link>
         </motion.div>
 
       </div>
