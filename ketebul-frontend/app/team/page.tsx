@@ -67,13 +67,6 @@ const teamMembers = [
     bio: 'Nathan is a finance professional specializing in budgeting, compliance, and financial systems, ensuring our financial health.',
   },
   {
-    name: 'Shyam Shah',
-    role: 'Creative Advisor',
-    photo: '/team/shyam.jpg',
-    slug: 'shyam-shah',
-    bio: 'Shyam is a musician and cultural consultant based in London with a decade of international experience, advising on creative strategies.',
-  },
-  {
     name: 'Rachel Olwanda',
     role: 'Monitoring & Evaluation Expert',
     photo: '/team/rachel.jpeg',
@@ -88,25 +81,11 @@ const teamMembers = [
     bio: 'Fiston is a veteran British-Congolese guitarist, composer, and engineer with decades of experience, leading our studio efforts.',
   },
   {
-    name: 'Abdi Rashid Jibril',
-    role: 'Music Curator & Researcher',
-    photo: '/team/abdi.jpg',
-    slug: 'abdi-rashid-jibril',
-    bio: "Abdi leads Roots International and curates East Africa's premier live music nights, bringing fresh talent to our roster.",
-  },
-  {
     name: 'Steenie Njoroge',
     role: 'Photography & Research',
     photo: '/team/steenie.jpg',
     slug: 'steenie-njoroge',
     bio: 'Steenie is a veteran photojournalist with over 45 years in the arts and entertainment industry, documenting our journey.',
-  },
-  {
-    name: 'Tobias "Shunkyz" Odhiambo',
-    role: 'Audio Engineer',
-    photo: '/team/tobias.jpg',
-    slug: 'tobias-odhiambo',
-    bio: 'Shunkyz is a skilled audio engineer specializing in African genres, mixing, and mastering, perfecting our sound.',
   },
   {
     name: 'Moise Bonyambala',
@@ -121,13 +100,6 @@ const teamMembers = [
     photo: '/team/drix.jpg',
     slug: 'martin-muyeshi',
     bio: 'Drix is a second-generation photographer and documentary visual artist focused on African stories, capturing compelling visuals.',
-  },
-  {
-    name: 'Carola Daniel Amri Kinasha',
-    role: 'Regional Consultant',
-    photo: '/team/carola.jpeg',
-    slug: 'carola-kinasha',
-    bio: 'Carola is a Tanzanian songwriter and activist creating afro-centric music with strong social messages, expanding our regional reach.',
   },
 ];
 
