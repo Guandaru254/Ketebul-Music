@@ -402,11 +402,11 @@ export default function AboutPage() {
                 </p>
                 {project.isExternal ? (
                   <a href={project.link} target="_blank" rel="noopener noreferrer" className={`mt-6 inline-flex items-center text-${PRIMARY_YELLOW} hover:text-${HOVER_YELLOW} font-semibold transition-colors duration-200 group-hover:translate-x-1`}>
-                    Visit Project &rarr;
+                    View Project &rarr;
                   </a>
                 ) : (
                   <Link href={project.link} className={`mt-6 inline-flex items-center text-${PRIMARY_YELLOW} hover:text-${HOVER_YELLOW} font-semibold transition-colors duration-200 group-hover:translate-x-1`}>
-                    Explore Project &rarr;
+                    View Project &rarr;
                   </Link>
                 )}
               </div>
