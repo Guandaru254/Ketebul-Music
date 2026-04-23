@@ -155,7 +155,7 @@ const AnimatedPhrase: React.FC<AnimatedPhraseProps> = ({ text, keywords }) => {
 
   return (
     <motion.h1
-      className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white mb-6 leading-tight font-josefin-sans drop-shadow-lg"
+      className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white mb-6 leading-tight font-inter drop-shadow-lg"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -370,7 +370,7 @@ export default function HomePage() {
             transition={{ duration: 1, ease: 'easeOut', delay: 0.2 }}
             className="flex flex-col space-y-4 md:pt-0 pt-8"
           >
-            <h2 className="text-3xl sm:text-4xl font-bold font-josefin-sans text-white text-left">
+            <h2 className="text-3xl sm:text-4xl font-bold font-inter text-white text-left">
               About Us
             </h2>
             <p className="text-gray-300 leading-relaxed mb-4">
@@ -397,7 +397,7 @@ export default function HomePage() {
       {/* FEATURED PROJECTS SECTION */}
       <section className="container mx-auto px-4 py-20">
         <motion.h2
-          className="text-3xl sm:text-4xl font-bold mb-12 text-center font-josefin-sans text-white"
+          className="text-3xl sm:text-4xl font-bold mb-12 text-center font-inter text-white"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: false, amount: 0.3 }}
@@ -426,7 +426,7 @@ export default function HomePage() {
                 <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-gray-900 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300 rounded-b-xl" />
               </div>
               <div className="p-6 flex flex-col flex-grow items-start">
-                <h3 className="text-xl font-semibold mb-2 font-josefin-sans text-white">
+                <h3 className="text-xl font-semibold mb-2 font-inter text-white">
                   {project.title}
                 </h3>
                 <a
@@ -458,7 +458,7 @@ export default function HomePage() {
       {/* PARTNERS SECTION */}
       <section className="container mx-auto px-4 py-20 overflow-hidden">
         <motion.h2
-          className="text-3xl sm:text-4xl font-bold mb-12 text-center font-josefin-sans text-white"
+          className="text-3xl sm:text-4xl font-bold mb-12 text-center font-inter text-white"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: false, amount: 0.3 }}
@@ -506,7 +506,7 @@ export default function HomePage() {
           viewport={{ once: false, amount: 0.5 }}
           variants={sectionVariants}
         >
-          <h2 className="text-3xl sm:text-4xl font-bold mb-5 font-josefin-sans text-gray-900">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-5 font-inter text-gray-900">
             Join Our Journey
           </h2>
           <p className="text-lg text-gray-800 max-w-2xl mx-auto mb-10">

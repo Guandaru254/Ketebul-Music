@@ -53,7 +53,7 @@ export default function TeamProfile({ member }: { member: any }) {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <h1 className="text-4xl md:text-5xl font-bold font-josefin-sans mb-8 text-white leading-tight">
+            <h1 className="text-4xl md:text-5xl font-bold font-inter mb-8 text-white leading-tight">
               {member.name}
             </h1>
 

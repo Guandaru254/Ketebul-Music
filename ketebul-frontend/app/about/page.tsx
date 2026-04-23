@@ -186,7 +186,7 @@ export default function AboutPage() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="flex flex-col items-start"
           >
-            <h2 className="text-3xl sm:text-4xl font-bold mb-6 font-josefin-sans text-white text-left">Introduction</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-6 font-inter text-white text-left">Introduction</h2>
             <p className="text-gray-300 leading-relaxed mb-4 text-left">
               Ketebul Music is a not-for-profit non-governmental organization based at the GoDown Arts Centre in Nairobi, Kenya.
             </p>
@@ -218,7 +218,7 @@ export default function AboutPage() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <h2 className="text-3xl sm:text-4xl font-bold mb-6 font-josefin-sans text-white text-left">Our Story</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-6 font-inter text-white text-left">Our Story</h2>
             <p className="text-gray-300 leading-relaxed mb-4 text-left">
               Ketebul Music was established in early 2007 with the ambitious vision to carry out research and promote the diverse fusion of traditional sounds of Kenya and East Africa through the documentation and archiving of the work of musicians who have shaped the various genres of music from the region over the past six decades.
             </p>
@@ -246,7 +246,7 @@ export default function AboutPage() {
 
       {/* Mission & Values Section */}
       <section className="max-w-7xl mx-auto mb-16 py-8">
-        <h2 className="text-center text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-12 font-josefin-sans text-white drop-shadow-md">
+        <h2 className="text-center text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-12 font-inter text-white drop-shadow-md">
           Mission & Values
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -261,7 +261,7 @@ export default function AboutPage() {
               variants={cardVariants}
               custom={index}
             >
-              <h3 className={`text-xl font-semibold mb-4 font-josefin-sans text-${PRIMARY_YELLOW} text-left`}>
+              <h3 className={`text-xl font-semibold mb-4 font-inter text-${PRIMARY_YELLOW} text-left`}>
                 {item.title}
               </h3>
               <p className="text-gray-300 text-left leading-relaxed">
@@ -274,7 +274,7 @@ export default function AboutPage() {
 
       {/* Core Pillars Section */}
       <section className="max-w-7xl mx-auto mb-16 py-8">
-        <h2 className="text-center text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-12 font-josefin-sans text-white drop-shadow-md">
+        <h2 className="text-center text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-12 font-inter text-white drop-shadow-md">
           Core Pillars
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -289,7 +289,7 @@ export default function AboutPage() {
               variants={cardVariants}
               custom={index}
             >
-              <h3 className={`text-xl font-semibold mb-4 font-josefin-sans text-${PRIMARY_YELLOW} text-left`}>
+              <h3 className={`text-xl font-semibold mb-4 font-inter text-${PRIMARY_YELLOW} text-left`}>
                 {item.title}
               </h3>
               <p className="text-gray-300 text-left leading-relaxed">
@@ -302,7 +302,7 @@ export default function AboutPage() {
 
       {/* The Studios Section */}
       <section className="max-w-7xl mx-auto mb-16 py-8">
-        <h2 className="text-center text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-12 font-josefin-sans text-white drop-shadow-md">
+        <h2 className="text-center text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-12 font-inter text-white drop-shadow-md">
           The Studios
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -336,7 +336,7 @@ export default function AboutPage() {
 
       {/* Video Production Wing Section */}
       <section className="max-w-7xl mx-auto mb-16 py-8">
-        <h2 className="text-center text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-12 font-josefin-sans text-white drop-shadow-md">
+        <h2 className="text-center text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-12 font-inter text-white drop-shadow-md">
           Video Production Wing
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -371,7 +371,7 @@ export default function AboutPage() {
 
       {/* Projects Section */}
       <section className="max-w-7xl mx-auto mb-16 py-8">
-        <h2 className="text-center text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-12 font-josefin-sans text-white drop-shadow-md">
+        <h2 className="text-center text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-12 font-inter text-white drop-shadow-md">
           Projects by Ketebul Music
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -393,7 +393,7 @@ export default function AboutPage() {
 
               <div className="p-6 flex flex-col flex-grow items-start">
                 <div className="flex flex-col h-20 justify-center w-full">
-                  <h3 className="text-2xl font-semibold font-josefin-sans text-white text-left leading-snug">
+                  <h3 className="text-2xl font-semibold font-inter text-white text-left leading-snug">
                     {project.title}
                   </h3>
                 </div>

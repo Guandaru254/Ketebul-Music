@@ -40,7 +40,7 @@ export default function ArtistProfile({ artist }: { artist: any }) {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
         >
-          <h1 className="text-5xl font-bold font-josefin-sans mb-6 text-white">
+          <h1 className="text-5xl font-bold font-inter mb-6 text-white">
             {artist.name}
           </h1>
 

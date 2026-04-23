@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Block studio from indexing
+Disallow: /studio/
+
+Sitemap: https://ketebulmusic.org/sitemap.xml

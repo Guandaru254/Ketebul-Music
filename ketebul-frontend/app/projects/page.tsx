@@ -177,7 +177,7 @@ export default function ProjectsPage() {
 
             {/* CONTENT */}
             <div className="p-6 flex flex-col flex-grow items-start">
-              <h2 className="text-2xl font-bold mb-3 font-josefin-sans text-white text-left leading-snug">
+              <h2 className="text-2xl font-bold mb-3 font-inter text-white text-left leading-snug">
                 {project.title}
               </h2>
 

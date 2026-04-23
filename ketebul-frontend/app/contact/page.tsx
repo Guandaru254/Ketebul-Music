@@ -45,7 +45,7 @@ export default function ContactPage() {
     <main className="min-h-screen bg-gradient-to-r from-gray-900 to-black text-white font-inter py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto text-center">
         <motion.h1 
-          className="text-4xl sm:text-5xl font-extrabold mb-6 font-josefin-sans"
+          className="text-4xl sm:text-5xl font-extrabold mb-6 font-inter"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -70,7 +70,7 @@ export default function ContactPage() {
         {/* Contact Information Section */}
         <div className="bg-gray-800 p-8 rounded-xl shadow-2xl flex flex-col justify-between">
           <motion.div variants={itemVariants}>
-            <h2 className="text-2xl font-bold font-josefin-sans mb-6 text-yellow-500">
+            <h2 className="text-2xl font-bold font-inter mb-6 text-yellow-500">
               Our Contact Details
             </h2>
             <div className="space-y-6 text-gray-300">
@@ -116,7 +116,7 @@ export default function ContactPage() {
           className="bg-gray-800 p-8 rounded-xl shadow-2xl"
           variants={itemVariants}
         >
-          <h2 className="text-2xl font-bold font-josefin-sans mb-6 text-yellow-500">
+          <h2 className="text-2xl font-bold font-inter mb-6 text-yellow-500">
             Send us a Message
           </h2>
           <div className="space-y-6">

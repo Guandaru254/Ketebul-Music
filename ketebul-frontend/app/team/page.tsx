@@ -149,7 +149,7 @@ export default function TeamPage() {
             {/* CONTENT */}
             <div className="flex flex-col items-start w-full px-2">
               <div className="flex flex-col min-h-[6.5rem] justify-start w-full">
-                <h2 className="text-2xl font-bold mb-1 font-josefin-sans text-white text-left">
+                <h2 className="text-2xl font-bold mb-1 font-inter text-white text-left">
                   {member.name}
                 </h2>
                 <p className={`text-lg font-medium text-${PRIMARY_YELLOW} text-left`}>

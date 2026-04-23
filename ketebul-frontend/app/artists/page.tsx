@@ -100,7 +100,7 @@ export default function ArtistsPage() {
 
             {/* TEXT */}
             <div className="mt-6 flex flex-col flex-grow">
-              <h2 className="text-2xl font-bold font-josefin-sans text-white mb-2">
+              <h2 className="text-2xl font-bold font-inter text-white mb-2">
                 {artist.name}
               </h2>
 
