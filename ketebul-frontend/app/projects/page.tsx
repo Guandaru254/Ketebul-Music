@@ -13,14 +13,14 @@ const projects = [
   {
     title: "SAUTI: Gifted Different Unsilenced",
     slug: "sauti",
-    image: "/projects/sauti.png",
+    image: "/projects/sauti1.png",
     description: "A multimedia project featuring a documentary and music compilation exploring musicians with unique abilities.",
     category: "Documentaries",
   },
   {
     title: "Shades of Benga",
     slug: "shades-of-benga",
-    image: "/projects/benga.jpg",
+    image: "/projects/benga1.jpg",
     description: "A comprehensive book and research project tracing the roots of Kenya's popular music from 1946 to 2016.",
     category: "Books & Research",
   },
@@ -34,7 +34,7 @@ const projects = [
   {
     title: "Weapon of Mass Reconciliation",
     slug: "reconciliation",
-    image: "/projects/reconciliation.jpg",
+    image: "/projects/reconciliations.jpg",
     description: "Music and outreach campaign that helped foster national healing after the 2008 post-election crisis.",
     category: "Social Impact",
   },
@@ -55,7 +55,7 @@ const projects = [
   {
     title: "Singing Wells",
     slug: "singing-wells",
-    image: "/projects/wells.png",
+    image: "/projects/swells.png",
     description: "An initiative to document, preserve, and promote traditional music from East Africa, focusing on cultural heritage.",
     category: "Documentaries",
   },

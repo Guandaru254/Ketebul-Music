@@ -149,7 +149,7 @@ const featuredCollaborations = [
   {
     title: "The Singing Wells Project",
     slug: "singing-wells",
-    image: "/projects/wells.png",
+    image: "/projects/swells.png",
     description: "A significant collaboration documenting, preserving, and promoting traditional East African music through extensive field recordings and digital archiving.",
     link: "https://www.youtube.com/@singingwells",
     isExternal: true,
@@ -157,7 +157,7 @@ const featuredCollaborations = [
   {
     title: "Shades of Benga",
     slug: "shades-of-benga",
-    image: "/projects/benga.jpg",
+    image: "/projects/benga1.jpg",
     description: "A comprehensive project tracing the roots of Kenya’s popular Benga music from 1946 to 2016, enriching our understanding of its evolution.",
     link: "/projects/shades-of-benga",
     isExternal: false,

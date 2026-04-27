@@ -88,8 +88,9 @@ export default function ContactPage() {
               </p>
               <p>
                 <strong>Address:</strong> <br/>
-                Ketebul Music Studios, GoDown Arts Centre, <br/>
-                Dunga Road, Industrial Area, Nairobi, Kenya
+                Head Office - Valley Court, Kilimani
+                 <br/>
+                Ketebul Music Studios - Tena Estate along Outering Road
               </p>
             </div>
           </motion.div>
