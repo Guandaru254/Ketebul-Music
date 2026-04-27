@@ -137,11 +137,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div>
             <Image src="/logo.png" alt="Ketebul Music" width={120} height={36} className="w-auto h-auto mb-3 opacity-90" />
             <p className="text-xs text-gray-500 leading-relaxed">
-              GoDown Arts Centre, Dunga Road<br />
-              Industrial Area, Nairobi, Kenya
+              Head Office - Valley Court, Kilimani<br />
+              Our Studios - Tena Estate along Outering Road
             </p>
             <a href="tel:+254206751011" className="text-xs text-gray-500 hover:text-yellow-400 transition-colors mt-1 block">
-              +254 20 675 1011
+              +254 734 585 519
             </a>
             <a href="mailto:info@ketebulmusic.org" className="text-xs text-gray-500 hover:text-yellow-400 transition-colors mt-0.5 block">
               info@ketebulmusic.org
@@ -156,6 +156,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 { label: 'About Us',  href: '/about'   },
                 { label: 'Artists',   href: '/artists' },
                 { label: 'Projects',  href: '/projects'},
+                { label: 'Team',      href: '/team'    },
+                { label: 'Gallery',   href: '/gallery' },
                 { label: 'Updates',   href: '/updates' },
                 { label: 'Shop',      href: '/shop'    },
                 { label: 'Contact',   href: '/contact' },
