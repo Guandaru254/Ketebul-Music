@@ -25,7 +25,7 @@ const products = [
       'Hardcover · 320 pages',
       'Illustrated with rare archival photographs',
       'Includes curated audio compilation',
-      'Available for pickup at GoDown Arts Centre or delivery within Nairobi',
+      'Available for pickup at our head office ,studios or delivery within Nairobi',
     ],
     available: true,
   },

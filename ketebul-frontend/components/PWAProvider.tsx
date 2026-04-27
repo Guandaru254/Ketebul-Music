@@ -112,8 +112,8 @@ export default function PWAProvider() {
         className="fixed bottom-6 right-6 z-[999] flex items-center gap-3 bg-gray-900 border border-white/10 p-3 rounded-2xl shadow-2xl opacity-0 translate-y-10 pointer-events-none transition-all duration-500 ease-out [&.visible]:opacity-100 [&.visible]:translate-y-0 [&.visible]:pointer-events-auto"
       >
         <div className="flex flex-col">
-          <span className="text-xs font-bold text-white leading-none">Ketebul Music</span>
-          <span className="text-[10px] text-gray-400">Install for offline access</span>
+          <span className="text-xs font-bold text-white leading-none"></span>
+          <span className="text-[10px] text-gray-400"></span>
         </div>
         
         <div className="flex items-center gap-2 ml-2">
