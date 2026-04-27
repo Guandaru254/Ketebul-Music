@@ -5,8 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 
 // ─── Config — update these when ready ────────────────────────────────────────
-const TILL_NUMBER   = 'XXXXXXX';      // ← replace with Ketebul M-Pesa till
-const WHATSAPP_NUM  = '254700000000'; // ← replace with accounts WhatsApp number
+const TILL_NUMBER   = '804505';      // ← replace with Ketebul M-Pesa till
+const WHATSAPP_NUM  = '254734585519'; // ← replace with accounts WhatsApp number
 const SHOP_EMAIL    = 'info@ketebulmusic.org';
 
 const GOLDEN = '#FFD700';
