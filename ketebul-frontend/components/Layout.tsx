@@ -40,7 +40,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div className="flex flex-col min-h-screen bg-gray-950 font-inter antialiased text-white">
 
       {/* ── Header ── */}
-      <header className="fixed top-0 w-full bg-gradient-to-r from-gray-900 to-black text-white shadow-2xl z-50 transition-all duration-300 ease-in-out py-2.5 sm:py-2.5">
+      <header className="fixed top-0 w-full bg-gradient-to-r from-gray-900 to-black text-white shadow-2xl z-50 transition-all duration-300 ease-in-out py-2.5 sm:py-2.5 border-b border-white/5">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center relative h-14 sm:h-14">
           <Link href="/" className="flex items-center group flex-shrink-0">
             <Image
@@ -88,44 +88,69 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
         {/* Mobile overlay */}
         {mobileMenuOpen && (
-          <div className="fixed inset-0 bg-black/50 z-40 md:hidden" onClick={() => setMobileMenuOpen(false)} />
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden" onClick={() => setMobileMenuOpen(false)} />
         )}
 
-        {/* Mobile slide-in */}
-        <div className={`fixed top-0 right-0 h-full w-3/4 max-w-sm bg-gradient-to-b from-gray-900 to-black shadow-lg transform transition-transform duration-300 ease-in-out z-50 md:hidden ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-          <div className="flex justify-end p-4 border-b border-gray-800">
-            <button className="p-2 text-white hover:bg-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400" onClick={() => setMobileMenuOpen(false)} aria-label="Close mobile menu">
-              <X size={32} />
+        {/* Mobile slide-in - Dynamic & Scrollable */}
+        <div 
+          className={`fixed top-0 right-0 h-full w-[85%] max-w-sm bg-gradient-to-b from-gray-900 to-black shadow-2xl transform transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] z-50 md:hidden flex flex-col ${
+            mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
+        >
+          {/* Header of Mobile Nav */}
+          <div className="flex justify-between items-center p-5 border-b border-gray-800 flex-shrink-0">
+             <Image src="/logo.png" alt="Ketebul" width={100} height={30} className="object-contain" />
+             <button 
+              className="p-2 text-white hover:bg-gray-800 rounded-full focus:outline-none" 
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <X size={28} />
             </button>
           </div>
-          <nav className="flex flex-col items-center space-y-5 py-8 px-4 overflow-y-auto">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className={`w-full text-center text-lg py-2.5 uppercase tracking-wide transition-colors duration-200 ease-in-out ${pathname === item.href ? 'text-yellow-400 font-bold' : 'text-white hover:text-yellow-400'}`}
-              >
-                {item.label}
-              </Link>
-            ))}
-            <div className="flex justify-center space-x-8 pt-6 border-t border-gray-800 w-full text-yellow-400">
-              <Link href="https://facebook.com/ketebulmusic" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-                <Facebook size={28} className="hover:text-white transition-colors transform hover:scale-110" />
-              </Link>
-              <Link href="https://instagram.com/ketebulmusic" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                <Instagram size={28} className="hover:text-white transition-colors transform hover:scale-110" />
-              </Link>
-              <Link href="https://youtube.com/ketebulmusic" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-                <Youtube size={28} className="hover:text-white transition-colors transform hover:scale-110" />
-              </Link>
+
+          {/* Nav Items Container - Scrollable */}
+          <nav className="flex-grow overflow-y-auto overflow-x-hidden py-6 px-6 custom-scrollbar">
+            <div className="flex flex-col space-y-1">
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`group flex items-center justify-between w-full text-left text-lg py-4 px-4 rounded-xl uppercase tracking-widest transition-all duration-300 ${
+                    pathname === item.href 
+                      ? 'bg-yellow-500/10 text-yellow-400 font-bold' 
+                      : 'text-white hover:bg-white/5 hover:text-yellow-400'
+                  }`}
+                >
+                  <span>{item.label}</span>
+                  <span className={`h-1.5 w-1.5 rounded-full bg-yellow-400 transition-transform duration-300 ${
+                    pathname === item.href ? 'scale-100 opacity-100' : 'scale-0 opacity-0 group-hover:scale-100 group-hover:opacity-100'
+                  }`} />
+                </Link>
+              ))}
+            </div>
+
+            {/* Social Links at Bottom of Scroll */}
+            <div className="mt-10 pt-10 border-t border-gray-800 pb-10">
+              <p className="text-gray-500 text-xs uppercase tracking-widest mb-6 text-center font-semibold">Join the Culture</p>
+              <div className="flex justify-center gap-8 text-yellow-400">
+                <Link href="https://facebook.com/ketebulmusic" target="_blank" rel="noopener noreferrer" className="p-3 bg-gray-800 rounded-full hover:bg-yellow-500 hover:text-gray-900 transition-all duration-300">
+                  <Facebook size={24} />
+                </Link>
+                <Link href="https://instagram.com/ketebulmusic" target="_blank" rel="noopener noreferrer" className="p-3 bg-gray-800 rounded-full hover:bg-yellow-500 hover:text-gray-900 transition-all duration-300">
+                  <Instagram size={24} />
+                </Link>
+                <Link href="https://youtube.com/ketebulmusic" target="_blank" rel="noopener noreferrer" className="p-3 bg-gray-800 rounded-full hover:bg-yellow-500 hover:text-gray-900 transition-all duration-300">
+                  <Youtube size={24} />
+                </Link>
+              </div>
             </div>
           </nav>
         </div>
       </header>
 
       {/* ── Main ── */}
-      <main className="flex-grow pt-[4.5rem] sm:pt-[4.75rem] lg:pt-[5rem]">
+      <main className="flex-grow pt-[3.5rem] sm:pt-[3.5rem]">
         {children}
       </main>
 
@@ -152,16 +177,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">Quick links</p>
             <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
-              {[
-                { label: 'About Us',  href: '/about'   },
-                { label: 'Artists',   href: '/artists' },
-                { label: 'Projects',  href: '/projects'},
-                { label: 'Team',      href: '/team'    },
-                { label: 'Gallery',   href: '/gallery' },
-                { label: 'Updates',   href: '/updates' },
-                { label: 'Shop',      href: '/shop'    },
-                { label: 'Contact',   href: '/contact' },
-              ].map(link => (
+              {navItems.map(link => (
                 <Link key={link.href} href={link.href} className="text-xs text-gray-500 hover:text-yellow-400 transition-colors">
                   {link.label}
                 </Link>
