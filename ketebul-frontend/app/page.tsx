@@ -259,7 +259,8 @@ export default function HomePage() {
   const currentContent = heroContent[heroIndex];
 
   return (
-    <main className="min-h-screen bg-gray-950 text-gray-100 font-inter">
+    /* Layout Fix: added overflow-x-hidden to prevent the horizontal scroll issue */
+    <main className="min-h-screen bg-gray-950 text-gray-100 font-inter overflow-x-hidden">
       {/* HERO SECTION */}
       <section className="relative h-screen flex items-center justify-center text-center overflow-hidden">
         <AnimatePresence mode="wait">
@@ -306,8 +307,9 @@ export default function HomePage() {
       </section>
 
       {/* ABOUT PREVIEW SECTION */}
+      {/* Layout Fix: Added overflow-hidden to the section to contain the sliding animations */}
       <motion.section
-        className="container mx-auto px-4 py-20"
+        className="container mx-auto px-4 py-20 overflow-hidden"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: false, amount: 0.4 }}
@@ -349,7 +351,7 @@ export default function HomePage() {
       </motion.section>
 
       {/* FEATURED PROJECTS SECTION */}
-      <section className="container mx-auto px-4 py-20">
+      <section className="container mx-auto px-4 py-20 overflow-hidden">
         <motion.h2
           className="text-3xl sm:text-4xl font-bold mb-12 text-center text-white"
           initial="hidden"
@@ -422,7 +424,7 @@ export default function HomePage() {
       </section>
 
       {/* CALL TO ACTION SECTION */}
-      <section className="container mx-auto px-4 py-20 text-center">
+      <section className="container mx-auto px-4 py-20 text-center overflow-hidden">
         <motion.div
           className="bg-gradient-to-r from-yellow-500 to-yellow-600 p-10 md:p-14 rounded-lg shadow-2xl"
           initial="hidden"
