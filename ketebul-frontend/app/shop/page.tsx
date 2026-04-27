@@ -18,7 +18,7 @@ const products = [
     subtitle: 'The Story of Popular Music in Kenya: 1946–2016',
     price: 5000,
     currency: 'KES',
-    image: '/projects/benga.jpg',
+    image: '/projects/benga1.jpg',
     description:
       'The definitive history of Benga — Kenya\'s most beloved popular music genre. A landmark publication tracing its roots from the Luo lakeside communities of the 1940s through six decades of evolution. Hardcover, 320 pages, richly illustrated with archive photographs and accompanied by a curated audio compilation.',
     details: [
