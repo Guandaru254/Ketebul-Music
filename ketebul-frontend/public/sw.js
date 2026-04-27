@@ -1,29 +1,36 @@
 // Ketebul Music — Service Worker
-// Version bump = forces cache refresh on deploy
-const CACHE_VERSION = 'ketebul-v1';
+// Version bump = forces browser to install new worker and clear old caches
+const CACHE_VERSION = 'ketebul-v2';
 const STATIC_CACHE  = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
 
-// Shell assets to precache on install
+// Shell assets to precache immediately on install
+// Ensure these files exist in your /public folder exactly as named
 const PRECACHE_URLS = [
   '/',
-  '/updates',
-  '/artists',
-  '/projects',
-  '/about',
-  '/contact',
-  '/shop',
   '/offline',
   '/logo.png',
   '/favicon.ico',
+  '/favicon-96x96.png',
+  '/apple-touch-icon.png',
   '/icon-192.png',
+  '/icon-512.png',
+  '/site.webmanifest',
 ];
 
 // ── Install ──────────────────────────────────────────────────────────────────
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(STATIC_CACHE).then((cache) => {
-      return cache.addAll(PRECACHE_URLS.map(url => new Request(url, { credentials: 'same-origin' })));
+      console.log('[SW] Precaching app shell');
+      // Using {cache: 'reload'} to bypass the browser's own cache 
+      // ensures we get the freshest files from the server
+      return Promise.all(
+        PRECACHE_URLS.map(url => {
+          return cache.add(new Request(url, { cache: 'reload' }))
+            .catch(err => console.warn(`[SW] Failed to cache: ${url}`, err));
+        })
+      );
     }).then(() => self.skipWaiting())
   );
 });
@@ -35,36 +42,42 @@ self.addEventListener('activate', (event) => {
       Promise.all(
         cacheNames
           .filter(name => name.startsWith('ketebul-') && name !== STATIC_CACHE && name !== DYNAMIC_CACHE)
-          .map(name => caches.delete(name))
+          .map(name => {
+            console.log(`[SW] Deleting old cache: ${name}`);
+            return caches.delete(name);
+          })
       )
     ).then(() => self.clients.claim())
   );
 });
 
 // ── Fetch strategy ──────────────────────────────────────────────────────────
-// Network-first for API/Sanity, stale-while-revalidate for pages/assets
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Skip non-GET, browser extensions, Sanity Studio, analytics
+  // 1. Skip non-GET, browser extensions, Vercel analytics, and Next.js HMR
   if (
     request.method !== 'GET' ||
     url.protocol === 'chrome-extension:' ||
-    url.pathname.startsWith('/studio') ||
     url.hostname.includes('vercel-insights') ||
-    url.hostname.includes('va.vercel-scripts')
+    url.hostname.includes('va.vercel-scripts') ||
+    url.pathname.startsWith('/_next/webpack-hmr')
   ) return;
 
-  // Sanity API — network only (live content)
+  // 2. Sanity API — network only (live content)
   if (url.hostname.includes('sanity.io') || url.hostname.includes('cdn.sanity.io')) {
     event.respondWith(
-      fetch(request).catch(() => new Response('{}', { headers: { 'Content-Type': 'application/json' } }))
+      fetch(request).catch(() => 
+        new Response(JSON.stringify({ error: 'Offline' }), { 
+          headers: { 'Content-Type': 'application/json' } 
+        })
+      )
     );
     return;
   }
 
-  // Navigation requests — network-first, fallback to cache, then /offline
+  // 3. Navigation requests — Network-first, fallback to /offline
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request)
@@ -80,15 +93,13 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Static assets — cache-first
-  if (
-    url.pathname.match(/\.(js|css|woff2?|png|jpg|jpeg|svg|ico|webp)$/)
-  ) {
+  // 4. Static assets (Images, Fonts, Scripts) — Cache-first, then update
+  if (url.pathname.match(/\.(js|css|woff2?|png|jpg|jpeg|svg|ico|webp)$/)) {
     event.respondWith(
       caches.match(request).then(cached => {
-        if (cached) return cached;
-        return fetch(request).then(response => {
-          caches.open(STATIC_CACHE).then(cache => cache.put(request, response.clone()));
+        return cached || fetch(request).then(response => {
+          const clone = response.clone();
+          caches.open(STATIC_CACHE).then(cache => cache.put(request, clone));
           return response;
         });
       })
@@ -96,7 +107,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Everything else — stale-while-revalidate
+  // 5. Default — Stale-while-revalidate
   event.respondWith(
     caches.open(DYNAMIC_CACHE).then(cache =>
       cache.match(request).then(cached => {
