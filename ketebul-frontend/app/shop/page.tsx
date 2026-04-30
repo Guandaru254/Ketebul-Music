@@ -5,27 +5,28 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 
 // ─── Config — update these when ready ────────────────────────────────────────
-const TILL_NUMBER   = '804505';      // ← replace with Ketebul M-Pesa till
-const WHATSAPP_NUM  = '254734585519'; // ← replace with accounts WhatsApp number
+const TILL_NUMBER   = '804505';        // ← Ketebul M-Pesa till
+const WHATSAPP_NUM  = '254734585519';  // ← Official Ketebul WhatsApp number
 const SHOP_EMAIL    = 'info@ketebulmusic.org';
-
-const GOLDEN = '#FFD700';
 
 const products = [
   {
     id: 'shades-of-benga',
     title: 'Shades of Benga',
-    subtitle: 'The Story of Popular Music in Kenya: 1946–2016',
+    subtitle: 'The Story of Popular Music in Kenya',
     price: 5000,
     currency: 'KES',
     image: '/projects/benga1.jpg',
     description:
-      'The definitive history of Benga — Kenya\'s most beloved popular music genre. A landmark publication tracing its roots from the Luo lakeside communities of the 1940s through six decades of evolution. Hardcover, 320 pages, richly illustrated with archive photographs and accompanied by a curated audio compilation.',
+      "Shades of Benga: The Story of Popular Music in Kenya delves into the foundations of modern Kenyan music, examining external influences from the English waltz to Afro-Cuban Rumba and how they helped mould new music styles across Africa. Rumba was brought to Eastern Africa via the itinerant Congolese musicians Edouard Masengo and Jean Bosco Mwenda, whose intricate guitar-picking styles largely shaped the present Kenyan sound, with Benga playing a dominant role.",
+    longDescription:
+      "Although dozens of works have been published over the years on various characteristics of popular music in Kenya — from conventional folk to hip hop — none captures the history of music and its players as authoritatively as Shades of Benga. As we wrote this book, we engaged directly with practitioners involved in creating and shaping benga, ensuring their collective voice remains the critical factor in placing the music in its proper perspective while giving the other genres in Kenya their correct definition. In an effort to make this 678-page book an easy read as well as eye-catching, it features over 400 pictures and covers all genres in Kenya — not limited to Benga.",
     details: [
-      'Hardcover · 320 pages',
-      'Illustrated with rare archival photographs',
-      'Includes curated audio compilation',
-      'Available for pickup at our head office ,studios or delivery within Nairobi',
+      'Hardcover book · 678 pages',
+      'Over 400 archival photographs and illustrations',
+      'Covers all music genres in Kenya — not limited to Benga',
+      'ISBN: 6164001943132',
+      'Available for pickup at our Head Office (Valley Court, Kilimani), Ketebul Music Studios (Tena Estate), or delivery within Nairobi',
     ],
     available: true,
   },
@@ -41,11 +42,9 @@ export default function ShopPage() {
   const [mpesaRef, setMpesaRef] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
-  const ref = selected ? `BENGA-${phone.slice(-4) || '0000'}` : '';
-
   function openWhatsApp() {
     const msg = encodeURIComponent(
-      `Hi! I've paid for *${selected?.title}* (KES ${selected?.price.toLocaleString()}).\n\nM-Pesa ref: ${mpesaRef}\nName: ${name}\nPhone: ${phone}\n\nPlease confirm my order. Thank you!`
+      `Hi Ketebul Music! I've paid for *${selected?.title}* (KES ${selected?.price.toLocaleString()}).\n\nM-Pesa ref: ${mpesaRef}\nName: ${name}\nPhone: ${phone}\n\nKindly confirm my order. Asante!`
     );
     window.open(`https://wa.me/${WHATSAPP_NUM}?text=${msg}`, '_blank');
     setSubmitted(true);
@@ -72,7 +71,7 @@ export default function ShopPage() {
           className="text-center mb-14"
         >
           <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white mb-3">
-            The <span style={{ color: GOLDEN }}>Shop</span>
+            The <span className="text-yellow-400">Shop</span>
           </h1>
           <p className="text-gray-400 max-w-md mx-auto text-sm leading-relaxed">
             Books, compilations and research publications from Ketebul Music. Pay via M-Pesa · Instant confirmation via WhatsApp.
@@ -94,8 +93,8 @@ export default function ShopPage() {
                     initial={{ opacity: 0, y: 40 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.1, duration: 0.5 }}
-                    whileHover={{ y: -6, boxShadow: `0 12px 32px rgba(0,0,0,0.5), 0 0 0 2px ${GOLDEN}` }}
-                    className="bg-gray-800/60 border border-gray-700 rounded-2xl overflow-hidden flex flex-col cursor-pointer group"
+                    whileHover={{ y: -6 }}
+                    className="bg-gray-800/60 border border-gray-700 hover:border-yellow-400 hover:shadow-[0_12px_32px_rgba(0,0,0,0.5)] transition-all duration-300 rounded-2xl overflow-hidden flex flex-col cursor-pointer group"
                     onClick={() => { setSelected(product); setStep('instructions'); }}
                   >
                     {/* Book image */}
@@ -122,14 +121,13 @@ export default function ShopPage() {
                       <p className="text-gray-300 text-sm leading-relaxed flex-grow line-clamp-3">{product.description}</p>
 
                       <div className="flex items-center justify-between mt-5 pt-4 border-t border-gray-700">
-                        <span className="text-2xl font-extrabold" style={{ color: GOLDEN }}>
+                        <span className="text-2xl font-extrabold text-yellow-400">
                           KES {product.price.toLocaleString()}
                         </span>
                         {product.available && (
                           <motion.button
                             whileTap={{ scale: 0.95 }}
-                            className="px-5 py-2 text-sm font-bold text-gray-900 rounded-lg"
-                            style={{ backgroundColor: GOLDEN }}
+                            className="px-5 py-2 text-sm font-bold text-gray-900 bg-yellow-400 hover:bg-yellow-500 rounded-lg transition-colors"
                           >
                             Buy Now
                           </motion.button>
@@ -174,13 +172,20 @@ export default function ShopPage() {
                   </div>
                 </div>
 
+                {/* About the book */}
+                <div className="p-6 border-b border-gray-700">
+                  <p className="text-xs text-gray-400 uppercase tracking-widest mb-3">About the book</p>
+                  <p className="text-sm text-gray-300 leading-relaxed mb-3">{selected.description}</p>
+                  <p className="text-sm text-gray-400 leading-relaxed">{selected.longDescription}</p>
+                </div>
+
                 {/* What's included */}
                 <div className="p-6 border-b border-gray-700">
-                  <p className="text-xs text-gray-400 uppercase tracking-widest mb-3">What's included</p>
+                  <p className="text-xs text-gray-400 uppercase tracking-widest mb-3">Specifications</p>
                   <ul className="space-y-1.5">
                     {selected.details.map((d, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm text-gray-300">
-                        <span style={{ color: GOLDEN }} className="mt-0.5 flex-shrink-0">✓</span>
+                        <span className="text-yellow-400 mt-0.5 flex-shrink-0">✓</span>
                         {d}
                       </li>
                     ))}
@@ -195,14 +200,14 @@ export default function ShopPage() {
                     placeholder="Your full name"
                     value={name}
                     onChange={e => setName(e.target.value)}
-                    className="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2.5 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                    className="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2.5 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400"
                   />
                   <input
                     type="tel"
                     placeholder="Your phone number (e.g. 0712 345 678)"
                     value={phone}
                     onChange={e => setPhone(e.target.value)}
-                    className="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2.5 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                    className="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2.5 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400"
                   />
                 </div>
 
@@ -219,12 +224,12 @@ export default function ShopPage() {
                       <span key="ref">Use reference: <strong className="text-white font-mono">{name ? `BENGA-${phone.slice(-4) || '0000'}` : 'BENGA-[last 4 digits of your number]'}</strong></span>,
                       'Confirm and complete payment',
                       'Copy your M-Pesa confirmation message reference number',
-                    ].map((step, i) => (
+                    ].map((stepItem, i) => (
                       <li key={i} className="flex gap-3 items-start text-sm text-gray-300">
-                        <span className="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold text-gray-900 mt-0.5" style={{ backgroundColor: GOLDEN }}>
+                        <span className="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold text-gray-900 mt-0.5 bg-yellow-400">
                           {i + 1}
                         </span>
-                        {step}
+                        {stepItem}
                       </li>
                     ))}
                   </ol>
@@ -234,10 +239,9 @@ export default function ShopPage() {
                     whileHover={{ scale: 1.02 }}
                     onClick={() => setStep('confirm')}
                     disabled={!name.trim() || !phone.trim()}
-                    className="w-full py-3 mt-2 font-bold text-gray-900 rounded-xl text-sm disabled:opacity-40 disabled:cursor-not-allowed"
-                    style={{ backgroundColor: GOLDEN }}
+                    className="w-full py-3 mt-2 font-bold text-gray-900 bg-yellow-400 hover:bg-yellow-500 transition-colors rounded-xl text-sm disabled:opacity-40 disabled:cursor-not-allowed"
                   >
-                    I've paid — enter M-Pesa reference →
+                    I&apos;ve paid — enter M-Pesa reference →
                   </motion.button>
                 </div>
               </div>
@@ -261,7 +265,7 @@ export default function ShopPage() {
 
               <div className="bg-gray-800/60 border border-gray-700 rounded-2xl p-8 space-y-6">
                 <div className="text-center">
-                  <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: GOLDEN + '22', border: `2px solid ${GOLDEN}` }}>
+                  <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 bg-yellow-400/10 border-2 border-yellow-400">
                     <span className="text-2xl">📱</span>
                   </div>
                   <h2 className="text-xl font-bold text-white">Confirm your payment</h2>
@@ -273,7 +277,7 @@ export default function ShopPage() {
                   placeholder="M-Pesa reference e.g. RCK1ABC2DE"
                   value={mpesaRef}
                   onChange={e => setMpesaRef(e.target.value.toUpperCase())}
-                  className="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-3 text-sm font-mono text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 tracking-wider"
+                  className="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-3 text-sm font-mono text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 tracking-wider"
                 />
 
                 {/* Summary */}
@@ -292,8 +296,7 @@ export default function ShopPage() {
                   whileHover={{ scale: 1.02 }}
                   onClick={openWhatsApp}
                   disabled={!mpesaRef.trim()}
-                  className="w-full py-3 font-bold text-white rounded-xl text-sm flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
-                  style={{ backgroundColor: '#25D366' }}
+                  className="w-full py-3 font-bold text-white rounded-xl text-sm flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed bg-[#25D366] hover:bg-[#1ebe57] transition-colors"
                 >
                   <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
@@ -302,7 +305,7 @@ export default function ShopPage() {
                 </motion.button>
 
                 <p className="text-center text-xs text-gray-500">
-                  This opens WhatsApp with your order details pre-filled. We'll confirm and arrange delivery within 24 hours.
+                  This opens WhatsApp with your order details pre-filled. We&apos;ll confirm and arrange delivery within 24 hours.
                 </p>
               </div>
             </motion.div>
@@ -316,19 +319,18 @@ export default function ShopPage() {
               transition={{ type: 'spring', stiffness: 200, damping: 20 }}
               className="max-w-md mx-auto text-center py-16"
             >
-              <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: GOLDEN + '22', border: `2px solid ${GOLDEN}` }}>
+              <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 bg-yellow-400/10 border-2 border-yellow-400">
                 <span className="text-4xl">🎉</span>
               </div>
               <h2 className="text-2xl font-bold text-white mb-3">Order received!</h2>
               <p className="text-gray-400 text-sm leading-relaxed mb-8">
-                Thank you, <strong className="text-white">{name}</strong>. We've received your WhatsApp message and will confirm your order within 24 hours.
+                Thank you, <strong className="text-white">{name}</strong>. We&apos;ve received your WhatsApp message and will confirm your order within 24 hours.
                 For queries email <a href={`mailto:${SHOP_EMAIL}`} className="text-yellow-400 hover:underline">{SHOP_EMAIL}</a>
               </p>
               <motion.button
                 whileTap={{ scale: 0.97 }}
                 onClick={reset}
-                className="px-8 py-3 font-bold text-gray-900 rounded-xl text-sm"
-                style={{ backgroundColor: GOLDEN }}
+                className="px-8 py-3 font-bold text-gray-900 bg-yellow-400 hover:bg-yellow-500 transition-colors rounded-xl text-sm"
               >
                 Back to shop
               </motion.button>
@@ -338,7 +340,7 @@ export default function ShopPage() {
 
         {/* Footer note */}
         <div className="mt-16 text-center text-xs text-gray-600 space-y-1">
-          <p>Payments processed via M-Pesa · Orders fulfilled by Ketebul Music, GoDown Arts Centre, Nairobi</p>
+          <p>Payments processed via M-Pesa · Orders fulfilled by Ketebul Music, Valley Court, Kilimani, Nairobi</p>
           <p>Questions? Email <a href={`mailto:${SHOP_EMAIL}`} className="text-gray-500 hover:text-yellow-400">{SHOP_EMAIL}</a></p>
         </div>
       </div>
