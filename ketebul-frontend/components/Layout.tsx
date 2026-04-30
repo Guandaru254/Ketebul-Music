@@ -125,7 +125,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </main>
 
       {/* ── Footer ── */}
-      <footer className="bg-gray-900 text-gray-300 py-10 px-4 sm:px-6 lg:px-8 border-t border-gray-800">
+      <footer className="bg-gray-950 text-gray-300 py-10 px-4 sm:px-6 lg:px-8 border-t border-gray-800">
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
 
           {/* Brand + address */}
