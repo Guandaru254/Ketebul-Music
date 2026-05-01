@@ -340,7 +340,7 @@ export default function ShopPage() {
 
         {/* Footer note */}
         <div className="mt-16 text-center text-xs text-gray-600 space-y-1">
-          <p>Payments processed via M-Pesa · Orders fulfilled by Ketebul Music, Valley Court, Kilimani, Nairobi</p>
+          <p>Payments processed via M-Pesa · Orders fulfilled by the Ketebul head office in Valley Court,  Kilimani</p>
           <p>Questions? Email <a href={`mailto:${SHOP_EMAIL}`} className="text-gray-500 hover:text-yellow-400">{SHOP_EMAIL}</a></p>
         </div>
       </div>
