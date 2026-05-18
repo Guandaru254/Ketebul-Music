@@ -10,18 +10,20 @@ const GOLDEN_YELLOW = '#FFD700';
 const HOVER_GOLDEN_YELLOW = '#E5BE00';
 
 const sectionVariants: Variants = {
-  hidden: { opacity: 0, y: 50 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: 'easeOut' } },
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
 };
 
 const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 40, scale: 0.95 },
-  visible: (i: number) => ({
-    opacity: 1, y: 0, scale: 1,
-    transition: { type: 'spring', stiffness: 150, damping: 12, delay: i * 0.07, duration: 0.8 },
-  }),
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.4, ease: 'easeOut' },
+  },
   lift: {
-    y: -5, scale: 1.01,
+    y: -5,
+    scale: 1.01,
     boxShadow: `0 8px 16px rgba(0,0,0,0.3), 0 0 0 3px ${GOLDEN_YELLOW}`,
     transition: { type: 'spring', stiffness: 300, damping: 20 },
   },
@@ -42,21 +44,30 @@ const ptComponents = {
 // ─── Safe date parser ─────────────────────────────────────────────────────────
 // Parses "YYYY-MM-DD" without timezone shift by treating it as local noon
 function parseLocalDate(dateStr: string): Date {
-  if (!dateStr) return new Date();
-  const [y, m, d] = dateStr.split('-').map(Number);
-  return new Date(y, m - 1, d, 12, 0, 0);
+  if (!dateStr || typeof dateStr !== 'string' || !dateStr.includes('-')) return new Date();
+  try {
+    const [y, m, d] = dateStr.split('-').map(Number);
+    if (!y || !m || !d) return new Date();
+    return new Date(y, m - 1, d, 12, 0, 0);
+  } catch {
+    return new Date();
+  }
 }
 
 // ─── Image component — never passes empty src to next/image ──────────────────
 const FALLBACK = 'https://placehold.co/600x400/374151/DAA520?text=Ketebul+Music';
 
 function PostImage({ update }: { update: any }) {
-  // Priority: Sanity mainImage → buttonLink (old WP url stored during migration) → fallback
   const [src, setSrc] = useState<string>(() => {
-    if (update.mainImage) {
-      try { return urlFor(update.mainImage).width(800).url(); } catch { /* fall through */ }
+    if (update?.mainImage) {
+      try {
+        const url = urlFor(update.mainImage).width(800).url();
+        if (url) return url;
+      } catch {
+        /* fall through */
+      }
     }
-    if (update.buttonLink && update.buttonLink.startsWith('http')) {
+    if (update?.buttonLink && typeof update.buttonLink === 'string' && update.buttonLink.startsWith('http')) {
       return update.buttonLink;
     }
     return FALLBACK;
@@ -66,14 +77,17 @@ function PostImage({ update }: { update: any }) {
   return (
     <div className="relative w-full h-full">
       <Image
-        src={src}
-        alt={update.title || 'Ketebul Music update'}
+        src={src || FALLBACK}
+        alt={update?.title || 'Ketebul Music update'}
         fill
         sizes="(max-width: 768px) 100vw, 40vw"
-        className={`object-cover object-center transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+        className={`object-cover object-center transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
         onLoad={() => setLoaded(true)}
-        onError={() => { setSrc(FALLBACK); setLoaded(true); }}
-        unoptimized={!update.mainImage} // skip Next optimizer for external WP urls
+        onError={() => {
+          setSrc(FALLBACK);
+          setLoaded(true);
+        }}
+        unoptimized={true}
       />
       {!loaded && (
         <div className="absolute inset-0 bg-gray-700 animate-pulse flex items-center justify-center">
@@ -92,15 +106,51 @@ export default function UpdatesPage() {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
+    let isMounted = true;
+
+    // TARGETED FILTER: Pulls only native updates, completely skipping legacy 'post' types or orphaned strings
     client
-      .fetch(`*[_type == "update" && published != false] | order(date desc)`)
-      .then((data: any[]) => setUpdates(data))
-      .catch((err: Error) => console.error('Sanity fetch error:', err))
-      .finally(() => setIsFetching(false));
+      .fetch(`*[_type == "update" && defined(mainImage)] | order(date desc, _createdAt desc)`)
+      .then((data: any[]) => {
+        if (isMounted && data) {
+          const normalizedData = data.map(item => {
+            let finalDate = '';
+            if (item.date) {
+              finalDate = item.date;
+            } else if (item.publishedAt) {
+              finalDate = item.publishedAt.split('T')[0];
+            } else if (item._createdAt) {
+              finalDate = item._createdAt.split('T')[0];
+            }
+
+            return {
+              ...item,
+              date: finalDate,
+              content: item.content || item.body || item.text || null
+            };
+          });
+          setUpdates(normalizedData);
+        }
+      })
+      .catch((err: Error) => {
+        console.error('Sanity fetch error:', err);
+        if (isMounted) {
+          setUpdates([]); 
+        }
+      })
+      .finally(() => {
+        if (isMounted) {
+          setIsFetching(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  const filtered = updates.filter(u =>
-    !search || u.title?.toLowerCase().includes(search.toLowerCase())
+  const filtered = (updates || []).filter(u =>
+    u && u.title && (!search || u.title.toLowerCase().includes(search.toLowerCase()))
   );
 
   if (isFetching) {
@@ -116,7 +166,10 @@ export default function UpdatesPage() {
     <div className="flex flex-col items-center min-h-screen px-4 py-10 sm:px-8 bg-gradient-to-b from-gray-950 to-black font-inter text-gray-100 w-full">
       <motion.div
         className="w-full max-w-5xl mx-auto"
-        initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.1 }} variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.1 }}
+        variants={sectionVariants}
       >
         {/* Header */}
         <div className="text-center mb-10">
@@ -124,7 +177,7 @@ export default function UpdatesPage() {
             Latest Updates
           </h1>
           <p className="text-gray-400 text-sm">
-            {updates.length} posts · news, events &amp; field dispatches from Ketebul Music
+            Showing {filtered.length} native posts · news &amp; events
           </p>
         </div>
 
@@ -148,31 +201,31 @@ export default function UpdatesPage() {
           ) : (
             filtered.map((update, index) => {
               const d = parseLocalDate(update.date);
-              const day   = d.getDate().toString().padStart(2, '0');
+              const day = d.getDate().toString().padStart(2, '0');
               const month = d.toLocaleString('en-US', { month: 'short' }).toUpperCase();
-              const year  = d.getFullYear();
+              const year = d.getFullYear();
 
-              // Determine button destination
-              const hasRealLink = update.buttonLink &&
+              const hasRealLink =
+                update.buttonLink &&
+                typeof update.buttonLink === 'string' &&
                 update.buttonLink.startsWith('http') &&
                 !update.buttonLink.includes('placehold.co') &&
-                !update.mainImage; // if image already uploaded, clear the link
+                !update.mainImage;
               const destination = hasRealLink
-                ? null  // don't use old WP image URL as button destination
+                ? null 
                 : update.slug?.current
-                  ? `/updates/${update.slug.current}`
-                  : null;
+                ? `/updates/${update.slug.current}`
+                : null;
 
               return (
                 <motion.div
-                  key={update._id}
+                  key={update._id || index}
                   className="flex flex-col md:flex-row bg-gradient-to-br from-gray-800/60 to-gray-900 rounded-2xl shadow-lg overflow-hidden border border-gray-700/50 backdrop-blur-sm"
                   initial="hidden"
                   whileInView="visible"
                   whileHover="lift"
                   viewport={{ once: true, amount: 0.1 }}
                   variants={cardVariants}
-                  custom={index}
                 >
                   {/* Date sidebar */}
                   <div className="w-full md:w-24 flex flex-row md:flex-col items-center justify-center gap-1 px-5 py-4 md:py-0 bg-gray-900/60 border-b md:border-b-0 md:border-r border-gray-700/50 flex-shrink-0">
@@ -203,7 +256,8 @@ export default function UpdatesPage() {
 
                       {update.venue && (
                         <p className="mt-3 text-xs text-gray-400">
-                          <span style={{ color: GOLDEN_YELLOW }}>Venue: </span>{update.venue}
+                          <span style={{ color: GOLDEN_YELLOW }}>Venue: </span>
+                          {update.venue}
                         </p>
                       )}
                     </div>
