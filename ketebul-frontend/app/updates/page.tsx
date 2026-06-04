@@ -42,7 +42,6 @@ const ptComponents = {
 };
 
 // ─── Safe date parser ─────────────────────────────────────────────────────────
-// Parses "YYYY-MM-DD" without timezone shift by treating it as local noon
 function parseLocalDate(dateStr: string): Date {
   if (!dateStr || typeof dateStr !== 'string' || !dateStr.includes('-')) return new Date();
   try {
@@ -54,47 +53,45 @@ function parseLocalDate(dateStr: string): Date {
   }
 }
 
-// ─── Image component — never passes empty src to next/image ──────────────────
+// ─── Image component — Safely handles empty assets and prevents leaks ────────
 const FALLBACK = 'https://placehold.co/600x400/374151/DAA520?text=Ketebul+Music';
 
 function PostImage({ update }: { update: any }) {
   const [src, setSrc] = useState<string>(() => {
-    if (update?.mainImage) {
+    if (update?.mainImage && update.mainImage.asset) {
       try {
         const url = urlFor(update.mainImage).width(800).url();
         if (url) return url;
-      } catch {
-        /* fall through */
+      } catch (err) {
+        console.error("Sanity image builder error:", err);
       }
-    }
-    if (update?.buttonLink && typeof update.buttonLink === 'string' && update.buttonLink.startsWith('http')) {
-      return update.buttonLink;
     }
     return FALLBACK;
   });
   const [loaded, setLoaded] = useState(false);
 
   return (
-    <div className="relative w-full h-full">
-      <Image
-        src={src || FALLBACK}
-        alt={update?.title || 'Ketebul Music update'}
-        fill
-        sizes="(max-width: 768px) 100vw, 40vw"
-        className={`object-cover object-center transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
-        onLoad={() => setLoaded(true)}
-        onError={() => {
-          setSrc(FALLBACK);
-          setLoaded(true);
-        }}
-        unoptimized={true}
-      />
-      {!loaded && (
-        <div className="absolute inset-0 bg-gray-700 animate-pulse flex items-center justify-center">
-          <span className="text-gray-500 text-sm">Loading…</span>
-        </div>
-      )}
-      <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 to-transparent pointer-events-none" />
+    <div className="w-full h-full min-h-[22rem] md:h-[26rem] flex items-center justify-center bg-gray-950/40 p-2 overflow-hidden">
+      <div className="relative w-full h-full max-h-full">
+        <Image
+          src={src}
+          alt={update?.title || 'Ketebul Music update'}
+          fill
+          sizes="(max-width: 768px) 100vw, 40vw"
+          className={`object-contain object-center transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+          onLoad={() => setLoaded(true)}
+          onError={() => {
+            setSrc(FALLBACK);
+            setLoaded(true);
+          }}
+          unoptimized={true}
+        />
+        {!loaded && (
+          <div className="absolute inset-0 bg-gray-800 animate-pulse flex items-center justify-center rounded-xl">
+            <span className="text-gray-500 text-sm">Loading…</span>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -108,9 +105,9 @@ export default function UpdatesPage() {
   useEffect(() => {
     let isMounted = true;
 
-    // TARGETED FILTER: Pulls only native updates, completely skipping legacy 'post' types or orphaned strings
+    // Pulls all live updates, including text/external updates missing a mainImage asset
     client
-      .fetch(`*[_type == "update" && defined(mainImage)] | order(date desc, _createdAt desc)`)
+      .fetch(`*[_type == "update" && !(_id in path("drafts.**"))] | order(date desc, _createdAt desc)`)
       .then((data: any[]) => {
         if (isMounted && data) {
           const normalizedData = data.map(item => {
@@ -205,14 +202,14 @@ export default function UpdatesPage() {
               const month = d.toLocaleString('en-US', { month: 'short' }).toUpperCase();
               const year = d.getFullYear();
 
-              const hasRealLink =
+              // Explicitly evaluate absolute hyperlinks vs dynamic local slugs
+              const isExternal =
                 update.buttonLink &&
                 typeof update.buttonLink === 'string' &&
-                update.buttonLink.startsWith('http') &&
-                !update.buttonLink.includes('placehold.co') &&
-                !update.mainImage;
-              const destination = hasRealLink
-                ? null 
+                update.buttonLink.startsWith('http');
+
+              const destination = isExternal
+                ? update.buttonLink
                 : update.slug?.current
                 ? `/updates/${update.slug.current}`
                 : null;
@@ -234,12 +231,12 @@ export default function UpdatesPage() {
                     <span className="text-sm text-gray-400 md:mt-0.5">{year}</span>
                   </div>
 
-                  {/* Image */}
-                  <div className="md:w-2/5 flex-shrink-0 relative h-56 md:h-auto min-h-[14rem]">
+                  {/* Image wrapper - Locks scale constraint */}
+                  <div className="w-full md:w-2/5 flex-shrink-0 relative h-72 md:h-auto min-h-[22rem]">
                     <PostImage update={update} />
                   </div>
 
-                  {/* Content */}
+                  {/* Content block */}
                   <div className="flex-grow p-6 flex flex-col justify-between">
                     <div>
                       <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 leading-snug">
@@ -262,18 +259,33 @@ export default function UpdatesPage() {
                       )}
                     </div>
 
+                    {/* Conditional Native Anchor vs Router Link Rendering */}
                     {destination && (
-                      <motion.a
-                        href={destination}
-                        className="mt-5 inline-block px-6 py-2.5 text-sm text-gray-900 font-bold rounded-lg shadow self-start"
-                        style={{ backgroundColor: GOLDEN_YELLOW }}
-                        whileHover={{ backgroundColor: HOVER_GOLDEN_YELLOW, scale: 1.03 }}
-                        whileTap={{ scale: 0.97 }}
-                      >
-                        {update.buttonText && !update.buttonText.includes('Original Image')
-                          ? update.buttonText
-                          : 'More Details'}
-                      </motion.a>
+                      isExternal ? (
+                        <a
+                          href={destination}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-5 inline-block px-6 py-2.5 text-sm text-gray-900 font-bold rounded-lg shadow self-start transition-transform hover:scale-105 active:scale-95 cursor-pointer"
+                          style={{ backgroundColor: GOLDEN_YELLOW }}
+                        >
+                          {update.buttonText && !update.buttonText.includes('Original Image')
+                            ? update.buttonText
+                            : 'More Details'}
+                        </a>
+                      ) : (
+                        <motion.a
+                          href={destination}
+                          className="mt-5 inline-block px-6 py-2.5 text-sm text-gray-900 font-bold rounded-lg shadow self-start cursor-pointer"
+                          style={{ backgroundColor: GOLDEN_YELLOW }}
+                          whileHover={{ backgroundColor: HOVER_GOLDEN_YELLOW, scale: 1.03 }}
+                          whileTap={{ scale: 0.97 }}
+                        >
+                          {update.buttonText && !update.buttonText.includes('Original Image')
+                            ? update.buttonText
+                            : 'More Details'}
+                        </motion.a>
+                      )
                     )}
                   </div>
                 </motion.div>
