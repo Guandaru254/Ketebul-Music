@@ -102,9 +102,9 @@ export default function UpdatesPage() {
   useEffect(() => {
     let isMounted = true;
 
-    // Strips out explicit drafts and known legacy WP item patterns directly in GROQ engine
+    // TARGETED FIXED QUERY: Querying "_type == 'post'" matching the exact Studio collection
     client
-      .fetch(`*[_type == "update" && !(_id in path("drafts.**")) && !(_id match "post-*") && defined(slug.current)] | order(date desc, _createdAt desc)`)
+      .fetch(`*[_type == "post" && !(_id in path("drafts.**")) && defined(slug.current)] | order(publishedAt desc, _createdAt desc)`)
       .then((data: any[]) => {
         if (!isMounted) return;
         
@@ -112,10 +112,11 @@ export default function UpdatesPage() {
           if (data && Array.isArray(data)) {
             const normalizedData = data.map(item => {
               let finalDate = '';
-              if (item.date) {
-                finalDate = item.date;
-              } else if (item.publishedAt) {
+              // Fallbacks for checking standard Sanity document date schemas
+              if (item.publishedAt) {
                 finalDate = item.publishedAt.split('T')[0];
+              } else if (item.date) {
+                finalDate = item.date;
               } else if (item._createdAt) {
                 finalDate = item._createdAt.split('T')[0];
               }
@@ -123,7 +124,8 @@ export default function UpdatesPage() {
               return {
                 ...item,
                 date: finalDate,
-                content: item.content || item.body || item.text || null
+                // Maps standard 'body' array or content block structure seamlessly
+                content: item.body || item.content || item.text || null
               };
             });
             setUpdates(normalizedData);
@@ -131,7 +133,7 @@ export default function UpdatesPage() {
             setUpdates([]);
           }
         } catch (normalizationError) {
-          console.error('Data mapping sanity exception:', normalizationError);
+          console.error('Data mapping normalization exception:', normalizationError);
           setUpdates([]);
         }
       })
@@ -140,7 +142,6 @@ export default function UpdatesPage() {
         if (isMounted) setUpdates([]);
       })
       .finally(() => {
-        // Enforces state finalization regardless of runtime execution pathway
         if (isMounted) {
           setIsFetching(false);
         }
