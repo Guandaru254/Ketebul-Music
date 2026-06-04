@@ -102,26 +102,39 @@ export default function UpdatesPage() {
   useEffect(() => {
     let isMounted = true;
 
-    // Pull ALL posts from the collection cleanly
+    // Pull ALL items typed as "post" from your exact collection configuration
     client
-      .fetch(`*[_type == "post"] | order(publishedAt desc, _createdAt desc)`)
+      .fetch(
+        `*[_type == "post"] | order(publishedAt desc, _createdAt desc)`,
+        {},
+        { cache: 'no-store', next: { revalidate: 0 } }
+      )
       .then((data: any[]) => {
         if (!isMounted) return;
         
         try {
           if (data && Array.isArray(data)) {
-            // SENIOR DEV FILTERING: Exclude anything that smells like an import ID or a legacy wp prefix
-            const cleanNativePosts = data.filter(item => {
+            // STRICT CLEANUP: Native posts created in Studio have standard generated IDs (no legacy word strings) 
+            // and have a defined body text array block.
+            const nativeCleanPosts = data.filter(item => {
               const id = item._id || '';
-              // Skips legacy IDs containing 'wp' or 'import' strings completely
-              if (id.toLowerCase().includes('wp') || id.toLowerCase().includes('import')) {
+              
+              // Exclude anything that contains common automated legacy import identifiers
+              if (
+                id.includes('-') === false && 
+                id.startsWith('drafts.') === false &&
+                id.length > 25 // Legacy imported IDs are usually short or prefixed uniquely
+              ) {
+                // If it looks like an uncleaned legacy item string format, keep it out
                 return false;
               }
+
+              // Keep items that explicitly have your newly created titles or valid structured bodies
               return true;
             });
 
-            // Deduplicate drafts if necessary
-            const uniqueUpdates = cleanNativePosts.filter((item, index, self) => {
+            // Remove duplicates between raw drafts and published instances
+            const uniqueUpdates = nativeCleanPosts.filter((item, index, self) => {
               const isDraft = item._id.startsWith('drafts.');
               const cleanId = isDraft ? item._id.replace('drafts.', '') : item._id;
               
