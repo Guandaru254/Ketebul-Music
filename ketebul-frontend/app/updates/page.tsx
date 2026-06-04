@@ -41,7 +41,6 @@ const ptComponents = {
   },
 };
 
-// Parses "YYYY-MM-DD" safely without unexpected timezone shifts
 function parseLocalDate(dateStr: string): Date {
   if (!dateStr || typeof dateStr !== 'string' || !dateStr.includes('-')) return new Date();
   try {
@@ -103,41 +102,48 @@ export default function UpdatesPage() {
   useEffect(() => {
     let isMounted = true;
 
-    /**
-     * SENIOR DEV IMPLEMENTATION: Filter out imported items explicitly.
-     * WordPress migration objects typically carry legacy IDs like "post-xxx" or contain historical
-     * fields. Checking `!(attributes matches "wp")` or validating standard ID formats keeps it pristine.
-     * Here, we exclude any IDs starting with "post-" or containing automated migration prefixes.
-     */
+    // Strips out explicit drafts and known legacy WP item patterns directly in GROQ engine
     client
-      .fetch(`*[_type == "update" && !(_id in path("drafts.**")) && !(_id match "post-*")] | order(date desc, _createdAt desc)`)
+      .fetch(`*[_type == "update" && !(_id in path("drafts.**")) && !(_id match "post-*") && defined(slug.current)] | order(date desc, _createdAt desc)`)
       .then((data: any[]) => {
-        if (isMounted && data) {
-          const normalizedData = data.map(item => {
-            let finalDate = '';
-            if (item.date) {
-              finalDate = item.date;
-            } else if (item.publishedAt) {
-              finalDate = item.publishedAt.split('T')[0];
-            } else if (item._createdAt) {
-              finalDate = item._createdAt.split('T')[0];
-            }
+        if (!isMounted) return;
+        
+        try {
+          if (data && Array.isArray(data)) {
+            const normalizedData = data.map(item => {
+              let finalDate = '';
+              if (item.date) {
+                finalDate = item.date;
+              } else if (item.publishedAt) {
+                finalDate = item.publishedAt.split('T')[0];
+              } else if (item._createdAt) {
+                finalDate = item._createdAt.split('T')[0];
+              }
 
-            return {
-              ...item,
-              date: finalDate,
-              content: item.content || item.body || item.text || null
-            };
-          });
-          setUpdates(normalizedData);
+              return {
+                ...item,
+                date: finalDate,
+                content: item.content || item.body || item.text || null
+              };
+            });
+            setUpdates(normalizedData);
+          } else {
+            setUpdates([]);
+          }
+        } catch (normalizationError) {
+          console.error('Data mapping sanity exception:', normalizationError);
+          setUpdates([]);
         }
       })
       .catch((err: Error) => {
-        console.error('Sanity fetch error:', err);
-        if (isMounted) setUpdates([]); 
+        console.error('Sanity network client fetch failure:', err);
+        if (isMounted) setUpdates([]);
       })
       .finally(() => {
-        if (isMounted) setIsFetching(false);
+        // Enforces state finalization regardless of runtime execution pathway
+        if (isMounted) {
+          setIsFetching(false);
+        }
       });
 
     return () => {
@@ -201,7 +207,6 @@ export default function UpdatesPage() {
               const month = d.toLocaleString('en-US', { month: 'short' }).toUpperCase();
               const year = d.getFullYear();
 
-              // Evaluates explicitly whether the button link targets an absolute external URL
               const isExternal =
                 update.buttonLink &&
                 typeof update.buttonLink === 'string' &&
