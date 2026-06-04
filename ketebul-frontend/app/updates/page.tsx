@@ -102,17 +102,38 @@ export default function UpdatesPage() {
   useEffect(() => {
     let isMounted = true;
 
-    // TARGETED FIXED QUERY: Querying "_type == 'post'" matching the exact Studio collection
+    // Pull ALL posts from the collection cleanly
     client
-      .fetch(`*[_type == "post" && !(_id in path("drafts.**")) && defined(slug.current)] | order(publishedAt desc, _createdAt desc)`)
+      .fetch(`*[_type == "post"] | order(publishedAt desc, _createdAt desc)`)
       .then((data: any[]) => {
         if (!isMounted) return;
         
         try {
           if (data && Array.isArray(data)) {
-            const normalizedData = data.map(item => {
+            // SENIOR DEV FILTERING: Exclude anything that smells like an import ID or a legacy wp prefix
+            const cleanNativePosts = data.filter(item => {
+              const id = item._id || '';
+              // Skips legacy IDs containing 'wp' or 'import' strings completely
+              if (id.toLowerCase().includes('wp') || id.toLowerCase().includes('import')) {
+                return false;
+              }
+              return true;
+            });
+
+            // Deduplicate drafts if necessary
+            const uniqueUpdates = cleanNativePosts.filter((item, index, self) => {
+              const isDraft = item._id.startsWith('drafts.');
+              const cleanId = isDraft ? item._id.replace('drafts.', '') : item._id;
+              
+              if (isDraft) {
+                const hasPublished = self.some(u => u._id === cleanId);
+                return !hasPublished; 
+              }
+              return true;
+            });
+
+            const normalizedData = uniqueUpdates.map(item => {
               let finalDate = '';
-              // Fallbacks for checking standard Sanity document date schemas
               if (item.publishedAt) {
                 finalDate = item.publishedAt.split('T')[0];
               } else if (item.date) {
@@ -124,7 +145,6 @@ export default function UpdatesPage() {
               return {
                 ...item,
                 date: finalDate,
-                // Maps standard 'body' array or content block structure seamlessly
                 content: item.body || item.content || item.text || null
               };
             });
