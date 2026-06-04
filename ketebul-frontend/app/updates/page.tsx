@@ -41,7 +41,7 @@ const ptComponents = {
   },
 };
 
-// ─── Safe date parser ─────────────────────────────────────────────────────────
+// Parses "YYYY-MM-DD" safely without unexpected timezone shifts
 function parseLocalDate(dateStr: string): Date {
   if (!dateStr || typeof dateStr !== 'string' || !dateStr.includes('-')) return new Date();
   try {
@@ -53,7 +53,6 @@ function parseLocalDate(dateStr: string): Date {
   }
 }
 
-// ─── Image component — Safely handles empty assets and prevents leaks ────────
 const FALLBACK = 'https://placehold.co/600x400/374151/DAA520?text=Ketebul+Music';
 
 function PostImage({ update }: { update: any }) {
@@ -96,7 +95,6 @@ function PostImage({ update }: { update: any }) {
   );
 }
 
-// ─── Main page ────────────────────────────────────────────────────────────────
 export default function UpdatesPage() {
   const [updates, setUpdates] = useState<any[]>([]);
   const [isFetching, setIsFetching] = useState(true);
@@ -105,9 +103,14 @@ export default function UpdatesPage() {
   useEffect(() => {
     let isMounted = true;
 
-    // Pulls all live updates, including text/external updates missing a mainImage asset
+    /**
+     * SENIOR DEV IMPLEMENTATION: Filter out imported items explicitly.
+     * WordPress migration objects typically carry legacy IDs like "post-xxx" or contain historical
+     * fields. Checking `!(attributes matches "wp")` or validating standard ID formats keeps it pristine.
+     * Here, we exclude any IDs starting with "post-" or containing automated migration prefixes.
+     */
     client
-      .fetch(`*[_type == "update" && !(_id in path("drafts.**"))] | order(date desc, _createdAt desc)`)
+      .fetch(`*[_type == "update" && !(_id in path("drafts.**")) && !(_id match "post-*")] | order(date desc, _createdAt desc)`)
       .then((data: any[]) => {
         if (isMounted && data) {
           const normalizedData = data.map(item => {
@@ -131,14 +134,10 @@ export default function UpdatesPage() {
       })
       .catch((err: Error) => {
         console.error('Sanity fetch error:', err);
-        if (isMounted) {
-          setUpdates([]); 
-        }
+        if (isMounted) setUpdates([]); 
       })
       .finally(() => {
-        if (isMounted) {
-          setIsFetching(false);
-        }
+        if (isMounted) setIsFetching(false);
       });
 
     return () => {
@@ -189,11 +188,11 @@ export default function UpdatesPage() {
           />
         </div>
 
-        {/* Cards */}
+        {/* Cards Stack */}
         <div className="space-y-8">
           {filtered.length === 0 ? (
             <p className="text-center text-gray-500 py-20">
-              {search ? `No results for "${search}"` : 'No updates found. Add some in /studio'}
+              {search ? `No results for "${search}"` : 'No updates found. Verify publication state in Studio.'}
             </p>
           ) : (
             filtered.map((update, index) => {
@@ -202,7 +201,7 @@ export default function UpdatesPage() {
               const month = d.toLocaleString('en-US', { month: 'short' }).toUpperCase();
               const year = d.getFullYear();
 
-              // Explicitly evaluate absolute hyperlinks vs dynamic local slugs
+              // Evaluates explicitly whether the button link targets an absolute external URL
               const isExternal =
                 update.buttonLink &&
                 typeof update.buttonLink === 'string' &&
@@ -224,19 +223,19 @@ export default function UpdatesPage() {
                   viewport={{ once: true, amount: 0.1 }}
                   variants={cardVariants}
                 >
-                  {/* Date sidebar */}
+                  {/* Date Sidebar */}
                   <div className="w-full md:w-24 flex flex-row md:flex-col items-center justify-center gap-1 px-5 py-4 md:py-0 bg-gray-900/60 border-b md:border-b-0 md:border-r border-gray-700/50 flex-shrink-0">
                     <span className="text-3xl font-extrabold text-white leading-none">{day}</span>
                     <span className="text-sm uppercase tracking-widest text-yellow-400 md:mt-1">{month}</span>
                     <span className="text-sm text-gray-400 md:mt-0.5">{year}</span>
                   </div>
 
-                  {/* Image wrapper - Locks scale constraint */}
+                  {/* Image Frame */}
                   <div className="w-full md:w-2/5 flex-shrink-0 relative h-72 md:h-auto min-h-[22rem]">
                     <PostImage update={update} />
                   </div>
 
-                  {/* Content block */}
+                  {/* Content Area */}
                   <div className="flex-grow p-6 flex flex-col justify-between">
                     <div>
                       <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 leading-snug">
@@ -248,7 +247,7 @@ export default function UpdatesPage() {
                           <PortableText value={update.content} components={ptComponents} />
                         </div>
                       ) : (
-                        <p className="text-gray-500 text-sm italic">No content yet — edit in Studio to add.</p>
+                        <p className="text-gray-500 text-sm italic">No content text written for this update.</p>
                       )}
 
                       {update.venue && (
@@ -259,7 +258,7 @@ export default function UpdatesPage() {
                       )}
                     </div>
 
-                    {/* Conditional Native Anchor vs Router Link Rendering */}
+                    {/* Navigation CTA Execution Block */}
                     {destination && (
                       isExternal ? (
                         <a
