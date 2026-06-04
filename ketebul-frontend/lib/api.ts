@@ -33,7 +33,7 @@ export async function fetchPosts() {
   return await client.fetch(`*[_type == "post"] | order(_createdAt desc)`)
 }
 
-// Added this so your Updates page can pull from the CMS
+// FIXED: Changed type matcher from "update" to "updates" to target your live collection
 export async function fetchUpdates() {
-  return await client.fetch(`*[_type == "update"] | order(date desc)`)
+  return await client.fetch(`*[_type == "updates"] | order(date desc, _createdAt desc)`)
 }

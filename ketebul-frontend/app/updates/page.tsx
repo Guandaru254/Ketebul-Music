@@ -24,7 +24,6 @@ const cardVariants: Variants = {
   },
 };
 
-// Fixed block mapping configuration
 const ptComponents = {
   block: {
     normal: ({ children }: any) => <p className="mb-3 last:mb-0 text-gray-300 text-sm leading-relaxed">{children}</p>,
@@ -110,6 +109,8 @@ export default function UpdatesPage() {
       )
       .then((data: any[]) => {
         if (!isMounted) return;
+
+        console.log("📡 FETCHED DIRECT CODES:", data);
 
         if (data && Array.isArray(data)) {
           const normalizedData = data.map(item => ({
