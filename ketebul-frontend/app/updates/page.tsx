@@ -7,7 +7,6 @@ import { client, urlFor } from '@/lib/api';
 import { PortableText } from '@portabletext/react';
 
 const GOLDEN_YELLOW = '#FFD700';
-const HOVER_GOLDEN_YELLOW = '#E5BE00';
 
 const sectionVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
@@ -16,11 +15,7 @@ const sectionVariants: Variants = {
 
 const cardVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4, ease: 'easeOut' },
-  },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } },
   lift: {
     y: -5,
     scale: 1.01,
@@ -29,15 +24,34 @@ const cardVariants: Variants = {
   },
 };
 
+// Fixed block mapping configuration
 const ptComponents = {
   block: {
-    normal: ({ children }: any) => <p className="mb-2 last:mb-0 text-gray-300 leading-relaxed">{children}</p>,
+    normal: ({ children }: any) => <p className="mb-3 last:mb-0 text-gray-300 text-sm leading-relaxed">{children}</p>,
+    h1: ({ children }: any) => <h1 className="text-2xl font-bold my-4 text-white">{children}</h1>,
+    h2: ({ children }: any) => <h2 className="text-xl font-bold my-3 text-white">{children}</h2>,
+    h3: ({ children }: any) => <h3 className="text-lg font-bold my-2 text-white">{children}</h3>,
+    blockquote: ({ children }: any) => <blockquote className="border-l-4 border-yellow-500 pl-4 my-4 italic text-gray-400">{children}</blockquote>,
   },
   list: {
-    bullet: ({ children }: any) => <ul className="list-disc pl-5 mt-1 text-gray-300">{children}</ul>,
+    bullet: ({ children }: any) => <ul className="list-disc pl-5 mb-4 text-gray-300 space-y-1 text-sm">{children}</ul>,
+    number: ({ children }: any) => <ol className="list-decimal pl-5 mb-4 text-gray-300 space-y-1 text-sm">{children}</ol>,
+  },
+  listItem: {
+    bullet: ({ children }: any) => <li>{children}</li>,
+    number: ({ children }: any) => <li>{children}</li>,
   },
   marks: {
     strong: ({ children }: any) => <strong className="font-bold text-white">{children}</strong>,
+    em: ({ children }: any) => <em className="italic">{children}</em>,
+    link: ({ value, children }: any) => {
+      const target = (value?.href || '').startsWith('http') ? '_blank' : undefined;
+      return (
+        <a href={value?.href} target={target} rel={target ? 'noopener noreferrer' : undefined} className="text-yellow-400 underline hover:text-yellow-300">
+          {children}
+        </a>
+      );
+    },
   },
 };
 
@@ -45,7 +59,6 @@ function parseLocalDate(dateStr: string): Date {
   if (!dateStr || typeof dateStr !== 'string' || !dateStr.includes('-')) return new Date();
   try {
     const [y, m, d] = dateStr.split('-').map(Number);
-    if (!y || !m || !d) return new Date();
     return new Date(y, m - 1, d, 12, 0, 0);
   } catch {
     return new Date();
@@ -66,158 +79,87 @@ function PostImage({ update }: { update: any }) {
     }
     return FALLBACK;
   });
-  const [loaded, setLoaded] = useState(false);
 
   return (
-    <div className="w-full h-full min-h-[22rem] md:h-[26rem] flex items-center justify-center bg-gray-950/40 p-2 overflow-hidden">
-      <div className="relative w-full h-full max-h-full">
-        <Image
-          src={src}
-          alt={update?.title || 'Ketebul Music update'}
-          fill
-          sizes="(max-width: 768px) 100vw, 40vw"
-          className={`object-contain object-center transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
-          onLoad={() => setLoaded(true)}
-          onError={() => {
-            setSrc(FALLBACK);
-            setLoaded(true);
-          }}
-          unoptimized={true}
-        />
-        {!loaded && (
-          <div className="absolute inset-0 bg-gray-800 animate-pulse flex items-center justify-center rounded-xl">
-            <span className="text-gray-500 text-sm">Loading…</span>
-          </div>
-        )}
-      </div>
+    <div className="w-full h-full min-h-[22rem] md:h-[26rem] flex items-center justify-center bg-gray-950/40 p-2 overflow-hidden relative rounded-t-2xl md:rounded-l-2xl md:rounded-tr-none">
+      <Image
+        src={src}
+        alt={update?.title || 'Ketebul Music Update'}
+        fill
+        sizes="(max-width: 768px) 100vw, 40vw"
+        className="object-contain object-center p-2"
+        unoptimized
+      />
     </div>
   );
 }
 
 export default function UpdatesPage() {
   const [updates, setUpdates] = useState<any[]>([]);
-  const [isFetching, setIsFetching] = useState(true);
+  const [loadingData, setLoadingData] = useState(true);
   const [search, setSearch] = useState('');
 
   useEffect(() => {
     let isMounted = true;
 
-    // Pull ALL items typed as "post" from your exact collection configuration
     client
       .fetch(
-        `*[_type == "post"] | order(publishedAt desc, _createdAt desc)`,
+        `*[_type == "updates"] | order(date desc, _createdAt desc)`,
         {},
-        { cache: 'no-store', next: { revalidate: 0 } }
+        { cache: 'no-store' }
       )
       .then((data: any[]) => {
         if (!isMounted) return;
-        
-        try {
-          if (data && Array.isArray(data)) {
-            // STRICT CLEANUP: Native posts created in Studio have standard generated IDs (no legacy word strings) 
-            // and have a defined body text array block.
-            const nativeCleanPosts = data.filter(item => {
-              const id = item._id || '';
-              
-              // Exclude anything that contains common automated legacy import identifiers
-              if (
-                id.includes('-') === false && 
-                id.startsWith('drafts.') === false &&
-                id.length > 25 // Legacy imported IDs are usually short or prefixed uniquely
-              ) {
-                // If it looks like an uncleaned legacy item string format, keep it out
-                return false;
-              }
 
-              // Keep items that explicitly have your newly created titles or valid structured bodies
-              return true;
-            });
-
-            // Remove duplicates between raw drafts and published instances
-            const uniqueUpdates = nativeCleanPosts.filter((item, index, self) => {
-              const isDraft = item._id.startsWith('drafts.');
-              const cleanId = isDraft ? item._id.replace('drafts.', '') : item._id;
-              
-              if (isDraft) {
-                const hasPublished = self.some(u => u._id === cleanId);
-                return !hasPublished; 
-              }
-              return true;
-            });
-
-            const normalizedData = uniqueUpdates.map(item => {
-              let finalDate = '';
-              if (item.publishedAt) {
-                finalDate = item.publishedAt.split('T')[0];
-              } else if (item.date) {
-                finalDate = item.date;
-              } else if (item._createdAt) {
-                finalDate = item._createdAt.split('T')[0];
-              }
-
-              return {
-                ...item,
-                date: finalDate,
-                content: item.body || item.content || item.text || null
-              };
-            });
-            setUpdates(normalizedData);
-          } else {
-            setUpdates([]);
-          }
-        } catch (normalizationError) {
-          console.error('Data mapping normalization exception:', normalizationError);
-          setUpdates([]);
+        if (data && Array.isArray(data)) {
+          const normalizedData = data.map(item => ({
+            ...item,
+            displayDate: item.date || item._createdAt?.split('T')[0] || '',
+            richTextContent: Array.isArray(item.content) ? item.content : null
+          }));
+          setUpdates(normalizedData);
         }
       })
-      .catch((err: Error) => {
-        console.error('Sanity network client fetch failure:', err);
-        if (isMounted) setUpdates([]);
+      .catch((err) => {
+        console.error('Sanity fetch failure on updates schema:', err);
       })
       .finally(() => {
         if (isMounted) {
-          setIsFetching(false);
+          setLoadingData(false);
         }
       });
 
-    return () => {
-      isMounted = false;
-    };
+    return () => { isMounted = false; };
   }, []);
 
-  const filtered = (updates || []).filter(u =>
+  const filtered = updates.filter(u =>
     u && u.title && (!search || u.title.toLowerCase().includes(search.toLowerCase()))
   );
 
-  if (isFetching) {
+  if (loadingData) {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center gap-4">
         <div className="w-10 h-10 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin" />
-        <p className="text-gray-400 text-sm tracking-widest uppercase">Loading updates…</p>
+        <p className="text-gray-400 text-sm tracking-widest uppercase font-mono">Loading updates…</p>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col items-center min-h-screen px-4 py-10 sm:px-8 bg-gradient-to-b from-gray-950 to-black font-inter text-gray-100 w-full">
-      <motion.div
-        className="w-full max-w-5xl mx-auto"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.1 }}
-        variants={sectionVariants}
-      >
-        {/* Header */}
+    <div className="flex flex-col items-center min-h-screen px-4 py-10 sm:px-8 bg-gradient-to-b from-gray-950 to-black text-gray-100 w-full">
+      <motion.div className="w-full max-w-5xl mx-auto" initial="hidden" animate="visible" variants={sectionVariants}>
+        
+        {/* Header Block */}
         <div className="text-center mb-10">
           <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-3" style={{ color: GOLDEN_YELLOW }}>
             Latest Updates
           </h1>
           <p className="text-gray-400 text-sm">
-            Showing {filtered.length} native posts · news &amp; events
+            Showing {filtered.length} live records · news &amp; announcements
           </p>
         </div>
 
-        {/* Search */}
+        {/* Search Field */}
         <div className="mb-8 flex justify-center">
           <input
             type="text"
@@ -228,38 +170,25 @@ export default function UpdatesPage() {
           />
         </div>
 
-        {/* Cards Stack */}
+        {/* Dynamic Card Display */}
         <div className="space-y-8">
           {filtered.length === 0 ? (
-            <p className="text-center text-gray-500 py-20">
-              {search ? `No results for "${search}"` : 'No updates found. Verify publication state in Studio.'}
-            </p>
+            <p className="text-center text-gray-500 py-20">No matching updates found.</p>
           ) : (
             filtered.map((update, index) => {
-              const d = parseLocalDate(update.date);
+              const d = parseLocalDate(update.displayDate);
               const day = d.getDate().toString().padStart(2, '0');
               const month = d.toLocaleString('en-US', { month: 'short' }).toUpperCase();
               const year = d.getFullYear();
 
-              const isExternal =
-                update.buttonLink &&
-                typeof update.buttonLink === 'string' &&
-                update.buttonLink.startsWith('http');
-
-              const destination = isExternal
-                ? update.buttonLink
-                : update.slug?.current
-                ? `/updates/${update.slug.current}`
-                : null;
+              const isExternal = update.buttonLink && typeof update.buttonLink === 'string' && update.buttonLink.startsWith('http');
+              const destination = isExternal ? update.buttonLink : update.slug?.current ? `/updates/${update.slug.current}` : null;
 
               return (
                 <motion.div
                   key={update._id || index}
                   className="flex flex-col md:flex-row bg-gradient-to-br from-gray-800/60 to-gray-900 rounded-2xl shadow-lg overflow-hidden border border-gray-700/50 backdrop-blur-sm"
-                  initial="hidden"
-                  whileInView="visible"
                   whileHover="lift"
-                  viewport={{ once: true, amount: 0.1 }}
                   variants={cardVariants}
                 >
                   {/* Date Sidebar */}
@@ -269,24 +198,24 @@ export default function UpdatesPage() {
                     <span className="text-sm text-gray-400 md:mt-0.5">{year}</span>
                   </div>
 
-                  {/* Image Frame */}
+                  {/* Image Block */}
                   <div className="w-full md:w-2/5 flex-shrink-0 relative h-72 md:h-auto min-h-[22rem]">
                     <PostImage update={update} />
                   </div>
 
-                  {/* Content Area */}
+                  {/* Description Box Content */}
                   <div className="flex-grow p-6 flex flex-col justify-between">
                     <div>
                       <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 leading-snug">
                         {update.title}
                       </h2>
 
-                      {update.content && Array.isArray(update.content) && update.content.length > 0 ? (
+                      {update.richTextContent ? (
                         <div className="text-gray-300 text-sm leading-relaxed line-clamp-4">
-                          <PortableText value={update.content} components={ptComponents} />
+                          <PortableText value={update.richTextContent} components={ptComponents} />
                         </div>
                       ) : (
-                        <p className="text-gray-500 text-sm italic">No content text written for this update.</p>
+                        <p className="text-gray-500 text-sm italic">No description text written for this update.</p>
                       )}
 
                       {update.venue && (
@@ -297,33 +226,17 @@ export default function UpdatesPage() {
                       )}
                     </div>
 
-                    {/* Navigation CTA Execution Block */}
+                    {/* Button Links CTA */}
                     {destination && (
-                      isExternal ? (
-                        <a
-                          href={destination}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="mt-5 inline-block px-6 py-2.5 text-sm text-gray-900 font-bold rounded-lg shadow self-start transition-transform hover:scale-105 active:scale-95 cursor-pointer"
-                          style={{ backgroundColor: GOLDEN_YELLOW }}
-                        >
-                          {update.buttonText && !update.buttonText.includes('Original Image')
-                            ? update.buttonText
-                            : 'More Details'}
-                        </a>
-                      ) : (
-                        <motion.a
-                          href={destination}
-                          className="mt-5 inline-block px-6 py-2.5 text-sm text-gray-900 font-bold rounded-lg shadow self-start cursor-pointer"
-                          style={{ backgroundColor: GOLDEN_YELLOW }}
-                          whileHover={{ backgroundColor: HOVER_GOLDEN_YELLOW, scale: 1.03 }}
-                          whileTap={{ scale: 0.97 }}
-                        >
-                          {update.buttonText && !update.buttonText.includes('Original Image')
-                            ? update.buttonText
-                            : 'More Details'}
-                        </motion.a>
-                      )
+                      <a
+                        href={destination}
+                        target={isExternal ? '_blank' : '_self'}
+                        rel="noopener noreferrer"
+                        className="mt-5 inline-block px-6 py-2.5 text-sm text-gray-900 font-bold rounded-lg shadow self-start transition-transform hover:scale-105 active:scale-95 text-center"
+                        style={{ backgroundColor: GOLDEN_YELLOW }}
+                      >
+                        {update.buttonText || 'More Details'}
+                      </a>
                     )}
                   </div>
                 </motion.div>
