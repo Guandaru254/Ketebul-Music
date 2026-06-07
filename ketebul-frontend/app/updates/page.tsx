@@ -6,8 +6,8 @@ export const revalidate = 0;
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { motion, Variants } from 'framer-motion';
-// Consolidated: Fetching data via the central abstraction layer
-import { fetchUpdates, urlFor } from '@/lib/api';
+// FIXED IMPORT PATH: Using relative jumps to clear the Vercel Type Checking error
+import { fetchUpdates, urlFor } from '../../lib/api';
 import { PortableText } from '@portabletext/react';
 
 const GOLDEN_YELLOW = '#FFD700';
@@ -105,7 +105,6 @@ export default function UpdatesPage() {
   useEffect(() => {
     let isMounted = true;
 
-    // Routed through central API configuration method to maintain single-source typing config
     fetchUpdates()
       .then((data: any[]) => {
         if (!isMounted) return;
