@@ -1,9 +1,13 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { motion, Variants } from 'framer-motion';
-import { client, urlFor } from '@/lib/api';
+// Consolidated: Fetching data via the central abstraction layer
+import { fetchUpdates, urlFor } from '@/lib/api';
 import { PortableText } from '@portabletext/react';
 
 const GOLDEN_YELLOW = '#FFD700';
@@ -101,16 +105,12 @@ export default function UpdatesPage() {
   useEffect(() => {
     let isMounted = true;
 
-    client
-      .fetch(
-        `*[_type == "updates"] | order(date desc, _createdAt desc)`,
-        {},
-        { cache: 'no-store' }
-      )
+    // Routed through central API configuration method to maintain single-source typing config
+    fetchUpdates()
       .then((data: any[]) => {
         if (!isMounted) return;
 
-        console.log("📡 FETCHED DIRECT CODES:", data);
+        console.log("📡 FETCHED VIA API LAYER:", data);
 
         if (data && Array.isArray(data)) {
           const normalizedData = data.map(item => ({
@@ -122,7 +122,7 @@ export default function UpdatesPage() {
         }
       })
       .catch((err) => {
-        console.error('Sanity fetch failure on updates schema:', err);
+        console.error('Sanity schema pipeline error on updates interface:', err);
       })
       .finally(() => {
         if (isMounted) {
