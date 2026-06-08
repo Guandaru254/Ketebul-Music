@@ -45,7 +45,7 @@ function parseLocalDate(dateStr: string): Date {
   }
 }
 
-// Solid visual fallback matrix if an item truly has no image data anywhere
+// Global fallback image if an item truly has no image data anywhere
 const FALLBACK = 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=800&auto=format&fit=crop';
 
 function PostImage({ update }: { update: any }) {
@@ -65,14 +65,14 @@ function PostImage({ update }: { update: any }) {
       }
     }
     
-    // 2. Extract migrated WordPress image URL from attributes (Old Posts)
-    const wpUrl = update?.attributes?.wp_post_thumbnail;
+    // 2. Extract migrated WordPress image URL from nested node.attributes (Old Posts Fix)
+    const wpUrl = update?.node?.attributes?.wp_post_thumbnail || update?.attributes?.wp_post_thumbnail;
     if (wpUrl && typeof wpUrl === 'string' && wpUrl.trim() !== '') {
       setSrc(wpUrl);
       return;
     }
 
-    // 3. Alternate generic fallback checks for raw image strings if structured differently
+    // 3. Alternate generic fallback checks for raw image strings if flat
     if (update?.imageUrl && typeof update.imageUrl === 'string') {
       setSrc(update.imageUrl);
       return;
@@ -199,7 +199,7 @@ export default function UpdatesPage() {
                 ? update.buttonLink 
                 : update.slug?.current 
                   ? `/updates/${update.slug.current}` 
-                  : '#'; // Keep them on page cleanly if completely empty record
+                  : '#'; 
 
               return (
                 <motion.div
@@ -245,7 +245,7 @@ export default function UpdatesPage() {
                       )}
                     </div>
 
-                    {/* Always Render Action Button to maintain alignment UI integrity */}
+                    {/* Action Button */}
                     <div className="mt-5">
                       <a
                         href={destination}
