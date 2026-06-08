@@ -4,14 +4,28 @@ import { PortableText } from '@portabletext/react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+// Next.js 15 native page props typing layout
 interface PageProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<Record<string, string | string[] | undefined>>;
 }
 
 export default async function UpdateDetailPage({ params }: PageProps) {
+  // Await the generic params object safely
   const resolvedParams = await params;
+  const slug = resolvedParams?.slug;
+
+  // Graceful fallback if slug is missing or is an array
+  if (!slug || typeof slug !== 'string') {
+    return (
+      <div className="min-h-screen bg-black flex flex-col items-center justify-center text-gray-400">
+        <h1 className="text-2xl font-bold mb-4">Invalid Identifier</h1>
+        <Link href="/updates" className="text-[#FFD700] hover:underline">← Back to Updates</Link>
+      </div>
+    );
+  }
+
   const query = `*[_type == "update" && slug.current == $slug][0]`;
-  const post = await client.fetch(query, { slug: resolvedParams.slug });
+  const post = await client.fetch(query, { slug });
 
   if (!post) {
     return (
