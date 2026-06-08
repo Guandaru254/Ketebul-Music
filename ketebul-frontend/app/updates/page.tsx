@@ -45,14 +45,14 @@ function parseLocalDate(dateStr: string): Date {
   }
 }
 
-// Solid visual fallback matrix
+// Solid visual fallback matrix if an item truly has no image data anywhere
 const FALLBACK = 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=800&auto=format&fit=crop';
 
 function PostImage({ update }: { update: any }) {
   const [src, setSrc] = useState<string>(FALLBACK);
 
   useEffect(() => {
-    // 1. Check for native Sanity Asset reference
+    // 1. Check for native Sanity Asset reference (New Posts)
     if (update?.mainImage?.asset) {
       try {
         const url = urlFor(update.mainImage).width(800).url();
@@ -65,7 +65,14 @@ function PostImage({ update }: { update: any }) {
       }
     }
     
-    // 2. Fallback check for old migrated raw image strings
+    // 2. Extract migrated WordPress image URL from attributes (Old Posts)
+    const wpUrl = update?.attributes?.wp_post_thumbnail;
+    if (wpUrl && typeof wpUrl === 'string' && wpUrl.trim() !== '') {
+      setSrc(wpUrl);
+      return;
+    }
+
+    // 3. Alternate generic fallback checks for raw image strings if structured differently
     if (update?.imageUrl && typeof update.imageUrl === 'string') {
       setSrc(update.imageUrl);
       return;
