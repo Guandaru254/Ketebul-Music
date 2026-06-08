@@ -1,5 +1,5 @@
 // app/updates/[slug]/page.tsx
-import { client, urlFor } from '@/lib/api';
+import { client, urlFor } from '../../../lib/api';
 import { PortableText } from '@portabletext/react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -32,7 +32,7 @@ export default async function UpdateDetailPage({ params }: PageProps) {
         </Link>
         {src && (
           <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-gray-800 mb-8">
-            <Image src={src} alt={post.title} fill className="object-cover" priority />
+            <Image src={src} alt={post.title} fill className="object-cover" priority unoptimized />
           </div>
         )}
         <span className="text-sm uppercase tracking-widest text-[#FFD700] font-semibold">{post.date}</span>
