@@ -1,12 +1,12 @@
 'use client';
 
 export const dynamic = 'force-dynamic';
-export const revalidate = 0;
 
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { motion, Variants } from 'framer-motion';
-import { fetchUpdates, urlFor } from '../../lib/api';
+// We only import client and urlFor directly to bypass the live-revalidate wrappers inside fetchUpdates
+import { client, urlFor } from '../../lib/api'; 
 import { PortableText } from '@portabletext/react';
 
 const GOLDEN_YELLOW = '#FFD700';
@@ -104,7 +104,8 @@ export default function UpdatesPage() {
   useEffect(() => {
     let isMounted = true;
 
-    fetchUpdates()
+    // Direct, standard client fetch block to explicitly drop all server revalidate hooks
+    client.fetch(`*[_type == "update"] | order(date desc)`)
       .then((data: any[]) => {
         if (!isMounted) return;
 
@@ -118,7 +119,7 @@ export default function UpdatesPage() {
         }
       })
       .catch((err) => {
-        console.error('Sanity schema pipeline error on updates interface:', err);
+        console.error('Sanity raw fetch error on updates page client:', err);
       })
       .finally(() => {
         if (isMounted) {
@@ -146,6 +147,7 @@ export default function UpdatesPage() {
     <div className="flex flex-col items-center min-h-screen px-4 py-10 sm:px-8 bg-gradient-to-b from-gray-950 to-black text-gray-100 w-full">
       <motion.div className="w-full max-w-5xl mx-auto" initial="hidden" animate="visible" variants={sectionVariants}>
         
+        {/* Header Block */}
         <div className="text-center mb-10">
           <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-3" style={{ color: GOLDEN_YELLOW }}>
             Latest Updates
@@ -155,6 +157,7 @@ export default function UpdatesPage() {
           </p>
         </div>
 
+        {/* Search Field */}
         <div className="mb-8 flex justify-center">
           <input
             type="text"
@@ -165,6 +168,7 @@ export default function UpdatesPage() {
           />
         </div>
 
+        {/* Dynamic Card Display */}
         <div className="space-y-8">
           {filtered.length === 0 ? (
             <p className="text-center text-gray-500 py-20">No matching updates found.</p>
@@ -185,16 +189,19 @@ export default function UpdatesPage() {
                   whileHover="lift"
                   variants={cardVariants}
                 >
+                  {/* Date Sidebar */}
                   <div className="w-full md:w-24 flex flex-row md:flex-col items-center justify-center gap-1 px-5 py-4 md:py-0 bg-gray-900/60 border-b md:border-b-0 md:border-r border-gray-700/50 flex-shrink-0">
                     <span className="text-3xl font-extrabold text-white leading-none">{day}</span>
                     <span className="text-sm uppercase tracking-widest text-yellow-400 md:mt-1">{month}</span>
                     <span className="text-sm text-gray-400 md:mt-0.5">{year}</span>
                   </div>
 
+                  {/* Image Block */}
                   <div className="w-full md:w-2/5 flex-shrink-0 relative h-72 md:h-auto min-h-[22rem]">
                     <PostImage update={update} />
                   </div>
 
+                  {/* Description Box Content */}
                   <div className="flex-grow p-6 flex flex-col justify-between">
                     <div>
                       <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 leading-snug">
@@ -217,6 +224,7 @@ export default function UpdatesPage() {
                       )}
                     </div>
 
+                    {/* Button Links CTA */}
                     {destination && (
                       <a
                         href={destination}
