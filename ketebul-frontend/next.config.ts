@@ -19,8 +19,7 @@ const nextConfig: NextConfig = {
   // 4. Image Security & Source Sorting
   images: {
     dangerouslyAllowSVG: true,
-    contentDispositionType: 'attachment',
-    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    contentDispositionType: 'inline', // Changed to inline to let images render instead of forcing a download trigger
     
     remotePatterns: [
       {
@@ -44,7 +43,6 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
       {
-        // FIX: Secure HTTPS pattern matching to prevent asset blockage under mixed content rules
         protocol: 'https', 
         hostname: '102.213.49.154',
         pathname: '/**',
