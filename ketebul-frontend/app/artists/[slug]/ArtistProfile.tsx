@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { Artist } from './page';
+import { Artist, DiscographyItem } from './page';
 
 // SVG Icons for DSPs
 const SpotifyIcon = () => (
@@ -27,6 +27,15 @@ const YoutubeIcon = () => (
 
 export default function ArtistProfile({ artist }: { artist: Artist }) {
   const [loading, setLoading] = useState(true);
+
+  // Helper to sort items from Latest to Earliest (Newest -> Oldest)
+  const sortByYearDescending = (items?: DiscographyItem[]) => {
+    if (!items) return [];
+    return [...items].sort((a, b) => parseInt(b.year, 10) - parseInt(a.year, 10));
+  };
+
+  const sortedAlbums = sortByYearDescending(artist.albumsAndEPs);
+  const sortedSingles = sortByYearDescending(artist.singles);
 
   return (
     <main className="min-h-screen bg-gray-950 text-gray-100 px-6 py-12 md:py-20 font-inter">
@@ -159,7 +168,7 @@ export default function ArtistProfile({ artist }: { artist: Artist }) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 pt-6">
 
           {/* DETAILED BIO SECTIONS */}
-          <div className="lg:col-span-8 space-y-8">
+          <div className="lg:col-span-7 space-y-8">
             <h2 className="text-2xl font-bold text-white border-b border-gray-800 pb-3">
               Biography & Cultural Journey
             </h2>
@@ -174,15 +183,39 @@ export default function ArtistProfile({ artist }: { artist: Artist }) {
             ))}
           </div>
 
-          {/* SIDEBAR: DISCOGRAPHY + BACK BUTTON */}
-          <div className="lg:col-span-4 space-y-8">
-            {artist.discography && artist.discography.length > 0 && (
+          {/* SIDEBAR: DISCOGRAPHY SECTIONS */}
+          <div className="lg:col-span-5 space-y-8">
+            
+            {/* ALBUMS & EPS */}
+            {sortedAlbums.length > 0 && (
               <div className="bg-gray-900/60 p-6 rounded-2xl border border-gray-800">
                 <h3 className="text-lg font-bold text-white mb-4 border-b border-gray-800 pb-2">
-                  Key Releases
+                  Albums & EPs
                 </h3>
                 <ul className="space-y-3">
-                  {artist.discography.map((item, idx) => (
+                  {sortedAlbums.map((item, idx) => (
+                    <li key={idx} className="flex justify-between items-center text-sm border-b border-gray-800/40 pb-2">
+                      <div>
+                        <p className="font-semibold text-gray-200">{item.title}</p>
+                        <p className="text-xs text-gray-500">{item.type}</p>
+                      </div>
+                      <span className="text-xs font-mono text-yellow-500 bg-yellow-500/10 px-2 py-1 rounded">
+                        {item.year}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* SINGLES & COLLABORATIONS */}
+            {sortedSingles.length > 0 && (
+              <div className="bg-gray-900/60 p-6 rounded-2xl border border-gray-800">
+                <h3 className="text-lg font-bold text-white mb-4 border-b border-gray-800 pb-2">
+                  Singles & Collaborations
+                </h3>
+                <ul className="space-y-3">
+                  {sortedSingles.map((item, idx) => (
                     <li key={idx} className="flex justify-between items-center text-sm border-b border-gray-800/40 pb-2">
                       <div>
                         <p className="font-semibold text-gray-200">{item.title}</p>
@@ -205,6 +238,7 @@ export default function ArtistProfile({ artist }: { artist: Artist }) {
                 ← Back to All Artists
               </Link>
             </div>
+
           </div>
 
         </div>
