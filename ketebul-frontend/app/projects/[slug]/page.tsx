@@ -3,9 +3,21 @@ import ProjectProfile from './ProjectProfile';
 
 const projects = [
   {
+    title: "English Access Scholarship Program",
+    slug: "english-access-scholarship-program",
+    image: "/projects/eng.jpeg",
+    description: "A U.S. Embassy Nairobi-funded initiative building English language and business skills for 25 young music professionals in Kisumu.",
+    category: "Social Impact",
+    fullDescription: `The English Access Scholarship Program is a U.S. Embassy Nairobi-funded initiative implemented locally by Ketebul Music to build English language and business skills among 25 young music professionals in Kisumu.
+
+The nine-month course, fully sponsored by the U.S. Department of State through its Regional English Language Office, was officially launched at Dunga Hill Camp in Kisumu. It is designed for singers, rappers, DJs, dancers, producers, sound engineers, band managers, and other young creatives.
+
+Selected through a competitive recruitment process that drew 63 applicants, the 25 learners participate in intensive sessions focused on expanding their language proficiency, professional communication, and capacity to commercialize their creative craft.`,
+  },
+  {
     title: "SAUTI: Gifted Different Unsilenced",
     slug: "sauti",
-    image: "/projects/sauti.png",
+    image: "/projects/sauti1.png",
     description: "A multimedia project featuring a documentary and music compilation exploring musicians with unique abilities.",
     category: "Documentaries",
     fullDescription: `SAUTI: Gifted Different Unsilenced is a groundbreaking multimedia project by Ketebul Music that shines a light on musicians living with disabilities across East Africa.
@@ -17,7 +29,7 @@ Through intimate portraits and live performances, SAUTI challenges perceptions o
   {
     title: "Shades of Benga",
     slug: "shades-of-benga",
-    image: "/projects/benga.jpg",
+    image: "/projects/benga1.jpg",
     description: "A comprehensive book and research project tracing the roots of Kenya's popular music from 1946 to 2016.",
     category: "Books & Research",
     fullDescription: `Shades of Benga is a landmark publication by Ketebul Music documenting the evolution of Benga — Kenya's most beloved popular music genre — from its origins in the 1940s through to the modern era.
@@ -41,7 +53,7 @@ The album has been praised for its emotional depth and its role in introducing t
   {
     title: "Weapon of Mass Reconciliation",
     slug: "reconciliation",
-    image: "/projects/reconciliation.jpg",
+    image: "/projects/reconciliations.jpg",
     description: "Music and outreach campaign that helped foster national healing after the 2008 post-election crisis.",
     category: "Social Impact",
     fullDescription: `In the aftermath of Kenya's devastating 2008 post-election violence, Ketebul Music launched the Weapon of Mass Reconciliation — a powerful music and community outreach campaign that used the unifying power of song to help heal a fractured nation.
@@ -77,7 +89,7 @@ The project involved extensive fieldwork and community engagement in Garissa, an
   {
     title: "Singing Wells",
     slug: "singing-wells",
-    image: "/projects/wells.png",
+    image: "/projects/singing-wells",
     description: "An initiative to document, preserve, and promote traditional music from East Africa.",
     category: "Documentaries",
     fullDescription: `Singing Wells is a long-running documentation initiative by Ketebul Music in partnership with Abubilla Music Foundation, dedicated to recording and preserving the endangered traditional music of East Africa.
